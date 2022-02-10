@@ -37,6 +37,10 @@ const userSchema = Schema({
   postalBox: {
     type: String,
     default: ""
+  },
+  country: {
+    type: String,
+    default: ""
   }
 },
   { timestamps: true }

@@ -7,7 +7,7 @@ import {
   MarkunreadMailboxOutlined,
   PermIdentityOutlined
 } from "@mui/icons-material"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
 import { updateUser } from "redux/apiCalls"
@@ -103,7 +103,22 @@ font-size: 16px;
   outline: 2px solid #4f9ae7;
 }
 `
-
+const Select = Styled.select`
+  background-color: darkgray;
+  border:none;
+  border-bottom: 1px solid gray;
+  width: calc(100% - 10px);
+  padding: 8px 0;
+  margin: 0 5px 15px;
+  color: black;
+  font-size: 16px; 
+  &:focus-visible {
+    outline:2px solid #4f9ae7;
+  }
+`
+const Option = Styled.option`
+  
+`
 const StyledPermIdentityOutlined = Styled(PermIdentityOutlined)`
 position: absolute;
 right: 4px;
@@ -206,11 +221,73 @@ export default function Main() {
     address: "",
     city: "",
     postalBox: "",
-    createdAt: ""
+    createdAt: "",
+    country: ""
   })
   // @ts-ignore
   const { currentUser, isFetching, error } = useSelector((state) => state.user)
-
+  const countries = useMemo(
+    () => [
+      { country: "Argentina", code: "AR" },
+      { country: "Australia", code: "AU" },
+      { country: "Austria", code: "AT" },
+      { country: "Belgium", code: "BE" },
+      { country: "Bolivia", code: "BO" },
+      { country: "Brazil", code: "BR" },
+      { country: "Bulgaria", code: "BG" },
+      { country: "Canada", code: "CA" },
+      { country: "Chile", code: "CL" },
+      { country: "Colombia", code: "CO" },
+      { country: "Costa Rica", code: "CR" },
+      { country: "Croatia", code: "HR" },
+      { country: "Cyprus", code: "CY" },
+      { country: "Czech Republic", code: "CZ" },
+      { country: "Denmark", code: "DK" },
+      { country: "Dominican Republic", code: "DO" },
+      { country: "Egypt", code: "EG" },
+      { country: "Estonia", code: "EE" },
+      { country: "Finland", code: "FI" },
+      { country: "France", code: "FR" },
+      { country: "Germany", code: "DE" },
+      { country: "Greece", code: "GR" },
+      { country: "Hong Kong SAR China", code: "HK" },
+      { country: "Hungary", code: "HU" },
+      { country: "Iceland", code: "IS" },
+      { country: "India", code: "IN" },
+      { country: "Indonesia", code: "ID" },
+      { country: "Ireland", code: "IE" },
+      { country: "Israel", code: "IL" },
+      { country: "Italy", code: "IT" },
+      { country: "Japan", code: "JP" },
+      { country: "Latvia", code: "LV" },
+      { country: "Liechtenstein", code: "LI" },
+      { country: "Lithuania", code: "LT" },
+      { country: "Luxembourg", code: "LU" },
+      { country: "Malta", code: "MT" },
+      { country: "Mexico ", code: "MX" },
+      { country: "Netherlands", code: "NL" },
+      { country: "New Zealand", code: "NZ" },
+      { country: "Norway", code: "NO" },
+      { country: "Paraguay", code: "PY" },
+      { country: "Peru", code: "PE" },
+      { country: "Poland", code: "PL" },
+      { country: "Portugal", code: "PT" },
+      { country: "Romania", code: "RO" },
+      { country: "Singapore", code: "SG" },
+      { country: "Slovakia", code: "SK" },
+      { country: "Slovenia", code: "SI" },
+      { country: "Spain", code: "ES" },
+      { country: "Sweden", code: "SE" },
+      { country: "Switzerland", code: "CH" },
+      { country: "Thailand", code: "TH" },
+      { country: "Trinidad & Tobago", code: "TT" },
+      { country: "United Arab Emirates", code: "AE" },
+      { country: "United Kingdom", code: "GB" },
+      { country: "United States", code: "US" },
+      { country: "Uruguay", code: "UY" }
+    ],
+    []
+  )
   const {
     firstname,
     lastname,
@@ -219,7 +296,8 @@ export default function Main() {
     address,
     city,
     postalBox,
-    createdAt
+    createdAt,
+    country
   } = info
   const handleUpdate = (e) => {
     const { name: inputName, value } = e.target
@@ -228,6 +306,7 @@ export default function Main() {
   useEffect(() => {
     setInfo(currentUser)
   }, [currentUser])
+  console.log(info)
 
   const dispatch = useDispatch()
   const [modalPassword, setModalPassword] = useState("")
@@ -237,9 +316,11 @@ export default function Main() {
     setDisabled(!disabled)
   }
 
-  const handleUpdateUser = async () => {
+  const handleUpdateUser = () => {
     const user = Object.entries(currentUser)
-    const newInfo = Object.entries(info).filter((x, i) => x[1] !== user[i][1])
+    const newInfo = Object.entries(info).filter((x, i) =>
+      x !== undefined ? x[1] !== user[i][1] : false
+    )
     // @ts-ignore
     const { _id: id } = currentUser
     if (newInfo) {
@@ -354,6 +435,21 @@ export default function Main() {
                 onChange={handleUpdate}
               />
               <StyledLocationCity />
+            </BottomField>
+            <BottomField>
+              <Label>Country</Label>
+              <Select
+                disabled={disabled}
+                name="country"
+                value={country}
+                onChange={handleUpdate}
+              >
+                {countries.map(({ country: cntry, code }) => (
+                  <Option key={code} value={code}>
+                    {cntry}
+                  </Option>
+                ))}
+              </Select>
             </BottomField>
             <BottomField>
               <Label>Postal box</Label>
