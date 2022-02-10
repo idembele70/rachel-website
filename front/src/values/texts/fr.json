@@ -1,0 +1,173 @@
+{
+  "siteName": "Dembele Couture",
+  "siteLanguage": "FR",
+  "announcement": "Super Deal! Free Shipping on Orders Over $50",
+  "cart": {
+    "checkout": "PAYER MAINTENANT",
+    "continueShop": "Continuez vos achats",
+    "description": "Le prix total est",
+    "empty": "Votre panier est vide !" ,
+    "title": "VOTRE PANIER",
+    "topTexts": {
+      "bag": "Votre panier",
+      "whislist": "Vos Souhait"
+    },
+    "orderSummary": {
+      "shippingPrice": "Frais de port estimés",
+      "shippingDiscount": "Remise sur les frais de port",
+      "subtotal": "Sous total",
+      "title": "Récapitulatif de la commande",
+      "total": "Total"
+    }
+  },
+  "footer": {
+    "left": {
+      "description": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet odit minus totam sint beatae quas est fuga ratione sed asperiores. Nostrum ut aut ab vel adipisci quisquam, fugit quibusdam ratione."
+    },
+    "center": {
+      "title": "Liens utiles",
+      "listItem": {
+        "home": "Page D'accueil",
+        "cart": "Panier",
+        "manFashion": "Style pour Homme",
+        "womamFashion": "Style pour Femme",
+        "accessories": "Accessoires",
+        "myAcount": "Mon compte",
+        "orderTracking": "Suivi de commande",
+        "wishlist": "Liste de souhait",
+        "terms": "termes"
+      }
+    },
+    "right": {
+      "title": "Contact",
+      "contactItem": {
+        "address": "7 Rue de la republique",
+        "phoneNumber": "0631805723",
+        "email": "racheldembelecouture@gmail.com"
+      }
+    }
+  },
+  "navbar": {
+    "search": "recherche",
+    "myAccount": "Mon compte"
+  },
+  "newsletter": {
+    "title": "Newsletter",
+    "description": "Soyez les premiers a être informé sur les derniers changements.",
+    "placeholder": "Votre adresse email"
+  },
+  "products": {
+    "addToCard": "AJOUTEZ AU PANIER",
+    "cart": {
+      "product": "produit",
+      "productId": "ID",
+      "productSize": "Taille",
+      "color": "Couleur"
+    },
+    "categories": {
+      "tShirts": "T-shirts",
+      "loungewear": "Vêtements de dentente",
+      "jackets": "Vestes",
+      "button": "ACHETEZ MAINTENANT"
+    },
+    "currency": "€",
+    "description": {
+      "earing251220212148": "Boucle d'oreille avec la carte d'afrique"
+    },
+    "filter": {
+      "category": {
+        "accessories": "Accessoires",
+        "cloth": "Tissu",
+        "earring": "Boucle d'oreilles",
+        "fan": "Eventails",
+        "man": "Hommes",
+        "sweatshirt": "Pull",
+        "wax": "Wax",
+        "woman": "Femmes"
+      },
+      "colors": {
+        "black": "Noir",
+        "blue": "Bleu",
+        "color": "Couleur",
+        "darkblue": "Bleu foncé",
+        "green": "Vert",
+        "red": "Rouge",
+        "white": "Blanc",
+        "yellow": "Jaune"
+      },
+      "sizes": {
+        "size": "Taille",
+        "m": "M",
+        "l": "L",
+        "s": "S",
+        "xl": "XL",
+        "xs": "XS",
+        "5-metter": "5 mètre"
+      },
+      "sort": {
+        "newest": "Nouveautés",
+        "priceAsc": "Prix bas à élevé",
+        "priceDesc": "Prix élevé à bas"
+      },
+      "text": {
+        "filterProducts": "Filtrer les produits:",
+        "sortProducts": "Ordonner les produits par prix:"
+      },
+      "title": {
+        "color": "Couleur"
+      }
+    },
+    "name": {
+      "dresses": "Robes",
+      "earing251220212148": "Boucle d'oreille carte d'afrique",
+      "hakuraTees": "T-Shirt hakura",
+      "overalls": "Salopette en jean",
+      "nikeRuning": "Nike run",
+      "size": "Taille"
+    }
+  },
+  "sign": {
+    "login": "Se\u00A0connecter",
+    "logout": "Se\u00A0deconnecter",
+    "signup": "S'incrire",
+    "email": "Email",
+    "password": "Mot\u00A0de\u00A0passe"
+  },
+  "signin": {
+    "errorMessage": "Oups\u00A0vos\u00A0identifiants\u00A0sembler\u00A0comporte\u00A0une\u00A0erreur",
+    "title": "SE\u00A0CONNECTER",
+    "login": "CONNEXION",
+    "forgotPassword": "MOT\u00A0DE\u00A0PASSE\u00A0OUBLIÉ\u00A0?",
+    "newUser": "CRÉER UN NOUVEAU COMPTE"
+  },
+  "signup": {
+    "agreement": "En créant un compte, je consens au traitement de mes données personelles conformément à la",
+    "agreementError": "Vous devez cochez la case !",
+    "confirmPassword": "Confirmez\u00A0votre\u00A0mot\u00A0de\u00A0passe",
+    "confirmEmail": "Confirmez\u00A0votre\u00A0email",
+    "create": "CRÉER",
+    "firstname": "Prénom",
+    "lastname": "Nom",
+    "passwordError": "Les mots de passes saisies sont différentes",
+    "privacyPolicy": "POLITIQUE DE CONFIDENTIALITÉ",
+    "signin": "Déja un compte ? connectez vous !",
+    "title": "CRÉEZ\u00A0UN\u00A0COMPTE"
+  },
+  "slider": {
+    "info": {
+      "button": "ACHETEZ MAINTENANT",
+      "summer": {
+        "description": "NE RATEZ PAS LA DERNIERE REDUCTION DE 30% SUR LES NOUVEAUTÉS",
+        "title": "Solde d'été"
+      },
+      "winter": {
+        "description": "NE RATEZ PAS LA DERNIERE REDUCTION DE 50% SUR LES NOUVEAUTÉS",
+        "title": "Solde d'hiver"
+      },
+      "fall": {
+        "description": "NE RATEZ PAS LA DERNIERE REDUCTION DE 40% SUR LES NOUVEAUTÉS",
+        "title": "Solde d'automne"
+      }
+    }
+  }
+}

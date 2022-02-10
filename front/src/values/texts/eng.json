@@ -1,0 +1,12 @@
+{
+  "siteName": "RDBLC",
+  "cart": {
+    "checkout": "CHECKOUT NOW",
+    "continueShop": "CONTINUE SHOPPING",
+    "title": "YOUR BAG",
+    "topText": {
+      "bag": "Shopping Bag",
+      "whislist": "Your Wishlist"
+    }
+  }
+}

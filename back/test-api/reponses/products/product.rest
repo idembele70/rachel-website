@@ -1,0 +1,39 @@
+### CREATE
+POST http://localhost:5000/api/products/new HTTP/1.1
+token:" "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MjIwMTE1OCwiZXhwIjoxNjQyNDYwMzU4fQ.31nCQSkaEQ2a7GF20kFOdWV6zESTBTMM2cXWQn7KRVg
+Content-Type: application/json
+
+{
+  "title": "test",
+"img": "https://firebasestorage.googleapis.com/v0/b/rachel-website-b13d5.appspot.com/o/resiliation_free.pdf1641207165028?alt=media&token=00e0ac72-dabc-4737-8b78-c4071ee30a72",
+"categories": ["earring"],
+"colors": ["red"],
+"description": "df",
+"inStock": true,
+"price": "100",
+"sizes": ["xl", "xs,", "l"],
+"title": "test"
+}
+
+
+### UPDATE
+PUT http://localhost:5000/api/products/61bfae9292f879c9590f2b85 HTTP/1.1
+Content-Type: application/json
+token: " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MDE5MTg0OCwiZXhwIjoxNjQwNDUxMDQ4fQ.xw-VvCtPqvkt-vAhrUCQDYize_69hfRmjGgGNhSOylM
+
+{
+  "color" : ["yellow", "green","black","blue","white"]
+}
+
+
+### DELETE
+
+DELETE http://localhost:5000/api/products/61aa195dfc3cde9c41793dd1
+token: a eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzOTg2NzgyOSwiZXhwIjoxNjQwMTI3MDI5fQ.wH_gC6_rYBttie-EzwZOwWXY4HAPw8xb57xkDQXq4qA
+
+### GET ONE PRODUCT
+GET http://localhost:5000/api/products/find/61bfaab392f879c9590f2b7b
+
+### GET ALL PRODUCTS
+
+GET http://localhost:5000/api/products

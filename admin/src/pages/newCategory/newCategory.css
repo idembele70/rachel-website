@@ -1,0 +1,42 @@
+.newCategory {
+  flex: 4
+}
+
+.addProductForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.addProductItem {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.addProductItem:last-of-type {
+  flex-direction: row;
+}
+.addProductItem > label {
+  color: gray;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.addProductItem:last-of-type > label {
+  position: relative;
+  top: -4px;
+  margin-right: 5px;
+}
+.addProductItem > input {
+  padding: 10px;
+}
+.addProductButton {
+  margin-top: 10px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 10px;
+  background: darkblue;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}

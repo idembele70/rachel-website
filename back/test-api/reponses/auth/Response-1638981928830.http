@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 384
+ETag: W/"180-c+/vSB68n5D2/L9nZCJ7LXGHSZ0"
+Date: Wed, 08 Dec 2021 16:43:23 GMT
+Connection: close
+
+{"_id":"619bcb60cc19631070635be9","username":"titi","email":"titi@mail.fr","isAdmin":true,"createdAt":"2021-11-22T16:54:56.256Z","updatedAt":"2021-11-24T17:50:16.090Z","__v":0,"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWJjYjYwY2MxOTYzMTA3MDYzNWJlOSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzODk4MTgwMywiZXhwIjoxNjM5MjQxMDAzfQ.OdUs6XbQ08LuxeUpbrGhcLzDiw-7nyBar1UfnePfWwM"}

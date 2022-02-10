@@ -1,0 +1,16 @@
+.appContainer{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 1023px;
+    max-width: 1440px;
+}
+.main{
+    display: flex;
+    flex: 1;
+}
+
+.link{
+    text-decoration: none;
+    color: inherit;
+}

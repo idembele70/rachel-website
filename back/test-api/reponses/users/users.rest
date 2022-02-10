@@ -1,0 +1,37 @@
+### GET
+GET http://localhost:5000/api/users/userstest
+
+#### POST
+POST http://localhost:5000/api/users/usersposttest HTTP/1.1
+Content-Type: application/json
+
+{
+  "username" : "coco"
+}
+
+### PUT
+
+PUT http://localhost:5000/api/users/61f57b2a76b5790d6f1576cf
+token: rachelDembele eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjU3YjJhNzZiNTc5MGQ2ZjE1NzZjZiIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2NDM0NzkwMzQsImV4cCI6MTY0MzczODIzNH0.aFERDvV4W2_MJTBAvq2w-ZUmjt0FTOc89W8mnosRMdc
+Content-Type: application/json
+
+{
+  "city": "Toulouse",
+  "password": "ikd",
+  "postalBox": "31500"
+}
+### DELETE
+DELETE http://localhost:5000/api/users/619d02ec688bb5ab5c4846ff HTTP/1.1
+token: r eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWQwMmVjNjg4YmI1YWI1YzQ4NDZmZiIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2MzgxOTIzMzcsImV4cCI6MTYzODQ1MTUzN30.PvqpUwiKrHC8xss_nsumdX3FqK5VhfVDMaeVHVEUBOc
+
+### GET ONE USER
+GET http://localhost:5000/api/users/find/619d02ec688bb5ab5c4846ff HTTP/1.1
+token: rachel eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWQwMmVjNjg4YmI1YWI1YzQ4NDZmZiIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2MzgxOTIzMzcsImV4cCI6MTYzODQ1MTUzN30.PvqpUwiKrHC8xss_nsumdX3FqK5VhfVDMaeVHVEUBOc
+
+### GET ALL USERS
+GET http://localhost:5000/api/users?new=true
+token: h eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MTA4MDM1MywiZXhwIjoxNjQxMzM5NTUzfQ.-UZpu4cx_vXYK_IV4C8wz8t7SkdTu5d8Db75mdonM2k
+
+### GET USERS STATS
+GET http://localhost:5000/api/users/stats
+token: h eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MTMxMDc1NSwiZXhwIjoxNjQxNTY5OTU1fQ.IJd0uDt6s7zzlMmBNzoN6W-iFYripf7zvxGbLz3b6ZI

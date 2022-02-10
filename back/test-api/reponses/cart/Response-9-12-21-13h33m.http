@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 436
+ETag: W/"1b4-787Ubs37zlc7DX/qV2OoF68hj+o"
+Date: Thu, 09 Dec 2021 12:27:16 GMT
+Connection: close
+
+{"_id":"61b1f3f28386922402b5dcb5","userId":"619bcb60cc19631070635be9","products":[{"productId":"61a4e9dd325d9d6621660e1b","quantity":"1","_id":"61b1f3f28386922402b5dcb6"},{"productId":"61aa16c268028b5665de99cd","quantity":"2","_id":"61b1f3f28386922402b5dcb7"},{"productId":"61aa195dfc3cde9c41793dd1","quantity":"3","_id":"61b1f3f28386922402b5dcb8"}],"createdAt":"2021-12-09T12:17:54.248Z","updatedAt":"2021-12-09T12:17:54.248Z","__v":0}
