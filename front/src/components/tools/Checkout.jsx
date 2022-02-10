@@ -165,7 +165,7 @@ function Checkout() {
     } = currentUser
     setInfo({ ...billing, zip })
   }, [currentUser])
-
+ 
   const { firstname, lastname, email, address, zip, city, country, phone } =
     info
   const handleUpdate = (ev) => {
@@ -272,7 +272,7 @@ function Checkout() {
         billing_details: {
           address: {
             city,
-            country: "FR",
+            country,
             line1: address,
             postal_code: zip
           },
@@ -400,7 +400,7 @@ function Checkout() {
             <FormItem>
               <ItemRow>
                 <Label>Country</Label>
-                <Select name="country" onChange={handleUpdate}>
+                <Select name="country" value={country} onChange={handleUpdate}>
                   {countries.map(({ country: ctry, code }) => (
                     <Option key={code} value={code}>
                       {ctry}
