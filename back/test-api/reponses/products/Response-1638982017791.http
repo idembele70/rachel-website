@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 832
+ETag: W/"340-LXKwQy/enGhLSzxWYaBQB3L/kl4"
+Date: Wed, 08 Dec 2021 16:47:52 GMT
+Connection: close
+
+[{"_id":"61a4e9dd325d9d6621660e1b","title":"dress LV","description":"long red dress for women make by the famous Louis Vuitton","img":"ImgDressLv","categories":["dress"],"size":"M","color":"red","price":20,"createdAt":"2021-11-29T14:55:25.849Z","updatedAt":"2021-11-29T14:55:25.849Z","__v":0},{"_id":"61aa16c268028b5665de99cd","title":"puma t-shirtssss","description":"a puma t-shirts !","img":"Imgpumatees","categories":["t-shirts","man"],"size":"M","color":"gray","price":30,"createdAt":"2021-12-03T13:08:18.912Z","updatedAt":"2021-12-03T13:08:18.912Z","__v":0},{"_id":"61aa195dfc3cde9c41793dd1","title":"puma t-shirts","description":"a puma t-shirts !","img":"Imgpumatees","categories":["t-shirts","man"],"size":"M","color":"gray","price":30,"createdAt":"2021-12-03T13:19:25.075Z","updatedAt":"2021-12-03T13:19:25.075Z","__v":0}]

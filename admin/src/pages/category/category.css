@@ -1,0 +1,78 @@
+.category{
+  flex: 4;
+  padding: 20px;
+}
+.categoryTitleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.categoryAddButton {
+  width: 80px;
+  border: none;
+  padding: 5px;
+  background-color: teal;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.categoryFormContainer {
+  padding: 20px;
+  margin: 20px;
+  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+}
+.categoryForm {
+  height: 290px;
+}
+.categoryFormItem{
+  display: flex;
+  flex-direction: column;
+  max-width: 100px;
+  margin-bottom: 10px;
+}
+.categoryFormItem:last-of-type{
+  flex-direction: row;
+}
+.categoryFormItem > label {
+  margin-bottom: 10px;
+  margin-right: 10px;
+  color: gray
+}
+
+.categoryFormItem > input {
+  margin-bottom: 10px;
+  border: none;
+  padding: 5px;
+  border-bottom: 1px solid gray;
+}
+
+.categoryUpload {
+display: flex;
+align-items: center;
+}
+.categoryUploadImg {
+max-width: 100px;
+max-height: 100px;
+border-radius: 10px;
+object-fit: contain;
+margin-right: 20px;
+}
+
+.categoryFormItem > label:last-of-type {
+  position: relative;
+  top: -4px;
+}
+
+.categoryButton{
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: darkblue;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}

@@ -1,0 +1,21 @@
+
+### CREATE a new category
+POST http://localhost:5000/api/category/new HTTP/1.1
+Content-Type: application/json
+
+{
+"name": "cat1",
+"img":"img",
+"isActive": true
+}
+
+### GET all categories
+GET http://localhost:5000/api/category/ HTTP/1.1
+
+### GET One category
+Put http://localhost:5000/api/category/61e17d1d8c6809f23ea004e6 HTTP/1.1
+Content-Type: application/json
+
+{
+  "isActive": false
+}

@@ -1,0 +1,20 @@
+[
+  {
+  "id" : "9aa5d26d-e9a9-4e01-9278-6bb08fc142fd",
+  "img" : "https://i.ibb.co/cXFnLLV/3.png",
+  "name": "summer",
+  "bg" : "f6fafd"
+},
+{
+  "id" : "2e7d1659-1bb6-4f60-af80-979f747a7f68",
+  "img" : "https://i.ibb.co/DG69bQ4/2.png",
+  "name": "winter",
+  "bg" : "fcf1ed"
+},
+{
+  "id" : "a3cd9164-75bc-4196-a80f-e549150a1977",
+  "img" : "https://i.ibb.co/XsdmR2c/1.png",
+  "name": "fall",
+  "bg" : "fbf0f4"
+  }
+]

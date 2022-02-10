@@ -1,0 +1,163 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+        "prettier"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "react-hooks",
+        "prettier"
+    ],
+    "rules": {
+        // for enabling the rule : 0=off, 1=warn, 2=error. Defaults to 0.
+        "prettier/prettier": [
+            "warn",
+            {
+                "trailingComma": "none",
+                "semi": false,
+                "endOfLine": "auto"
+            }
+        ],
+        "no-unused-vars": 1,
+        "import/no-unresolved": 0,
+        "react/no-multi-comp": [
+            2,
+            {
+                "ignoreStateless": true
+            }
+        ],
+        "react/forbid-prop-types": [
+            2,
+            {
+                "forbid": [
+                    "any",
+                    "array",
+                    "object"
+                ],
+                "checkContextTypes": false,
+                "checkChildContextTypes": false
+            }
+        ],
+        "react-hooks/rules-of-hooks": 2, // Checks rules of Hooks
+        "react-hooks/exhaustive-deps": 1, // Checks effect dependencies
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "allow": "as-needed"
+            }
+        ], // Only allow JSX file extensions in files that contain JSX syntax
+        "react/jsx-pascal-case": 1, // Enforces coding style referenced in PascalCase
+        "react/jsx-closing-bracket-location": [
+            2,
+            "tag-aligned"
+        ], // Alignment styles for JSX syntax
+        "react/jsx-tag-spacing": [
+            2,
+            {
+                "closingSlash": "never",
+                "beforeSelfClosing": "always",
+                "afterOpening": "never",
+                "beforeClosing": "never"
+            }
+        ],
+        "react/jsx-curly-spacing": [
+            2,
+            {
+                "when": "never",
+                "children": true
+            }
+        ], // Check curly braces with spaces
+        "react/jsx-boolean-value": [
+            2,
+            "never"
+        ], // Omit the value of the prop when it is explicitly true
+        "jsx-a11y/alt-text": [
+            2,
+            {
+                "elements": [
+                    "img"
+                ],
+                "img": [
+                    "Image"
+                ]
+            }
+        ], // Always include an alt prop on <img>
+        "jsx-a11y/img-redundant-alt": [
+            2,
+            {
+                "components": [
+                    "Image"
+                ],
+                "words": [
+                    "image",
+                    "photo",
+                    "picture"
+                ]
+            }
+        ], // Do not use words like "image", "photo", or "picture" in <img> alt props
+        "jsx-a11y/aria-role": [
+            2,
+            {
+                "ignoreNonDOM": true
+            }
+        ], // Use only valid, non-abstract ARIA roles
+        "react/no-array-index-key": 2, // Avoid using an array index as key prop
+        "react/no-string-refs": [
+            2,
+            {
+                "noTemplateLiterals": true
+            }
+        ], // Always use ref callbacks
+        "react/jsx-wrap-multilines": [
+            1,
+            {
+                "declaration": "parens-new-line",
+                "assignment": "parens-new-line",
+                "return": "parens-new-line",
+                "arrow": "parens-new-line",
+                "condition": "ignore",
+                "logical": "ignore",
+                "prop": "ignore"
+            }
+        ], // Wrap JSX tags in parentheses when they span more than one line
+        "react/self-closing-comp": [
+            2,
+            {
+                "component": true,
+                "html": true
+            }
+        ], // Always self-close tags that have no children
+        "comma-dangle": [
+            1,
+            "never"
+        ], // Disallows trailing commas
+        "react/jsx-props-no-spreading": [
+            2,
+            {
+                "custom": "ignore"
+            }
+        ]
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ]
+            }
+        }
+    }
+}

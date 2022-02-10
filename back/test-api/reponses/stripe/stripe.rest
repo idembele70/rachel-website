@@ -1,0 +1,1 @@
+GET http://localhost:5000/api/checkout/payment/intents/pi_3KRFoeJe4CiZtN4x05bzzWSu HTTP/1.1

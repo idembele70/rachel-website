@@ -1,0 +1,45 @@
+### CREATE
+POST http://localhost:5000/api/orders/new/61f5ced91bd6e601ff5301a6 HTTP/1.1
+Content-Type: application/json
+token : e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2NDQ0MDgyMDMsImV4cCI6MTY0NDQ5NDYwM30.JX6VdnMGWqcghBHzJlupSVcNnndQnymI7Mp7xTIbwqc
+
+{
+  "userId": "61f5ced91bd6e601ff5301a6",
+  "products": [
+    {
+      "productId" : "61be65c42974aea7e9b60a5d",
+      "quantity" : 1
+    }
+],
+"amount" : 10000,
+"stripeId": "pi_3KRFgGJe4CiZtN4x125Qqag7"
+}
+
+### UPDATE
+PUT http://localhost:5000/api/orders/61b2041f4435c98c45dde442 HTTP/1.1
+token: e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MTU3MDEyNiwiZXhwIjoxNjQxODI5MzI2fQ.6G7iZLv7sErvn5Ce5d8-4bKGGaFMSPt6mLsqSW6VzGE
+Content-Type: application/json
+
+{
+"products":[
+   {
+      "productId" : "61be65c42974aea7e9b60a5d", "quantity": "2"
+    }],
+    "amount" : 6000,
+    "address" : "18 rue de la republique-31300-Toulouse"
+}
+### DELETE
+DELETE http://localhost:5000/api/orders/61b2341bf6068563a012704d HTTP/1.1
+token: e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MTU3MDEyNiwiZXhwIjoxNjQxODI5MzI2fQ.6G7iZLv7sErvn5Ce5d8-4bKGGaFMSPt6mLsqSW6VzGE
+
+### GET USER ORDERS
+GET http://localhost:5000/api/orders/61f5ced91bd6e601ff5301a6
+token: e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2NDQ0MDgyMDMsImV4cCI6MTY0NDQ5NDYwM30.JX6VdnMGWqcghBHzJlupSVcNnndQnymI7Mp7xTIbwqc
+
+### GET ALL ORDERS
+GET http://localhost:5000/api/orders/ HTTP/1.1
+token: e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MTU3MDEyNiwiZXhwIjoxNjQxODI5MzI2fQ.6G7iZLv7sErvn5Ce5d8-4bKGGaFMSPt6mLsqSW6VzGE
+
+### GET INCOME
+GET http://localhost:5000/api/orders/income HTTP/1.1
+token: e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MTMxMDc1NSwiZXhwIjoxNjQxNTY5OTU1fQ.IJd0uDt6s7zzlMmBNzoN6W-iFYripf7zvxGbLz3b6ZI

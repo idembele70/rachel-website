@@ -1,0 +1,30 @@
+### CREATE
+POST http://localhost:5000/api/carts/new HTTP/1.1
+token : e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWJjYjYwY2MxOTYzMTA3MDYzNWJlOSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzOTA1MDY4OSwiZXhwIjoxNjM5MzA5ODg5fQ.cAwb6fIehHGr4GQ1VueCboNgkHEpR-nJkbjBo3Eqxs4
+Content-Type: application/json
+
+{
+  "userId": "619bcb60cc19631070635be9",
+    "products": [
+    {"productId":"61a4e9dd325d9d6621660e1b"},
+{"productId":"61aa16c268028b5665de99cd","quantity": "2"},
+{"productId":"61aa195dfc3cde9c41793dd1","quantity": "3"}]
+}
+
+### UPDATE
+PUT http://localhost:5000/api/carts/61b1f3f28386922402b5dcb5
+token : e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWJjYjYwY2MxOTYzMTA3MDYzNWJlOSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzOTA1MDY4OSwiZXhwIjoxNjM5MzA5ODg5fQ.cAwb6fIehHGr4GQ1VueCboNgkHEpR-nJkbjBo3Eqxs4
+Content-Type: application/json
+
+[
+    {"productId": "61a4e9dd325d9d6621660e1b", "quantity": 5}
+]
+### DELETE
+DELETE http://localhost:5000/api/carts/61b1f4fe031016e547fde52c
+token : e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWJjYjYwY2MxOTYzMTA3MDYzNWJlOSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzOTA1MDY4OSwiZXhwIjoxNjM5MzA5ODg5fQ.cAwb6fIehHGr4GQ1VueCboNgkHEpR-nJkbjBo3Eqxs4
+### GET USER CART
+GET http://localhost:5000/api/carts/619bcb60cc19631070635be9 HTTP/1.1
+token : e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWJjYjYwY2MxOTYzMTA3MDYzNWJlOSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzOTA1MDY4OSwiZXhwIjoxNjM5MzA5ODg5fQ.cAwb6fIehHGr4GQ1VueCboNgkHEpR-nJkbjBo3Eqxs4
+### GET ALL CARTS
+GET http://localhost:5000/api/carts/ HTTP/1.1
+token : e eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOWJjYjYwY2MxOTYzMTA3MDYzNWJlOSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzOTA1MDY4OSwiZXhwIjoxNjM5MzA5ODg5fQ.cAwb6fIehHGr4GQ1VueCboNgkHEpR-nJkbjBo3Eqxs4
