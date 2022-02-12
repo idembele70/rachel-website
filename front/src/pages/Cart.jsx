@@ -12,8 +12,6 @@ import { mobile, tablet } from "responsive"
 import styled from "styled-components"
 import { deleteProduct, updateProduct } from "../redux/cartRedux"
 
-const KEY = process.env.REACT_APP_STRIPE
-
 const Container = styled.div`
   width: 100%;
   max-width: 1440px;

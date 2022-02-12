@@ -4,9 +4,11 @@ const orderSchema = Schema({
 userId: {type: String, required: true},
 products : [
   {
-    productId: {
-      type : String
+    product: {
+      type : Schema.Types.ObjectId, ref: "product", required:true
     },
+    color: {type: String, required: true},
+    size: {type: String, required: true},
     quantity: {
       type : Number,
       default : 1

@@ -4,7 +4,7 @@ import Footer from "components/tools/Footer"
 import Navbar from "components/tools/Navbar"
 import React, { useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux"
-import { useLocation } from "react-router-dom"
+import { useLocation, useHistory } from "react-router-dom"
 import { publicRequest, userRequest } from "requestMethods"
 import { smallMobile } from "responsive"
 import styled from "styled-components"
@@ -40,8 +40,8 @@ const ProductRow = styled.div`
   border-bottom: 1px solid #e2dcdc;
 `
 const RowItemContainer = styled.div`
-display: flex;
-align-items: center;
+  display: flex;
+  align-items: center;
 `
 const RowItem = styled.h3`
   padding: 5px;
@@ -81,9 +81,9 @@ const RightList = styled.ul`
 `
 const RightListItem = styled.li``
 const ItemTitle = styled.h3`
-  display: ${(props) => (props.id ? "block" : "inline")};
-  font-weight: ${(props) => (props.isBold ? 600 : "normal")};
-  white-space: ${(props) => (props.isBold ? "wrap" : "initial")};
+  display: ${(props) => props.id || "inline"};
+  font-weight: ${(props) => (props.isBold === true ? 600 : "normal")};
+  white-space: ${(props) => (props.isBold === true ? "wrap" : "initial")};
 `
 const ColorContainer = styled.div`
   display: inline-block;
@@ -95,6 +95,7 @@ const ColorContainer = styled.div`
 `
 export default function Success() {
   const location = useLocation()
+  const history = useHistory()
   const dispatch = useDispatch()
   const [data, setData] = useState({
     cartProducts: [],
@@ -176,25 +177,28 @@ export default function Success() {
     []
   )
   useEffect(() => {
-    dispatch(initializeCart())
-    ;(async () => {
-      const { stripeId } = location.state.ordersData
-      try {
-        const { data: stripeData } = await publicRequest.get(
-          `/checkout/payment/intents/${stripeId}`
-        )
+    if (!location.state) history.push({ pathname: "/" })
+    else {
+      dispatch(initializeCart())
+      ;(async () => {
+        const { stripeId } = location.state.ordersData
+        try {
+          const { data: stripeData } = await publicRequest.get(
+            `/checkout/payment/intents/${stripeId}`
+          )
 
-        setData({
-          ...location.state,
-          stripeData:
-            stripeData.charges
-              .data[0] /* eslint-disable-line react/jsx-props-no-spreading */
-        })
-      } catch (error) {
-        console.error(error)
-      }
-    })()
-  }, [dispatch, location])
+          setData({
+            ...location.state,
+            stripeData:
+              stripeData.charges
+                .data[0] /* eslint-disable-line react/jsx-props-no-spreading */
+          })
+        } catch (error) {
+          console.error(error)
+        }
+      })()
+    }
+  }, [dispatch, history, location])
   const {
     stripeData: {
       billing_details: { address, name, email, phone },
@@ -218,7 +222,7 @@ export default function Success() {
               <RowItem>TOTAL</RowItem>
             </ProductRow>
             {cartProducts.map((product) => (
-              <ProductRow>
+              <ProductRow key={product.size + product.color + product.name}>
                 <RowItemContainer>
                   <RowItem isName>
                     {product.title} {` X${product.qte}`} {"-" && product?.size}
@@ -261,7 +265,7 @@ export default function Success() {
           <RightList>
             <RightListItem>
               <ItemTitle>Order Number:&nbsp;</ItemTitle>
-              <ItemTitle isBold id>
+              <ItemTitle isBold id="block">
                 {id}
               </ItemTitle>
             </RightListItem>

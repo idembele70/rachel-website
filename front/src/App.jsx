@@ -1,11 +1,13 @@
 import { Elements } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
+import AuthVerify from "components/tools/AuthVerify"
 import Checkout from "components/tools/Checkout"
 import PrivateRoute from "components/tools/PrivateRoute"
 import SignRoute from "components/tools/SignRoute"
 import Cart from "pages/Cart"
 import Home from "pages/Home"
 import Login from "pages/Login"
+import Order from "pages/Order"
 import Orders from "pages/Orders"
 import ProductList from "pages/ProductList"
 import ProductPage from "pages/ProductPage"
@@ -23,6 +25,7 @@ function App() {
   return (
     <Router>
       <>
+        <AuthVerify />
         <ScrollToTop />
         <Switch>
           <Route path="/" exact>
@@ -42,6 +45,7 @@ function App() {
           <PrivateRoute path="/success" component={Success} exact />
           <PrivateRoute path="/user" component={User} exact />
           <PrivateRoute path="/user/orders" component={Orders} exact />
+          <PrivateRoute path="/user/order/:id" component={Order} exact />
           <Route path="/pay" exact>
             <Elements stripe={stripePromise}>
               <Checkout />

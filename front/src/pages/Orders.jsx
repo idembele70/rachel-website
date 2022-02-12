@@ -1,6 +1,7 @@
 import Sidebar from "components/tools/Sidebar"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
+import { useHistory } from "react-router-dom"
 import { userRequest } from "requestMethods"
 import { mobile, tablet } from "responsive"
 import styled from "styled-components"
@@ -12,6 +13,7 @@ const Container = styled.div`
 `
 
 const Main = styled.div`
+  position: relative;
   flex: 4;
   height: 100vh;
   background-color: #fff;
@@ -102,7 +104,19 @@ const Button = styled.div`
   }
   ${tablet({ padding: 2 })}
 `
-
+const EmptyOrderContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${tablet({ margin: "20px 0" })}
+`
+const EmptyOrderTitle = styled.h2`
+  ${mobile({ fontSize: 20 })}
+`
 function Orders() {
   const {
     currentUser: { _id: id }
@@ -112,42 +126,77 @@ function Orders() {
   useEffect(() => {
     userRequest.get(`orders/${id}`).then(({ data }) => setOrders(data))
   }, [id])
-
+  const MONTHS = useMemo(
+    () => [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Agu",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
+    []
+  )
+  const convertDate = (date) => {
+    const [y, m, d, hour] = date.split(/[-T.]/gi)
+    return `${d} ${MONTHS[m - 1]}. ${y} ${hour}`
+  }
+  const history = useHistory()
   return (
     <Container>
       <Sidebar />
       <Main>
         <MainTitle>MES COMMANDES</MainTitle>
-        <ItemTitleContainer>
-          <ItemTitle>Les articles</ItemTitle>
-          <ItemTitle>Total</ItemTitle>
-          <ItemTitle>État</ItemTitle>
-          <ItemTitle>Activités De commande</ItemTitle>
-        </ItemTitleContainer>
-        <ListBody>
-          {orders.map(({ _id: orderId, products, amount, status }) => (
-            <ListItem>
-              <ListItemHeader>
-                <HeaderHour>19 oct. 2021 18:02:14</HeaderHour>
-                <HeaderOrderNumber>
-                  Numéro de commande {orderId}
-                </HeaderOrderNumber>
-              </ListItemHeader>
-              <ListItemRow>
-                <RowItem>{products.length} articles</RowItem>
-                <RowItem>{amount}€</RowItem>
-                <RowItem>
-                  <Status>{status}</Status>
-                  <Button>Details de ma commande</Button>
-                </RowItem>
-                <RowItem>
-                  <Button>Suivre</Button>
-                  <Button>Renvoyez L&apos;article</Button>
-                </RowItem>
-              </ListItemRow>
-            </ListItem>
-          ))}
-        </ListBody>
+        {orders.length ? (
+          <>
+            <ItemTitleContainer>
+              <ItemTitle>Les articles</ItemTitle>
+              <ItemTitle>Total</ItemTitle>
+              <ItemTitle>État</ItemTitle>
+              <ItemTitle>Activités De commande</ItemTitle>
+            </ItemTitleContainer>
+            <ListBody>
+              {orders.map(
+                ({ _id: orderId, createdAt, products, amount, status }) => (
+                  <ListItem key={orderId}>
+                    <ListItemHeader>
+                      <HeaderHour>{convertDate(createdAt)}</HeaderHour>
+                      <HeaderOrderNumber>
+                        Numéro de commande {orderId}
+                      </HeaderOrderNumber>
+                    </ListItemHeader>
+                    <ListItemRow>
+                      <RowItem>{products.length} articles</RowItem>
+                      <RowItem>{amount}€</RowItem>
+                      <RowItem>
+                        <Status>{status}</Status>
+                        <Button
+                          onClick={() => history.push(`/user/order/${orderId}`)}
+                        >
+                          Details de ma commande
+                        </Button>
+                      </RowItem>
+                      <RowItem>
+                        <Button>Suivre</Button>
+                        <Button>Renvoyez L&apos;article</Button>
+                      </RowItem>
+                    </ListItemRow>
+                  </ListItem>
+                )
+              )}
+            </ListBody>{" "}
+          </>
+        ) : (
+          <EmptyOrderContainer>
+            <EmptyOrderTitle>No Order yet</EmptyOrderTitle>
+          </EmptyOrderContainer>
+        )}
       </Main>
     </Container>
   )

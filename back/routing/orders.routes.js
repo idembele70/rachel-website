@@ -69,15 +69,27 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
   }
 })
 
-// GET user order
+// GET ALL USER ORDER
 router.get("/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
     const userOders = await Order.find({ userId: req.params.id })
     res.status(200).json(userOders)
   } catch (err) {
+    console.log(req.params.id)
     res.status(500).json(err)
   }
 });
+// GET ONE OF USER'S ORDER
+router.get("/find/:id/:orderId", verifyTokenAndAuthorization, async (req, res) => {
+ try {
+    const order = await Order.findById(req.params.orderId)
+    .populate("products.product")
+    res.status(200).json(order)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+});
+// GET ONE OF USER'S ORDER ENDPOINT
 
 // GET ALL ORDER
 router.get("/", verifyTokenAndAdmin, async (req, res) => {

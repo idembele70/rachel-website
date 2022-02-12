@@ -75,9 +75,9 @@ export default function Product(props) {
   } = props
   // @ts-ignore
   const { products } = useSelector((state) => state.cart)
-  const dispatch = useDispatch()
-  const history = useHistory()
-  const handleAddToCart = () => {
+  /* const dispatch = useDispatch()
+  const history = useHistory() */
+/*   const handleAddToCart = () => {
     if (sizes.length > 1 || colors.length > 1) {
       history.push(`/product/${id}`)
     } else {
@@ -88,16 +88,16 @@ export default function Product(props) {
         dispatch(addProduct({ ...product, qte: 1 }))
       }
     }
-  }
+  } */
 
   return (
     <Container>
       <Circle />
       <Image src={img} alt={title} />
       <Info>
-        <Icon onClick={handleAddToCart}>
+        {/* <Icon onClick={handleAddToCart}>
           <ShoppingCartOutlined />
-        </Icon>
+        </Icon> */}
         <Link
           style={{ color: "inherit", textDecoration: "inherit" }}
           to={`/product/${id}`}
@@ -106,9 +106,9 @@ export default function Product(props) {
             <SearchOutlined />
           </Icon>
         </Link>
-        <Icon>
+        {/* <Icon>
           <FavoriteBorderOutlined />
-        </Icon>
+        </Icon> */}
       </Info>
     </Container>
   )

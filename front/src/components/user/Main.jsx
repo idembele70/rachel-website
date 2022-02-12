@@ -306,7 +306,6 @@ export default function Main() {
   useEffect(() => {
     setInfo(currentUser)
   }, [currentUser])
-  console.log(info)
 
   const dispatch = useDispatch()
   const [modalPassword, setModalPassword] = useState("")
