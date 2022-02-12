@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { publicRequest } from "requestMethods"
 import { mobile } from "responsive"
 import styled from "styled-components"
-import PropTypes from "prop-types"
 import CategoryItem from "./CategoryItem"
 
 const Container = styled.div`
@@ -22,6 +21,7 @@ const Container = styled.div`
 
 function Categories() {
   const [categories, setCategories] = useState([])
+
   useEffect(() => {
     publicRequest
       .get("/category")
@@ -37,8 +37,7 @@ function Categories() {
   return (
     <Container>
       {categories.map((category) => (
-        // eslint-disable-next-line no-underscore-dangle
-        <CategoryItem itemInfo={category} key={category._id} />
+        <CategoryItem itemInfo={category} key={category._id} /> // eslint-disable-line no-underscore-dangle
       ))}
     </Container>
   )

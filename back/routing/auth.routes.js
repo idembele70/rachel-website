@@ -33,8 +33,9 @@ router.post("/login", async (req, res) => {
     if (password !== userPassword) return res.status(401).json("Wrong credentials")
     const { _id: id, isAdmin } = user
     const accessToken = jwt.sign({ id, isAdmin }, JWT_SECRET_KEY, { expiresIn: "1d" })
+    const {exp} = jwt.decode(accessToken)
     const { password: DBPassword, ...others } = user._doc
-    res.status(200).json({ ...others, accessToken })
+    res.status(200).json({ ...others, accessToken,exp })
   } catch (err) {
     res.status(500).json(err)
   }

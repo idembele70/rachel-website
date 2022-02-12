@@ -294,8 +294,10 @@ function Checkout() {
           qte, size, color
         }))
         const ordersProducts = products.map((product) => ({
-          productId: product._id, // eslint-disable-line no-underscore-dangle
-          quantity: product.qte
+          product: product._id, // eslint-disable-line no-underscore-dangle
+          quantity: product.qte,
+          color: product.color,
+          size: product.size
         }))
       const { data } = await userRequest.post(
           // eslint-disable-next-line no-underscore-dangle
