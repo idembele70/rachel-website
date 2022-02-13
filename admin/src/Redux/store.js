@@ -5,13 +5,20 @@ import storage from 'redux-persist/lib/storage'
 import productReducer from './productRedux'
 import userReducer from './userRedux'
 import categoryReducer from './categoryRedux'
+import orderReducer from './orderRedux'
 const persistConfig = {
   key: "root",
   version: 1,
   storage
 }
 
-const rootReducer = combineReducers({ user: userReducer, product: productReducer, category: categoryReducer })
+const rootReducer = combineReducers({ 
+  user: userReducer,
+  product: productReducer,
+  category: categoryReducer,
+  order: orderReducer
+})
+
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 

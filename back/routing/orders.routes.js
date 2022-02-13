@@ -17,6 +17,7 @@ router.post("/new/:id", verifyTokenAndAuthorization, async (req, res) => {
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     const orderUpdated = await Order.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+    .populate("products.product")
     res.status(200).json(orderUpdated)
   } catch (err) {
     res.status(500).json(err)
@@ -69,7 +70,7 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
   }
 })
 
-// GET ALL USER ORDER
+// GET ALL ORDER FROM ONE USER
 router.get("/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
     const userOders = await Order.find({ userId: req.params.id })
@@ -79,6 +80,7 @@ router.get("/:id", verifyTokenAndAuthorization, async (req, res) => {
     res.status(500).json(err)
   }
 });
+// GET ALL ORDER FROM ONE USER ENDPOINT
 // GET ONE OF USER'S ORDER
 router.get("/find/:id/:orderId", verifyTokenAndAuthorization, async (req, res) => {
  try {
@@ -95,6 +97,8 @@ router.get("/find/:id/:orderId", verifyTokenAndAuthorization, async (req, res) =
 router.get("/", verifyTokenAndAdmin, async (req, res) => {
   try {
     const orders = await Order.find()
+    .populate("products.product")
+    console.log(orders)
     res.status(200).json(orders)
   } catch (err) {
     res.status(500).json(err)
