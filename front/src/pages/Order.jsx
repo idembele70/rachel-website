@@ -1,11 +1,10 @@
 import Sidebar from "components/tools/Sidebar"
-import styled from "styled-components"
 import React, { useEffect, useMemo, useState } from "react"
+import { useSelector } from "react-redux"
 import { useLocation } from "react-router-dom"
 import { publicRequest, userRequest } from "requestMethods"
-import { Announcement } from "@mui/icons-material"
 import { smallMobile, tablet } from "responsive"
-import { useSelector } from "react-redux"
+import styled from "styled-components"
 
 const Container = styled.div`
   display: flex;
@@ -22,7 +21,7 @@ const OrderContainer = styled.div`
 `
 const LeftTitle = styled.h2``
 const ProductContainer = styled.div`
-  margin: 18px 0;
+  margin: 18px 0; // doit etre enlever 
 `
 
 const ProductRow = styled.div`

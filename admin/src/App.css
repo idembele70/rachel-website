@@ -4,6 +4,7 @@
     min-height: 100vh;
     min-width: 1023px;
     max-width: 1440px;
+    margin: 0 auto;
 }
 .main{
     display: flex;

@@ -36,6 +36,16 @@ import {
   updateProductSuccess,
 } from "./productRedux"
 
+import {
+  getOrderStart,
+  getOrderSuccess,
+  getOrderFailure,
+  updateOrderStart,
+  updateOrderFailure,
+  updateOrderSuccess
+} from './orderRedux'
+import { async } from "@firebase/util"
+
 //  LOGIN user
 export const login = async (dispatch, user) => {
   dispatch(loginStart())
@@ -155,3 +165,30 @@ export const deleteCategory = async (dispatch, id) => {
   }
 }
 // DELETE category endpoint
+
+/* ORDERS REQUEST */
+
+// GET ALL ORDERS 
+export const getOrders = async (dispatch)=> {
+  dispatch(getOrderStart())
+  try {
+    const {data} = await userRequest.get("/orders/")
+    dispatch(getOrderSuccess(data))
+  } catch (err) {
+    dispatch(getOrderFailure())
+  }
+}
+// GET ALL ORDERS ENDPOINT
+// UPDATE ORDER
+export const updateOrder = async (dispatch, newInformation, id) => {
+  dispatch(updateOrderStart())
+  try {
+    const { data } = await userRequest.put(`/orders/${id}`, newInformation)
+    console.log(data)
+    dispatch(updateOrderSuccess(data))
+  } catch (err) {
+    dispatch(updateOrderFailure())
+    
+  }
+}
+// UPDATE ORDER ENDPOINT

@@ -62,10 +62,12 @@ export default function Sidebar() {
                 Add Category
               </li>
             </Link>
+            <Link to="/orders" className="link" >
             <li className="sidebarListItem">
               <AttachMoney className="sidebarIcon" />
-              Transactions
+              Orders
             </li>
+            </Link>
             <li className="sidebarListItem">
               <BarChart className="sidebarIcon" />
               Reports
