@@ -184,7 +184,6 @@ export const updateOrder = async (dispatch, newInformation, id) => {
   dispatch(updateOrderStart())
   try {
     const { data } = await userRequest.put(`/orders/${id}`, newInformation)
-    console.log(data)
     dispatch(updateOrderSuccess(data))
   } catch (err) {
     dispatch(updateOrderFailure())

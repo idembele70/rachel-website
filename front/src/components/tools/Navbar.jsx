@@ -96,7 +96,7 @@ bottom: -60px;
 right:0px;
 height:40px;
 width: 128px;
-background-color: rgba(0,128,128,1);
+background-color: rgb(56 57 57);
 z-index:999;
 display: flex;
 flex-direction: column;
@@ -105,9 +105,9 @@ padding:0 10px 20px;
 const MenuInfoItem = Styled.div`
 margin: 5px 0;
 font-size: 16px;
-color: rgba(0,0,0,0.8);
+color: white;
 &:hover{
-  background: rgba(0,0,0,0.2);;
+  background: rgb(255, 255, 255, 0.42);
   color: white;
 }
 `
@@ -129,7 +129,7 @@ const Navbar = () => {
   const handleLogout = () => {
     logout(dispatch)
   }
-  const handleSearch = (e) => {
+  const handleSearch = () => {
     history.push(`/products/${search}`)
     setSearch("")
   }
