@@ -148,7 +148,6 @@ export default function Order() {
       }
     })()
   }, [orderId, userId])
-  console.log(data.ordersData.products)
   const {
     stripeData: {
       billing_details: { address, name, email, phone },

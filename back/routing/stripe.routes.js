@@ -36,7 +36,9 @@ router.post("/payment/intents", async (req, res) => {
   }
 })
 // CREATE PAYMENT WITH STRIPE JS ENDPONT
+// UPDATE PAYMENT WITH STRIPE JS 
 
+// UPDATE PAYMENT WITH STRIPE JS ENDPONT
 // GET PAYMENT WITH STRIPE JS
 router.get("/payment/intents/:id", async (req, res) => {
   try {

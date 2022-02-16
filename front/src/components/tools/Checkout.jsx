@@ -7,16 +7,17 @@ import {
   useStripe
 } from "@stripe/react-stripe-js"
 import React, { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
 import { userRequest } from "requestMethods"
-import { smallMobile } from "responsive"
+import { mobile, smallMobile } from "responsive"
 import styled from "styled-components"
 
 const Container = styled.div`
   max-width: 100vw;
   min-height: 100vh;
-  background: #27303ae8;
+  background-color: rgba(39, 48, 58, 0.91);
   padding: 10px 0;
 `
 const Title = styled.h1`
@@ -112,7 +113,6 @@ const Button = styled.button`
   outline: 0;
   display: inline-block;
   height: 40px;
-  line-height: 40px;
   padding: 0 14px;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   color: #fff;
@@ -124,6 +124,7 @@ const Button = styled.button`
   text-decoration: none;
   transition: all 150ms ease;
   margin: 0 10px;
+  ${mobile({ margin: 10 })}
   &:hover {
     color: #fff;
     cursor: pointer;
@@ -136,7 +137,7 @@ const Error = styled.span`
   color: red;
   margin: 0 0 15px;
   font-size: 20px;
-  opacity: ${(props) => props.display};
+  opacity: ${(props) => props.opacity};
 `
 function Checkout() {
   const history = useHistory()
@@ -165,7 +166,7 @@ function Checkout() {
     } = currentUser
     setInfo({ ...billing, zip })
   }, [currentUser])
- 
+
   const { firstname, lastname, email, address, zip, city, country, phone } =
     info
   const handleUpdate = (ev) => {
@@ -283,38 +284,43 @@ function Checkout() {
       })
       try {
         const {
-          data: {id: stripeId}
+          data: { id: stripeId }
         } = await userRequest.post("/checkout/payment/intents", {
           id: payload.paymentMethod.id,
           amount: total * 100
         })
-        const cartProducts = products.map(({ title, price, qte,size,color }) => ({
-          title,
-          price,
-          qte, size, color
-        }))
+        const cartProducts = products.map(
+          ({ title, price, qte, size, color }) => ({
+            title,
+            price,
+            qte,
+            size,
+            color
+          })
+        )
         const ordersProducts = products.map((product) => ({
           product: product._id, // eslint-disable-line no-underscore-dangle
           quantity: product.qte,
           color: product.color,
           size: product.size
         }))
-      const { data } = await userRequest.post(
+        const { data } = await userRequest.post(
           // eslint-disable-next-line no-underscore-dangle
           `/orders/new/${currentUser._id}`,
           {
-            userId: currentUser._id, // eslint-disable-line no-underscore-dangle
+            user: currentUser._id, // eslint-disable-line no-underscore-dangle
             products: ordersProducts,
             amount: total,
             stripeId
           }
         )
-         if (data)
+        if (data)
           history.push({
             pathname: "/success",
             state: { ordersData: data, cartProducts }
           })
       } catch (err) {
+        // eslint-disable-next-line no-underscore-dangle
         console.error(err)
       }
     } else if (Object.values(info).filter((x) => x === "").length !== 0)
@@ -332,28 +338,30 @@ function Checkout() {
       history.push("/cart")
     }
   }
-
+  const { t } = useTranslation()
   return (
     <Container>
-      <Title>{canPay ? "Payment" : "Billing & Shipping"}</Title>
+      <Title>{canPay ? t("checkout.payment") : t("checkout.billing")}</Title>
       <Form onSubmit={handleSubmit} onReset={handleReset}>
         {!canPay ? (
           <>
             <FormItem>
               <ItemRow>
-                <Label>Firstname</Label>
+                <Label>{t("checkout.firstname")}</Label>
                 <Input
-                  placeholder="FIRSTNAME"
+                  required
+                  placeholder={t("checkout.firstname").toUpperCase()}
                   name="firstname"
                   value={firstname}
                   onChange={handleUpdate}
                 />
               </ItemRow>
               <ItemRow>
-                <Label>Lastname</Label>
+                <Label>{t("checkout.lastname")}</Label>
                 <Input
+                  required
                   onChange={handleUpdate}
-                  placeholder="LASTNAME"
+                  placeholder={t("checkout.lastname").toUpperCase()}
                   name="lastname"
                   value={lastname}
                 />
@@ -361,9 +369,10 @@ function Checkout() {
             </FormItem>
             <FormItem>
               <ItemRow>
-                <Label>Email</Label>
+                <Label>{t("checkout.email")}</Label>
                 <Input
-                  placeholder="EMAIL"
+                  required
+                  placeholder={t("checkout.email").toUpperCase()}
                   name="email"
                   value={email}
                   onChange={handleUpdate}
@@ -372,6 +381,7 @@ function Checkout() {
               <ItemRow>
                 <Label>Address</Label>
                 <Input
+                  required
                   placeholder="ADDRESS"
                   name="address"
                   value={address}
@@ -381,18 +391,20 @@ function Checkout() {
             </FormItem>
             <FormItem>
               <ItemRow>
-                <Label>CP</Label>
+                <Label>{t("checkout.postalCode")}</Label>
                 <Input
-                  placeholder="CP"
+                  required
+                  placeholder={t("checkout.postalCode").toUpperCase()}
                   name="zip"
                   value={zip}
                   onChange={handleUpdate}
                 />
               </ItemRow>
               <ItemRow>
-                <Label>city</Label>
+                <Label>{t("checkout.city")}</Label>
                 <Input
-                  placeholder="CITY"
+                  required
+                  placeholder={t("checkout.city").toUpperCase()}
                   name="city"
                   value={city}
                   onChange={handleUpdate}
@@ -401,7 +413,7 @@ function Checkout() {
             </FormItem>
             <FormItem>
               <ItemRow>
-                <Label>Country</Label>
+                <Label>{t("checkout.country")}</Label>
                 <Select name="country" value={country} onChange={handleUpdate}>
                   {countries.map(({ country: ctry, code }) => (
                     <Option key={code} value={code}>
@@ -411,9 +423,10 @@ function Checkout() {
                 </Select>
               </ItemRow>
               <ItemRow>
-                <Label>Phone</Label>
+                <Label>{t("checkout.phone")}</Label>
                 <Input
-                  placeholder="PHONE"
+                  required
+                  placeholder={t("checkout.phone").toUpperCase()}
                   name="phone"
                   value={phone}
                   onChange={handleUpdate}
@@ -424,24 +437,24 @@ function Checkout() {
         ) : (
           <>
             <StripeFormItem>
-              <Label>Card Number</Label>
+              <Label>{t("checkout.card.number")}</Label>
               <StripeInput
                 component={<CardNumberElement options={options} />}
               />
             </StripeFormItem>
             <StripeFormItem>
-              <Label>Expiration</Label>
+              <Label>{t("checkout.card.expiration")}</Label>
               <StripeInput
                 component={<CardExpiryElement options={options} />}
               />
             </StripeFormItem>
             <StripeFormItem>
-              <Label>CVC</Label>
+              <Label>{t("checkout.card.cvc").toUpperCase()}</Label>
               <StripeInput component={<CardCvcElement options={options} />} />
             </StripeFormItem>
           </>
         )}
-        <Error display={error ? 1 : 0}>A input cannot be empty</Error>
+        <Error opacity={error ? 1 : 0}>{t("checkout.emptyField")}</Error>
         <ButtonContainer>
           <Button back type="Reset">
             {canPay ? "Go back" : "back to Card"}

@@ -61,24 +61,30 @@ const MainItem = styled.div`
     background: #4f9ae726;
     & > * {
       color: #4f9ae7;
-      }
     }
-    cursor: pointer;
   }
+  cursor: pointer;
   & > svg {
     ${mobile({ fontSize: 18 })};
   }
-  ${tablet({ padding: 0, flex: 1, justifyContent: "center" })};
-  &:not(:last-of-type){
-   ${tablet({ borderRight: "2px solid #e5e5e5" })}
+  ${tablet({
+    padding: 0,
+    flex: 1,
+    justifyContent: "center"
+  })};
+  &:not(:last-of-type) {
+    ${tablet({ borderRight: "2px solid #e5e5e5" })}
   }
+  ${mobile({
+    flex: (props) => props.flex
+  })}
 `
 const MainItemTitle = styled.h1`
   margin-left: 10px;
   font-size: 22px;
   font-weight: 500;
-  ${mobile({ fontSize: 16, lineHeight: "16px" })}
-  ${smallMobile({ display: "none" })};
+  ${tablet({ fontSize: 15 })};
+  ${mobile({ display: "none" })};
 `
 
 export default function Sidebar() {
@@ -93,15 +99,15 @@ export default function Sidebar() {
       <MainContainer>
         <MainItem onClick={() => history.push("/user")}>
           <HomeSharp />
-          <MainItemTitle>Home</MainItemTitle>
+          <MainItemTitle>{t("navbar.home")}</MainItemTitle>
         </MainItem>
         <MainItem onClick={() => history.push("/user/orders")}>
           <LocalGroceryStore />
-          <MainItemTitle>Orders</MainItemTitle>
+          <MainItemTitle>{t("navbar.orders")}</MainItemTitle>
         </MainItem>
         <MainItem onClick={() => logout(dispatch)}>
           <ExitToAppSharp />
-          <MainItemTitle>Logout</MainItemTitle>
+          <MainItemTitle>{t("sign.logout")}</MainItemTitle>
         </MainItem>
       </MainContainer>
     </Container>

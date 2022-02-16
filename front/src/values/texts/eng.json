@@ -1,5 +1,8 @@
 {
-  "siteName": "RDBLC",
+  "siteName": "Dembele Couture",
+  "siteLanguage": "FR",
+  "announcement": "Super Deal! Free Shipping on Orders Over $50",
+  "currency": "€",
   "cart": {
     "checkout": "CHECKOUT NOW",
     "continueShop": "CONTINUE SHOPPING",

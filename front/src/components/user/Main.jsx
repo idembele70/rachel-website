@@ -8,8 +8,8 @@ import {
   PermIdentityOutlined
 } from "@mui/icons-material"
 import React, { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
-import { useHistory } from "react-router-dom"
 import { updateUser } from "redux/apiCalls"
 import { publicRequest, userRequest } from "requestMethods"
 import { mobile } from "responsive"
@@ -187,6 +187,7 @@ padding: 0 5px;
 border-bottom: 1px solid darkgrey;
 `
 const ModalTitle = Styled.h3`
+text-align: center;
 `
 const CloseModal = Styled(Close)`
 &:hover {
@@ -213,6 +214,7 @@ cursor: pointer;
 export default function Main() {
   const [disabled, setDisabled] = useState(true)
   const [modal, setModal] = useState(false)
+  const { t } = useTranslation()
   const [info, setInfo] = useState({
     firstname: "",
     lastname: "",
@@ -309,7 +311,6 @@ export default function Main() {
 
   const dispatch = useDispatch()
   const [modalPassword, setModalPassword] = useState("")
-  const history = useHistory()
   const handleClick = () => {
     if (!disabled) setModal(true)
     setDisabled(!disabled)
@@ -340,7 +341,7 @@ export default function Main() {
         <ModalContainer>
           <Modal>
             <ModalHeader>
-              <ModalTitle>Confirm Your password</ModalTitle>
+              <ModalTitle>{t("user.profile.modalPassword")}</ModalTitle>
               <CloseModal
                 onClick={() => {
                   setModal(false)
@@ -353,7 +354,9 @@ export default function Main() {
                 value={modalPassword}
                 onChange={(e) => setModalPassword(e.target.value.toLowerCase())}
               />
-              <ModalButton onClick={handleUpdateUser}>Valider</ModalButton>
+              <ModalButton onClick={handleUpdateUser}>
+                {t("user.profile.modalButton")}
+              </ModalButton>
             </ModalContent>
           </Modal>
         </ModalContainer>
@@ -361,16 +364,16 @@ export default function Main() {
       <Card>
         <CardTop>
           <CardButton onClick={handleClick}>
-            {disabled ? "EDIT" : "SAVE"}
+            {disabled ? t("user.profile.edit") : t("user.profile.save")}
           </CardButton>
           <CardTitle>{`${firstname} ${lastname}`}</CardTitle>
           <CardDate>{new Date(createdAt).toLocaleDateString()}</CardDate>
         </CardTop>
         <CardBottom>
           <CardBottomWrapper>
-            <BottomTitle>Contact details</BottomTitle>
+            <BottomTitle>{t("user.profile.contact")}</BottomTitle>
             <BottomField>
-              <Label>firstname</Label>
+              <Label>{t("user.profile.firstname")}</Label>
               <Input
                 disabled={disabled}
                 type="text"
@@ -381,7 +384,7 @@ export default function Main() {
               <StyledPermIdentityOutlined />
             </BottomField>
             <BottomField>
-              <Label>Lastname</Label>
+              <Label>{t("user.profile.lastname")}</Label>
               <Input
                 disabled={disabled}
                 type="text"
@@ -392,7 +395,7 @@ export default function Main() {
               <StyledPermIdentityOutlined />
             </BottomField>
             <BottomField>
-              <Label>Email</Label>
+              <Label>{t("user.profile.email")}</Label>
               <Input
                 disabled={disabled}
                 type="email"
@@ -403,7 +406,7 @@ export default function Main() {
               <StyledMailOutline />
             </BottomField>
             <BottomField>
-              <Label>Phone</Label>
+              <Label>{t("user.profile.phone")}</Label>
               <Input
                 disabled={disabled}
                 type="tel"
@@ -414,7 +417,7 @@ export default function Main() {
               <StyledCallOutlined />
             </BottomField>
             <BottomField>
-              <Label>Address</Label>
+              <Label>{t("user.profile.address")}</Label>
               <Input
                 disabled={disabled}
                 type="text"
@@ -425,7 +428,7 @@ export default function Main() {
               <StyledHomeOutlined />
             </BottomField>
             <BottomField>
-              <Label>City</Label>
+              <Label>{t("user.profile.city")}</Label>
               <Input
                 disabled={disabled}
                 type="text"
@@ -436,7 +439,7 @@ export default function Main() {
               <StyledLocationCity />
             </BottomField>
             <BottomField>
-              <Label>Country</Label>
+              <Label>{t("user.profile.country")}</Label>
               <Select
                 disabled={disabled}
                 name="country"
@@ -451,7 +454,7 @@ export default function Main() {
               </Select>
             </BottomField>
             <BottomField>
-              <Label>Postal box</Label>
+              <Label>{t("user.profile.postalbox")}</Label>
               <Input
                 disabled={disabled}
                 type="number"

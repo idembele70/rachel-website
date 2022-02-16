@@ -1,14 +1,14 @@
 const { Schema, model } = require("mongoose")
 
 const orderSchema = Schema({
-userId: {type: String, required: true},
+user: {type: Schema.Types.ObjectId, ref:"users", required: true},
 products : [
   {
     product: {
       type : Schema.Types.ObjectId, ref: "product", required:true
     },
     color: {type: String, required: true},
-    size: {type: String, required: true},
+    size: {type: String, default : ""},
     quantity: {
       type : Number,
       default : 1

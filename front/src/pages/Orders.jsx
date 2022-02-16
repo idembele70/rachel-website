@@ -1,5 +1,6 @@
 import Sidebar from "components/tools/Sidebar"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
 import { userRequest } from "requestMethods"
@@ -9,13 +10,13 @@ import styled from "styled-components"
 const Container = styled.div`
   display: flex;
   width: 100vw;
+  min-height: 100vh;
   ${tablet({ flexDirection: "column" })}
 `
 
 const Main = styled.div`
   position: relative;
   flex: 4;
-  height: 100vh;
   background-color: #fff;
   padding: 10px;
 `
@@ -67,8 +68,6 @@ const ListItemRow = styled.div`
   padding: 0 10px;
   ${mobile({
     flexDirection: "column",
-    /* alignItems: "center",
-justifyContent: "center", */
     padding: 0
   })}
 `
@@ -106,15 +105,17 @@ const Button = styled.div`
 `
 const EmptyOrderContainer = styled.div`
   position: absolute;
-  top: 50%;
+  width: fit-content;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  ${tablet({ margin: "20px 0" })}
+  ${tablet({ margin: "20px 0", position: "fixedfixed" })}
 `
 const EmptyOrderTitle = styled.h2`
+  text-align: center;
   ${mobile({ fontSize: 20 })}
 `
 function Orders() {
@@ -126,40 +127,24 @@ function Orders() {
   useEffect(() => {
     userRequest.get(`orders/${id}`).then(({ data }) => setOrders(data))
   }, [id])
-  const MONTHS = useMemo(
-    () => [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Agu",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ],
-    []
-  )
+  const { t } = useTranslation()
   const convertDate = (date) => {
     const [y, m, d, hour] = date.split(/[-T.]/gi)
-    return `${d} ${MONTHS[m - 1]}. ${y} ${hour}`
+    return `${d}/${m}/${y} ${hour}`
   }
   const history = useHistory()
   return (
     <Container>
       <Sidebar />
       <Main>
-        <MainTitle>MES COMMANDES</MainTitle>
+        <MainTitle>{t("user.orders.title")}</MainTitle>
         {orders.length ? (
           <>
             <ItemTitleContainer>
-              <ItemTitle>Les articles</ItemTitle>
-              <ItemTitle>Total</ItemTitle>
-              <ItemTitle>État</ItemTitle>
-              <ItemTitle>Activités De commande</ItemTitle>
+              <ItemTitle>{t("user.orders.itemTitle")}</ItemTitle>
+              <ItemTitle>{t("user.orders.total")}</ItemTitle>
+              <ItemTitle>{t("user.orders.itemState")}</ItemTitle>
+              <ItemTitle>{t("user.orders.activity")}</ItemTitle>
             </ItemTitleContainer>
             <ListBody>
               {orders.map(
@@ -168,33 +153,38 @@ function Orders() {
                     <ListItemHeader>
                       <HeaderHour>{convertDate(createdAt)}</HeaderHour>
                       <HeaderOrderNumber>
-                        Numéro de commande {orderId}
+                        {t("user.orders.orderNumber")} {orderId}
                       </HeaderOrderNumber>
                     </ListItemHeader>
                     <ListItemRow>
-                      <RowItem>{products.length} articles</RowItem>
-                      <RowItem>{amount}€</RowItem>
                       <RowItem>
-                        <Status>{status}</Status>
+                        {products.length} {t("user.orders.article")}
+                      </RowItem>
+                      <RowItem>
+                        {amount}
+                        {t("currency")}
+                      </RowItem>
+                      <RowItem>
+                        <Status>{t(`user.orders.${status}`)}</Status>
                         <Button
                           onClick={() => history.push(`/user/order/${orderId}`)}
                         >
-                          Details de ma commande
+                          {t("user.orders.orderDetail")}
                         </Button>
                       </RowItem>
                       <RowItem>
-                        <Button>Suivre</Button>
-                        <Button>Renvoyez L&apos;article</Button>
+                        <Button>{t("user.orders.follow")}</Button>
+                        <Button>{t("user.orders.return")}</Button>
                       </RowItem>
                     </ListItemRow>
                   </ListItem>
                 )
               )}
-            </ListBody>{" "}
+            </ListBody>
           </>
         ) : (
           <EmptyOrderContainer>
-            <EmptyOrderTitle>No Order yet</EmptyOrderTitle>
+            <EmptyOrderTitle>{t("user.orders.empty")}</EmptyOrderTitle>
           </EmptyOrderContainer>
         )}
       </Main>

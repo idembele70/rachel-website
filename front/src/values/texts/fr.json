@@ -1,7 +1,8 @@
 {
   "siteName": "Dembele Couture",
   "siteLanguage": "FR",
-  "announcement": "Super Deal! Free Shipping on Orders Over $50",
+  "announcement": "Frais de port gratuit à partir de 100€",
+  "currency": "€",
   "cart": {
     "checkout": "PAYER MAINTENANT",
     "continueShop": "Continuez vos achats",
@@ -19,6 +20,25 @@
       "title": "Récapitulatif de la commande",
       "total": "Total"
     }
+  },
+  
+  "checkout":{
+    "address": "Adresse",
+    "billing": "Addresse de livraison et contact",
+    "card": {
+      "expiration":"Date d'expiration",
+      "cvc":"CVC",
+      "number":"Numéro de carte"
+    },
+    "city": "Ville",
+    "country": "Pays",
+    "email": "Adresse e-mail",
+    "emptyField": "Tout les champs doivent etre rempli",
+    "firstname": "Prénom",
+    "lastname": "Nom",
+    "payment": "Paiment",
+    "phone": "Téléphone",
+    "postalCode": "Code postal"
   },
   "footer": {
     "left": {
@@ -49,7 +69,9 @@
   },
   "navbar": {
     "search": "recherche",
-    "myAccount": "Mon compte"
+    "myAccount": "Mon compte",
+    "home": "Profile",
+    "orders": "Mes Achats"
   },
   "newsletter": {
     "title": "Newsletter",
@@ -128,7 +150,7 @@
   },
   "sign": {
     "login": "Se\u00A0connecter",
-    "logout": "Se\u00A0deconnecter",
+    "logout": "Deconnexion",
     "signup": "S'incrire",
     "email": "Email",
     "password": "Mot\u00A0de\u00A0passe"
@@ -168,6 +190,39 @@
         "description": "NE RATEZ PAS LA DERNIERE REDUCTION DE 40% SUR LES NOUVEAUTÉS",
         "title": "Solde d'automne"
       }
+    }
+  },
+  "user" : {
+    "profile" :{
+      "address": "Adresse",
+      "contact": "Contact details",
+      "country": "Pays",
+      "city": "Ville",
+      "edit": "Modifier",
+      "email": "Email",
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "modalButton": "Valider",
+      "modalPassword": "Veuillez saisir votre mot de passe",
+      "phone": "Téléphone",
+      "postalbox": "Code Postal",
+      "save": "Sauvegarder"
+    },
+    "orders": {
+      "activity":"Activités De commande",
+      "article":"Articles",
+      "empty": "Vos Prochaines commandes s'afficheront ici",
+      "follow": "Suivre",
+      "itemTitle": "Les articles",
+      "itemState":"État",
+      "orderDetail": "Details de ma commande",
+      "orderNumber": "Numéro de commande",
+      "pending": "En Attente",
+      "proccessing": "En Traitement",
+      "return": "Renvoyez L\u0027article",
+      "send": "Envoyez",
+      "title": "MES COMMANDES",
+      "total": "Total"
     }
   }
 }
