@@ -131,7 +131,8 @@ export default function ProductPage() {
     description: String(),
     img: String(),
     sizes: [],
-    colors: []
+    colors: [],
+    weight: String()
   })
   const [loading, setLoading] = useState(true)
   const id = useLocation().pathname.split("/")[2]
@@ -152,7 +153,7 @@ export default function ProductPage() {
       .finally(() => setLoading(false))
       .catch(console.error)
   }, [id])
-  const { price, title, description, img, sizes, colors } = product
+  const { price, title, description, img, sizes, colors, weight } = product
   const handleQuantity = (direction = String()) => {
     if (direction === "dec") {
       if (qte > 1) setQte(qte > 1 && qte - 1)

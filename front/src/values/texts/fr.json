@@ -3,42 +3,54 @@
   "siteLanguage": "FR",
   "announcement": "Frais de port gratuit à partir de 100€",
   "currency": "€",
+  "email": "racheldembelecouture@gmail.com",
   "cart": {
     "checkout": "PAYER MAINTENANT",
     "continueShop": "Continuez vos achats",
     "description": "Le prix total est",
-    "empty": "Votre panier est vide !" ,
-    "title": "VOTRE PANIER",
-    "topTexts": {
-      "bag": "Votre panier",
-      "whislist": "Vos Souhait"
+    "empty": "Votre panier est vide !",
+    "modal": {
+      "cancel": "fermer",
+      "copied": "copié",
+      "copy": "copie",
+      "title": "Contactez-nous par Mail"
     },
     "orderSummary": {
+      "destinationCountry": "Pays de destination",
+      "cantShip": "les Frais de port dans cette zone sont calculé manuellement contactez nous :",
       "shippingPrice": "Frais de port estimés",
       "shippingDiscount": "Remise sur les frais de port",
       "subtotal": "Sous total",
       "title": "Récapitulatif de la commande",
       "total": "Total"
+    },
+    "title": "VOTRE PANIER",
+    "topTexts": {
+      "bag": "Votre panier",
+      "whislist": "Vos Souhait"
     }
   },
-  
-  "checkout":{
+  "checkout": {
     "address": "Adresse",
+    "backToCard": "Revenir au panier",
     "billing": "Addresse de livraison et contact",
     "card": {
-      "expiration":"Date d'expiration",
-      "cvc":"CVC",
-      "number":"Numéro de carte"
+      "expiration": "Date d'expiration",
+      "cvc": "CVC",
+      "number": "Numéro de carte"
     },
     "city": "Ville",
     "country": "Pays",
     "email": "Adresse e-mail",
     "emptyField": "Tout les champs doivent etre rempli",
     "firstname": "Prénom",
+    "goBack": "Revenir en arrière",
     "lastname": "Nom",
     "payment": "Paiment",
     "phone": "Téléphone",
-    "postalCode": "Code postal"
+    "postalCode": "Code postal",
+    "pay": "Payer",
+    "proceedToPayment": "Procéder au paiment"
   },
   "footer": {
     "left": {
@@ -192,8 +204,26 @@
       }
     }
   },
-  "user" : {
-    "profile" :{
+  "success": {
+    "left": {
+      "billingAddress": "Adresse de Facturation & Livraison",
+      "ordersDetails": "Order details",
+      "paymentMethod": "Méthode de payment",
+      "product": "PRODUCT",
+      "subTotal": "sous-total",
+      "shippingFee": "Frais de port",
+      "total": "Total"
+    },
+    "right":{
+      "date": "Date:",
+      "email": "Adresse e-mail:",
+      "orderNumber": "Numéro de commande:",
+      "title": "Merci votre Commande à bien été validé",
+      "total": "Total:"
+    }
+  },
+  "user": {
+    "profile": {
       "address": "Adresse",
       "contact": "Contact details",
       "country": "Pays",
@@ -209,12 +239,12 @@
       "save": "Sauvegarder"
     },
     "orders": {
-      "activity":"Activités De commande",
-      "article":"Articles",
+      "activity": "Activités De commande",
+      "article": "Articles",
       "empty": "Vos Prochaines commandes s'afficheront ici",
       "follow": "Suivre",
       "itemTitle": "Les articles",
-      "itemState":"État",
+      "itemState": "État",
       "orderDetail": "Details de ma commande",
       "orderNumber": "Numéro de commande",
       "pending": "En Attente",

@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 import { userRequest } from "requestMethods"
 import { mobile, smallMobile } from "responsive"
 import styled from "styled-components"
@@ -140,6 +140,7 @@ const Error = styled.span`
   opacity: ${(props) => props.opacity};
 `
 function Checkout() {
+  const location = useLocation()
   const history = useHistory()
   const { currentUser } = useSelector((state) => state.user)
   const [info, setInfo] = useState({
@@ -286,8 +287,8 @@ function Checkout() {
         const {
           data: { id: stripeId }
         } = await userRequest.post("/checkout/payment/intents", {
-          id: payload.paymentMethod.id,
-          amount: total * 100
+          id: payload.paymentMethod?.id,
+          amount: (total + location.state?.shippingPrice || 0) * 100
         })
         const cartProducts = products.map(
           ({ title, price, qte, size, color }) => ({
@@ -311,7 +312,8 @@ function Checkout() {
             user: currentUser._id, // eslint-disable-line no-underscore-dangle
             products: ordersProducts,
             amount: total,
-            stripeId
+            stripeId,
+            shippingPrice: location.state?.shippingPrice
           }
         )
         if (data)
@@ -457,10 +459,14 @@ function Checkout() {
         <Error opacity={error ? 1 : 0}>{t("checkout.emptyField")}</Error>
         <ButtonContainer>
           <Button back type="Reset">
-            {canPay ? "Go back" : "back to Card"}
+            {canPay ? t("checkout.goBack") : t("checkout.backToCard")}
           </Button>
           <Button type="submit" disabled={!stripe}>
-            {canPay ? "PAY" : "Proceed to the payment"}
+            {canPay
+              ? `${t("checkout.pay")} ${
+                  total + location.state?.shippingPrice
+                }${t("currency")}`
+              : t("checkout.proceedToPayment")}
           </Button>
         </ButtonContainer>
       </Form>
