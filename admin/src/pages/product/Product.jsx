@@ -16,7 +16,7 @@ import styled from "styled-components";
 export default function Product() {
     const id = useLocation().pathname.split(/\//)[2]
     const dispatch = useDispatch()
-    const { title, quantity, img, description, categories, sizes, colors, price } = useSelector(state => state.product.products.find(
+    const { title, quantity, img, description, categories, sizes, colors, price,weight } = useSelector(state => state.product.products.find(
         ({ _id }) => _id === id
     ))
     const [data, setdata] = useState({
@@ -27,7 +27,8 @@ export default function Product() {
         categories,
         sizes,
         colors,
-        price
+        price,
+        weight
     })
     const handleUpdate = (e) => {
         const { name, value, files } = e.target
@@ -165,6 +166,8 @@ export default function Product() {
                         <textarea name="categories" cols="5" rows="2" value={data.categories} onChange={handleUpdate} ></textarea>
                         <label>Tailles</label>
                         <textarea name="sizes" cols="5" rows="3" value={data.sizes} onChange={handleUpdate} ></textarea>
+                        <label>Poids</label>
+                        <input type="number" name="weight" value={data.weight} onChange={handleUpdate} />
                     </div>
                     <div className="productFormCenter">
                         {/*  <label>couleurs</label>

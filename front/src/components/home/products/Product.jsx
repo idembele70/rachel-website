@@ -1,14 +1,9 @@
-import React from "react"
-import styled from "styled-components"
+import { SearchOutlined } from "@mui/icons-material"
 import PropTypes from "prop-types"
-import {
-  FavoriteBorderOutlined,
-  SearchOutlined,
-  ShoppingCartOutlined
-} from "@mui/icons-material"
-import { Link, useHistory } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
-import { addProduct, updateProduct } from "../../../redux/cartRedux"
+import React from "react"
+import { useSelector } from "react-redux"
+import { Link } from "react-router-dom"
+import styled from "styled-components"
 
 const Container = styled.div`
   align-items: center;
@@ -77,7 +72,7 @@ export default function Product(props) {
   const { products } = useSelector((state) => state.cart)
   /* const dispatch = useDispatch()
   const history = useHistory() */
-/*   const handleAddToCart = () => {
+  /*   const handleAddToCart = () => {
     if (sizes.length > 1 || colors.length > 1) {
       history.push(`/product/${id}`)
     } else {

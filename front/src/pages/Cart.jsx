@@ -4,7 +4,7 @@ import { Add, Delete, Remove } from "@mui/icons-material"
 import Announcement from "components/tools/Announcement"
 import Footer from "components/tools/Footer"
 import Navbar from "components/tools/Navbar"
-import React, { Fragment } from "react"
+import React, { Fragment, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
@@ -165,7 +165,7 @@ const Summary = styled.div`
   border: 0.5px solid lightgray;
   border-radius: 10px;
   padding: 20px;
-  height: 314px;
+  min-height: 314px;
   min-width: 275px;
   max-width: 365px;
   ${tablet({ width: "100%" })};
@@ -184,6 +184,8 @@ const SummaryItem = styled.div`
 `
 const SummaryItemText = styled.span``
 const SummaryItemPrice = styled.span``
+const SummarySelect = styled.select``
+const SummaryOption = styled.option``
 const Button = styled.button`
   width: 100%;
   padding: 10px;
@@ -192,7 +194,91 @@ const Button = styled.button`
   font-weight: 600;
   cursor: pointer;
 `
-
+const SummaryShippingText = styled.span`
+  text-align: center;
+  flex: 1;
+`
+const ShippingText = styled.div`
+  color: red;
+`
+const EmailText = styled.h4`
+  color: black;
+`
+const ModalContainer = styled.div`
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: fixed;
+  z-index: 1;
+  background-color: #00000047;
+  padding-top: 10%;
+  display: flex;
+  justify-content: center;
+  ${mobile({ paddingTop: "20%" })}
+`
+const Modal = styled.div`
+  max-width: 700px;
+  width: 90vw;
+  height: 50vh;
+  max-height: 225px;
+  background-color: #ffffff;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  padding: 40px;
+  ${tablet({ width: "calc(90vw - 40px)", padding: 20 })};
+  display: flex;
+  flex-direction: column;
+`
+const ModalTitle = styled.h2`
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 33px;
+  flex-grow: 33px;
+  ${mobile({ fontSize: 16 })}
+`
+const ModalContent = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`
+const ModalEmailContainer = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+const ModalEmail = styled.h3`
+  font-size: 14px;
+`
+const ModalButtonContainer = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  ${mobile({ flexDirection: "column" })};
+`
+const ModalButton = styled.button`
+  margin: 0 10px;
+  padding: 16px 58px;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background-color: transparent;
+  transition: all 500ms ease 50ms;
+  cursor: pointer;
+  &:hover {
+    background-color: #222222;
+    color: white;
+  }
+  ${mobile({ padding: "8px 29px", margin: "10px 0" })};
+`
+const Alert = styled.div`
+  position: relative;
+`
 export default function Cart() {
   const {
     cart: { products, quantity: cartQte, total },
@@ -205,16 +291,139 @@ export default function Cart() {
     dispatch(deleteProduct(data))
   }
   const isDisconnected = Object.keys(currentUser).length === 0
+  const [countryCode, setCountryCode] = useState("FR")
+  const countries = useMemo(
+    () => [
+      { country: "Argentina", code: "AR" },
+      { country: "Australia", code: "AU" },
+      { country: "Austria", code: "AT" },
+      { country: "Belgium", code: "BE" },
+      { country: "Bolivia", code: "BO" },
+      { country: "Brazil", code: "BR" },
+      { country: "Bulgaria", code: "BG" },
+      { country: "Canada", code: "CA" },
+      { country: "Chile", code: "CL" },
+      { country: "Colombia", code: "CO" },
+      { country: "Costa Rica", code: "CR" },
+      { country: "Croatia", code: "HR" },
+      { country: "Cyprus", code: "CY" },
+      { country: "Czech Republic", code: "CZ" },
+      { country: "Denmark", code: "DK" },
+      { country: "Dominican Republic", code: "DO" },
+      { country: "Egypt", code: "EG" },
+      { country: "Estonia", code: "EE" },
+      { country: "Finland", code: "FI" },
+      { country: "France", code: "FR" },
+      { country: "Germany", code: "DE" },
+      { country: "Greece", code: "GR" },
+      { country: "Hong Kong SAR China", code: "HK" },
+      { country: "Hungary", code: "HU" },
+      { country: "Iceland", code: "IS" },
+      { country: "India", code: "IN" },
+      { country: "Indonesia", code: "ID" },
+      { country: "Ireland", code: "IE" },
+      { country: "Israel", code: "IL" },
+      { country: "Italy", code: "IT" },
+      { country: "Japan", code: "JP" },
+      { country: "Latvia", code: "LV" },
+      { country: "Liechtenstein", code: "LI" },
+      { country: "Lithuania", code: "LT" },
+      { country: "Luxembourg", code: "LU" },
+      { country: "Malta", code: "MT" },
+      { country: "Mexico ", code: "MX" },
+      { country: "Netherlands", code: "NL" },
+      { country: "New Zealand", code: "NZ" },
+      { country: "Norway", code: "NO" },
+      { country: "Paraguay", code: "PY" },
+      { country: "Peru", code: "PE" },
+      { country: "Poland", code: "PL" },
+      { country: "Portugal", code: "PT" },
+      { country: "Romania", code: "RO" },
+      { country: "Singapore", code: "SG" },
+      { country: "Slovakia", code: "SK" },
+      { country: "Slovenia", code: "SI" },
+      { country: "Spain", code: "ES" },
+      { country: "Sweden", code: "SE" },
+      { country: "Switzerland", code: "CH" },
+      { country: "Thailand", code: "TH" },
+      { country: "Trinidad & Tobago", code: "TT" },
+      { country: "United Arab Emirates", code: "AE" },
+      { country: "United Kingdom", code: "GB" },
+      { country: "United States", code: "US" },
+      { country: "Uruguay", code: "UY" }
+    ],
+    []
+  )
+  const [shippingPrice, setShippingPrice] = useState(0)
+  const FranceTarif = useMemo(
+    () => [
+      { weight: 250, price: 4.95 },
+      { weight: 500, price: 6.55 },
+      { weight: 750, price: 7.45 },
+      { weight: 1000, price: 8.1 },
+      { weight: 2000, price: 9.35 },
+      { weight: 5000, price: 14.35 },
+      { weight: 10000, price: 20.85 },
+      { weight: 15000, price: 26.4 },
+      { weight: 30000, price: 32.7 }
+    ],
+    []
+  )
+  useEffect(() => {
+    if (["FR"].includes(countryCode)) {
+      const weight = products.reduce(
+        (somme, product) => somme + +product.weight * product.qte,
+        0
+      )
+      const { price } = FranceTarif.find((tarif) => tarif.weight > weight)
+      if (price) setShippingPrice(price)
+      else setShippingPrice(0)
+    } else setShippingPrice(0)
+  }, [countryCode, products, FranceTarif])
+
+  const [modal, setModal] = useState(false)
+
   const handlePay = () => {
     if (isDisconnected)
       history.push({
         pathname: "/register",
         state: { redirectTo: "cart" }
       })
-    else history.push("/pay")
+    else if (!shippingPrice) setModal(true)
+    else history.push({ pathname: "/pay", state: { shippingPrice } })
+  }
+
+  const [copy, setCopy] = useState(false)
+  const handleCopy = () => {
+    navigator.clipboard.writeText(t("email"))
+    setCopy(true)
+  }
+  const closeModal = () => {
+    setModal(false)
+    setCopy(true)
   }
   return (
     <Container>
+      {modal && (
+        <ModalContainer>
+          <Modal>
+            <ModalTitle>{t("cart.modal.title")}</ModalTitle>
+            <ModalContent>
+              <ModalEmailContainer>
+                <ModalEmail>{t("email")}</ModalEmail>
+              </ModalEmailContainer>
+              <ModalButtonContainer>
+                <ModalButton onClick={closeModal}>
+                  {t("cart.modal.cancel")}
+                </ModalButton>
+                <ModalButton onClick={handleCopy}>
+                  {copy ? t("cart.modal.copied") : t("cart.modal.copy")}
+                </ModalButton>
+              </ModalButtonContainer>
+            </ModalContent>
+          </Modal>
+        </ModalContainer>
+      )}
       <Navbar />
       <Announcement />
       <Wrapper>
@@ -231,7 +440,10 @@ export default function Cart() {
                 </TopText>
                 {/* <TopText>{t("cart.topTexts.whislist")}(0)</TopText> */}
               </TopTexts>
-              <TopButton onClick={handlePay} type="filled">
+              <TopButton
+                onClick={() => (shippingPrice ? handlePay() : setModal(true))}
+                type="filled"
+              >
                 {t("cart.checkout")}
               </TopButton>
             </Top>
@@ -340,30 +552,52 @@ export default function Cart() {
                 </SummaryItem>
                 <SummaryItem>
                   <SummaryItemText>
-                    {t("cart.orderSummary.shippingPrice")}
+                    {t("cart.orderSummary.destinationCountry")}
                   </SummaryItemText>
-                  <SummaryItemPrice>
-                    5.90{t("products.currency")}
-                  </SummaryItemPrice>
+                  <SummarySelect
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                  >
+                    {countries.map(({ country: ctry, code }) => (
+                      <SummaryOption key={code} value={code}>
+                        {ctry}
+                      </SummaryOption>
+                    ))}
+                  </SummarySelect>
                 </SummaryItem>
-                <SummaryItem>
-                  <SummaryItemText>
-                    {t("cart.orderSummary.shippingDiscount")}
-                  </SummaryItemText>
-                  <SummaryItemPrice>
-                    -5.90{t("products.currency")}
-                  </SummaryItemPrice>
-                </SummaryItem>
+                {shippingPrice ? (
+                  <SummaryItem>
+                    <SummaryItemText>
+                      {t("cart.orderSummary.shippingPrice")}
+                    </SummaryItemText>
+                    <SummaryItemPrice>
+                      {shippingPrice + t("products.currency")}
+                    </SummaryItemPrice>
+                  </SummaryItem>
+                ) : (
+                  <SummaryItem>
+                    <SummaryShippingText>
+                      <ShippingText>
+                        {t("cart.orderSummary.cantShip")}&nbsp;
+                      </ShippingText>
+                      <EmailText>{t("email")}</EmailText>
+                    </SummaryShippingText>
+                  </SummaryItem>
+                )}
                 <SummaryItem type="total">
                   <SummaryItemText>
                     {t("cart.orderSummary.total")}
                   </SummaryItemText>
                   <SummaryItemPrice>
-                    {total}
+                    {total + shippingPrice}
                     {t("products.currency")}
                   </SummaryItemPrice>
                 </SummaryItem>
-                <Button onClick={handlePay}>{t("cart.checkout")}</Button>
+                <Button
+                  onClick={() => (shippingPrice ? handlePay() : setModal(true))}
+                >
+                  {t("cart.checkout")}
+                </Button>
               </Summary>
             </Bottom>
           </>

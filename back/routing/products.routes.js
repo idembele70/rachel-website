@@ -29,6 +29,7 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
     )
     res.status(200).json(productUpdated)
   } catch (err) {
+    console.log(req.body)
     res.status(500).json(err)
   }
 })
@@ -44,7 +45,7 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
 })
 
 // GET ONE PRODUCT
-router.get("/find/:id" ,async (req, res) => {
+router.get("/find/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id)
     if (!product) res.status(401).json("Product not Found")

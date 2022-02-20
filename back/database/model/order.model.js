@@ -22,6 +22,11 @@ stripeId : {type: String, required: true},
 status : {
 type : String,
 default: "pending"
+},
+shippingPrice:{
+  type: Number,
+  default: 0,
+  required: true
 }
 },
 {timestamps: true}

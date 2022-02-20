@@ -77,7 +77,7 @@
 .productForm {
   display: flex;
   justify-content: space-between;
-  height: 290px;
+  min-height: 290px;
 }
 
 .productFormLeft, .productFormCenter {
@@ -99,6 +99,9 @@
   border: none;
   padding: 5px;
   border-bottom: 1px solid gray;
+}
+.productForm textarea {
+  margin-top: 10px;
 }
 .colorPicker {
   margin: 5px 0;

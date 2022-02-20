@@ -3,6 +3,7 @@ import Announcement from "components/tools/Announcement"
 import Footer from "components/tools/Footer"
 import Navbar from "components/tools/Navbar"
 import React, { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { useLocation, useHistory } from "react-router-dom"
 import { publicRequest, userRequest } from "requestMethods"
@@ -102,10 +103,9 @@ export default function Success() {
     stripeData: {
       billing_details: { address: "", name: "", email: "", phone: "" },
       payment_method_details: { card: "" },
-      shipping: "",
       created: 0
     },
-    ordersData: { _id: "", amount: 0 }
+    ordersData: { _id: "", amount: 0, shippingPrice: 0 }
   })
   function convertDate(inputFormat) {
     function pad(s) {
@@ -203,23 +203,23 @@ export default function Success() {
     stripeData: {
       billing_details: { address, name, email, phone },
       payment_method_details: { card },
-      shipping,
       created
     },
-    ordersData: { _id: id, amount },
+    ordersData: { _id: id, amount, shippingPrice },
     cartProducts
   } = data
+  const { t } = useTranslation()
   return (
     <Container>
       <Navbar />
       <Announcement />
       <OrderContainer>
         <Left>
-          <LeftTitle>Order details</LeftTitle>
+          <LeftTitle>{t("success.left.ordersDetails")}</LeftTitle>
           <ProductContainer>
             <ProductRow>
-              <RowItem>PRODUCT</RowItem>
-              <RowItem>TOTAL</RowItem>
+              <RowItem>{t("success.left.product")}</RowItem>
+              <RowItem>{t("success.left.total")}</RowItem>
             </ProductRow>
             {cartProducts.map((product) => (
               <ProductRow key={product.size + product.color + product.name}>
@@ -229,28 +229,28 @@ export default function Success() {
                   </RowItem>
                   <ColorContainer color={product.color} />
                 </RowItemContainer>
-                <RowItem>{product.qte * product.price}€</RowItem>
+                <RowItem>{product.qte * product.price + t("currency")}</RowItem>
               </ProductRow>
             ))}
             <ProductRow>
-              <RowItem>Subtotal</RowItem>
-              <RowItem>{amount}€</RowItem>
+              <RowItem>{t("success.left.subTotal")}</RowItem>
+              <RowItem>{`${amount}${t("currency")}`}</RowItem>
             </ProductRow>
             <ProductRow>
-              <RowItem>Payment Method</RowItem>
+              <RowItem>{t("success.left.paymentMethod")}</RowItem>
               <RowItem>{card.brand}</RowItem>
             </ProductRow>
             <ProductRow>
-              <RowItem>Shipping Fee</RowItem>
-              <RowItem>{shipping || 0}€</RowItem>
+              <RowItem>{t("success.left.shippingFee")}</RowItem>
+              <RowItem>{shippingPrice + t("currency")}</RowItem>
             </ProductRow>
             <ProductRow>
-              <RowItem>Total</RowItem>
-              <RowItem>{amount + +shipping}€</RowItem>
+              <RowItem>{t("success.left.total")}</RowItem>
+              <RowItem>{`${amount + shippingPrice}${t("currency")}`}</RowItem>
             </ProductRow>
           </ProductContainer>
           <AddressContainer>
-            <LeftTitle>Billing Address</LeftTitle>
+            <LeftTitle>{t("success.left.billingAddress")}</LeftTitle>
             <AddressRow>{name}</AddressRow>
             <AddressRow>{address.line1}</AddressRow>
             <AddressRow>{`${address.postal_code}, ${address.city}, ${
@@ -261,25 +261,27 @@ export default function Success() {
           </AddressContainer>
         </Left>
         <Right>
-          <RightTitle>Thank you. Your Order has been received.</RightTitle>
+          <RightTitle>{t("success.right.title")}</RightTitle>
           <RightList>
             <RightListItem>
-              <ItemTitle>Order Number:&nbsp;</ItemTitle>
+              <ItemTitle>{t("success.right.orderNumber")}&nbsp;</ItemTitle>
               <ItemTitle isBold id="block">
                 {id}
               </ItemTitle>
             </RightListItem>
             <RightListItem>
-              <ItemTitle>Date:&nbsp;</ItemTitle>
+              <ItemTitle>{t("success.right.date")}&nbsp;</ItemTitle>
               <ItemTitle isBold>{convertDate(created * 1000)}</ItemTitle>
             </RightListItem>
             <RightListItem>
-              <ItemTitle>email:&nbsp;</ItemTitle>
+              <ItemTitle>{t("success.right.email")}&nbsp;</ItemTitle>
               <ItemTitle isBold>{email}</ItemTitle>
             </RightListItem>
             <RightListItem>
-              <ItemTitle>Total:&nbsp;</ItemTitle>
-              <ItemTitle isBold>{amount}€</ItemTitle>
+              <ItemTitle>{t("success.right.total")}&nbsp;</ItemTitle>
+              <ItemTitle isBold>
+                {amount + shippingPrice + t("currency")}
+              </ItemTitle>
             </RightListItem>
           </RightList>
         </Right>
