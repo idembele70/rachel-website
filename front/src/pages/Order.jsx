@@ -1,5 +1,6 @@
 import Sidebar from "components/tools/Sidebar"
 import React, { useEffect, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useLocation } from "react-router-dom"
 import { publicRequest, userRequest } from "requestMethods"
@@ -21,7 +22,7 @@ const OrderContainer = styled.div`
 `
 const LeftTitle = styled.h2``
 const ProductContainer = styled.div`
-  margin: 18px 0; // doit etre enlever 
+  margin: 18px 0; // doit etre enlever
 `
 
 const ProductRow = styled.div`
@@ -61,12 +62,11 @@ const ColorContainer = styled.div`
 export default function Order() {
   const [data, setData] = useState({
     stripeData: {
-      billing_details: { address: "", name: "", email: "", phone: "" },
-      payment_method_details: { card: "" },
-      shipping: "",
+      billing_details: { address: {}, name: "", email: "", phone: "" },
+      payment_method_details: { card: {} },
       created: 0
     },
-    ordersData: { _id: "", amount: 0, products: [] }
+    ordersData: { _id: "", amount: 0, products: [], shippingPrice: 0 }
   })
   const countries = useMemo(
     () => [
@@ -151,20 +151,20 @@ export default function Order() {
   const {
     stripeData: {
       billing_details: { address, name, email, phone },
-      payment_method_details: { card },
-      shipping
+      payment_method_details: { card }
     },
-    ordersData: { _id: id, amount, products }
+    ordersData: {amount, products, shippingPrice, status }
   } = data
+  const { t } = useTranslation()
   return (
     <Container>
       <Sidebar />
       <OrderContainer>
-        <LeftTitle>Order details</LeftTitle>
+        <LeftTitle>{t("success.left.ordersDetails")}</LeftTitle>
         <ProductContainer>
           <ProductRow>
-            <RowItem>PRODUCT</RowItem>
-            <RowItem>TOTAL</RowItem>
+            <RowItem>{t("success.left.product")}</RowItem>
+            <RowItem>{t("success.left.total")}</RowItem>
           </ProductRow>
           {products?.map(
             ({ product, color, size, quantity, _id: productId }) => (
@@ -176,29 +176,40 @@ export default function Order() {
                   </RowItem>
                   <ColorContainer color={color} />
                 </RowItemContainer>
-                <RowItem>{quantity * product.price}€</RowItem>
+                <RowItem>
+                  {quantity * product.price}
+                  {t("currency")}
+                </RowItem>
               </ProductRow>
             )
           )}
           <ProductRow>
-            <RowItem>Subtotal</RowItem>
-            <RowItem>{amount}€</RowItem>
+            <RowItem>{t("success.left.subTotal")}</RowItem>
+            <RowItem>{amount + t("currency")}</RowItem>
           </ProductRow>
           <ProductRow>
-            <RowItem>Payment Method</RowItem>
+            <RowItem>{t("success.left.paymentMethod")}</RowItem>
             <RowItem>{card.brand}</RowItem>
           </ProductRow>
           <ProductRow>
-            <RowItem>Shipping Fee</RowItem>
-            <RowItem>{shipping || 0}€</RowItem>
+            <RowItem>{t("success.left.shippingFee")}</RowItem>
+            <RowItem>{shippingPrice + t("currency")}</RowItem>
           </ProductRow>
           <ProductRow>
-            <RowItem>Total</RowItem>
-            <RowItem>{amount + +shipping}€</RowItem>
+            <RowItem>{t("success.left.total")}</RowItem>
+            <RowItem>{amount + shippingPrice + t("currency")}</RowItem>
+          </ProductRow>
+          <ProductRow>
+            <RowItem>{t("success.left.orderNumber")}</RowItem>
+            <RowItem>{orderId}</RowItem>
+          </ProductRow>
+          <ProductRow>
+            <RowItem>{t("success.left.status")}</RowItem>
+            <RowItem>{t(`order.${status}`)}</RowItem>
           </ProductRow>
         </ProductContainer>
         <AddressContainer>
-          <LeftTitle>Billing Address</LeftTitle>
+          <LeftTitle>{t("success.left.billingAddress")}</LeftTitle>
           <AddressRow>{name}</AddressRow>
           <AddressRow>{address.line1}</AddressRow>
           <AddressRow>{`${address.postal_code}, ${address.city}, ${

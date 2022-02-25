@@ -77,7 +77,8 @@ const [data, setData] = useState({
     products: [],
     stripeId: "",
     amount: 0,
-    status : null
+    status : "",
+    trackingNumber: ""
   },
   stripeData: {
     billing_details: { address: "", name: "", email: "", phone: "" },
@@ -99,9 +100,18 @@ const [data, setData] = useState({
     })()
   }, [orderId,order])
   const dispatch = useDispatch()
-  const handleUpdateStatus = (e) => {
-    setData({...data,[data.orderData.status]: e.target.value})
-    updateOrder(dispatch,{status: e.target.value}, orderId)
+  const handleUpdate = ({target}) => {
+    const { value,name } = target
+        setData({...data, orderData : {...data.orderData,[name]: value} })
+  }
+  const onUpdate = (e) => {
+    const { status,trackingNumber } = data.orderData
+    if(status !== order.status && trackingNumber !== order.trackingNumber )
+    updateOrder(dispatch,{status,trackingNumber}, orderId)
+    else if(status !== order.status)
+    updateOrder(dispatch,{status}, orderId)
+    else if(trackingNumber !== order.trackingNumber)
+    updateOrder(dispatch,{trackingNumber}, orderId)
   }
   const {
     stripeData: {
@@ -109,7 +119,7 @@ const [data, setData] = useState({
       payment_method_details: { card },
       shipping
     },
-    orderData: { amount, products, status }
+    orderData: { amount, products, status,trackingNumber }
   } = data
   return <div className="container">
     <div className="productContainer">
@@ -147,13 +157,24 @@ const [data, setData] = useState({
             <h3 className="rowItem">{amount + +shipping}€</h3>
           </div>
           <div className="productRow">
+            <h3 className="rowItem">Numéro de commande</h3>
+            <h3 className="rowItem">{orderId}</h3>
+          </div>
+          <div className="productRow">
             <h3 className="rowItem">Status</h3>
-            <select value={status} onChange={handleUpdateStatus} >
+            <select value={status} name="status" onChange={handleUpdate} >
               <option value="pending">Pending</option>
               <option value="proccessing">proccessing</option>
               <option value="send">Send</option>
             </select>
           </div>
+          <div className="productRow">
+            <h3 className="rowItem">Tracking Number</h3>
+            <input type="text" className="trackingInput" name="trackingNumber" value={trackingNumber} onChange={handleUpdate} />
+            </div>
+            <div className="productRow">
+              <button onClick={onUpdate} className="update">update</button>
+              </div>
         </div>
         <div>
           <h2 className="title">Billing Address</h2>

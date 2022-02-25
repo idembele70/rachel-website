@@ -16,8 +16,8 @@ function Category() {
   })
 
   useEffect(() => {
-    /* const { name, img, isActive } =  */
-    setData(category)
+    const { name, img, isActive } = category
+    setData({ name, img, isActive })
   }, [category, id])
 
   const handleChange = (e) => {
@@ -37,7 +37,7 @@ function Category() {
   const dispatch = useDispatch()
   const handleUpdate = (e) => {
     e.preventDefault()
-    if (data.img) {
+    if (data.img !== category.img) {
       const fileName = new Date().getTime() + data.img.name
       const storage = getStorage(app)
       const storageRef = ref(storage, fileName)
@@ -68,8 +68,9 @@ function Category() {
         }
       );
     }
-    else
+    else {
       updateCategory(dispatch, data, id)
+    }
   }
 
   const { name, img, isActive } = data

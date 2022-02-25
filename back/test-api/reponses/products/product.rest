@@ -17,12 +17,14 @@ Content-Type: application/json
 
 
 ### UPDATE
-PUT http://localhost:5000/api/products/61bfae9292f879c9590f2b85 HTTP/1.1
+PUT http://localhost:5000/api/products/61be65c42974aea7e9b60a5d HTTP/1.1
 Content-Type: application/json
-token: " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MDE5MTg0OCwiZXhwIjoxNjQwNDUxMDQ4fQ.xw-VvCtPqvkt-vAhrUCQDYize_69hfRmjGgGNhSOylM
+token: " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0NTYyNzczMSwiZXhwIjoxNjQ1NzE0MTMxfQ.ptVhRREL5aV_pnMosCsihngt2w2rat94S79fJ9v-m7k
 
 {
-  "color" : ["yellow", "green","black","blue","white"]
+  "categories" : [
+   "61e2cf5db8b14a59d5363cec"
+  ]
 }
 
 

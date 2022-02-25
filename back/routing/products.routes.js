@@ -26,7 +26,7 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
       {
         new: true
       }
-    )
+    ).populate("categories")
     res.status(200).json(productUpdated)
   } catch (err) {
     console.log(req.body)
@@ -63,10 +63,17 @@ router.get("/", async (req, res) => {
     let products
     if (qNew)
       products = await Product.find().sort({ createdAt: -1 }).limit(5)
-    else if (qCategory)
-      products = await Product.find({ categories: { $in: [qCategory] } })
+    else if (qCategory) {
+      products = await Product.find({}).populate({
+        path: "categories",
+        match: {
+          "categories.name": qCategory
+        }
+      })
+      console.log(products)
+    }
     else
-      products = await Product.find()
+      products = await Product.find().populate("categories")
     res.status(200).json(products)
   } catch (err) {
     res.status(500).json(err)
