@@ -1,10 +1,12 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model, SchemaTypes } = require("mongoose")
 
 const productSchema = Schema({
    title: { type: String, required: true, unique: true },
    description: { type: String, required: true },
    img: { type: String, required: true },
-   categories: { type: Array },
+   categories: [
+         { type: Schema.Types.ObjectId, ref: "category", required:true }
+   ],
    sizes: { type: Array },
    colors: { type: Array },
    price: { type: Number, required: true },

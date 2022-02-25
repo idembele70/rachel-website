@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom"
 import { userRequest } from "requestMethods"
 import { mobile, tablet } from "responsive"
 import styled from "styled-components"
+import Modal from "../components/tools/Modal"
 
 const Container = styled.div`
   display: flex;
@@ -118,6 +119,25 @@ const EmptyOrderTitle = styled.h2`
   text-align: center;
   ${mobile({ fontSize: 20 })}
 `
+const Tracking = styled.h4`
+  color: black;
+  margin: 20px;
+`
+const Link = styled.a`
+  display: block;
+  color: white;
+  background-color: black;
+  padding: 15px;
+  text-decoration: none;
+  transition-duration: 150ms;
+  transition-property: background color;
+  transition-timing-function: ease-in-out;
+  transition-delay: 50ms;
+  &:hover {
+    color: black;
+    background-color: rgba(0, 0, 0, 0.426);
+  }
+`
 function Orders() {
   const {
     currentUser: { _id: id }
@@ -133,8 +153,49 @@ function Orders() {
     return `${d}/${m}/${y} ${hour}`
   }
   const history = useHistory()
+  const [copy, setCopy] = useState(false)
+  const [trackingNumber, setTrackingNumber] = useState(null)
+  const [sentBack, setSentBack] = useState(false)
+  const handleCopy = () => {
+    if (sentBack) navigator.clipboard.writeText(t("email"))
+    else navigator.clipboard.writeText(trackingNumber)
+    setCopy(true)
+  }
+  const [openModal, setOpenModal] = useState(false)
+  const handleClose = () => {
+    setOpenModal(false)
+    setCopy(false)
+    setSentBack(false)
+  }
   return (
     <Container>
+      {openModal && (
+        <Modal
+          onClose={handleClose}
+          onCopy={handleCopy}
+          title={
+            sentBack ? t("user.orders.sentBack") : t("user.orders.trackingInfo")
+          }
+          copy={copy}
+          canCopy={trackingNumber || sentBack}
+        >
+          {trackingNumber ? (
+            <>
+              <Tracking>
+                {t("user.orders.trackingNumber") + trackingNumber}
+              </Tracking>
+              <Link
+                target="_blank"
+                href={`https://www.laposte.fr/outils/suivre-vos-envois?code=${trackingNumber}`}
+              >
+                {t("user.orders.laposte")}
+              </Link>
+            </>
+          ) : (
+            <>{sentBack ? t("email") : t("user.orders.isBeingPrepared")}</>
+          )}
+        </Modal>
+      )}
       <Sidebar />
       <Main>
         <MainTitle>{t("user.orders.title")}</MainTitle>
@@ -148,7 +209,15 @@ function Orders() {
             </ItemTitleContainer>
             <ListBody>
               {orders.map(
-                ({ _id: orderId, createdAt, products, amount, status }) => (
+                ({
+                  _id: orderId,
+                  createdAt,
+                  products,
+                  amount,
+                  status,
+                  shippingPrice,
+                  trackingNumber: trackNum
+                }) => (
                   <ListItem key={orderId}>
                     <ListItemHeader>
                       <HeaderHour>{convertDate(createdAt)}</HeaderHour>
@@ -161,7 +230,7 @@ function Orders() {
                         {products.length} {t("user.orders.article")}
                       </RowItem>
                       <RowItem>
-                        {amount}
+                        {amount + shippingPrice}
                         {t("currency")}
                       </RowItem>
                       <RowItem>
@@ -173,8 +242,24 @@ function Orders() {
                         </Button>
                       </RowItem>
                       <RowItem>
-                        <Button>{t("user.orders.follow")}</Button>
-                        <Button>{t("user.orders.return")}</Button>
+                        <Button
+                          onClick={() => {
+                            setOpenModal(true)
+                            setTrackingNumber(trackNum)
+                          }}
+                        >
+                          {t("user.orders.follow")}
+                        </Button>
+                        {trackNum && (
+                          <Button
+                            onClick={() => {
+                              setOpenModal(true)
+                              setSentBack(true)
+                            }}
+                          >
+                            {t("user.orders.return")}
+                          </Button>
+                        )}
                       </RowItem>
                     </ListItemRow>
                   </ListItem>

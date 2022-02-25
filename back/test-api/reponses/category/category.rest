@@ -1,13 +1,15 @@
 
 ### CREATE a new category
 POST http://localhost:5000/api/category/new HTTP/1.1
+token: " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0NTYyNzczMSwiZXhwIjoxNjQ1NzE0MTMxfQ.ptVhRREL5aV_pnMosCsihngt2w2rat94S79fJ9v-m7k
 Content-Type: application/json
 
 {
-"name": "cat1",
-"img":"img",
-"isActive": true
+"name": "boucles d'oreilles",
+"img":"boucles d'oreilles",
+"isActive": false
 }
+
 
 ### GET all categories
 GET http://localhost:5000/api/category/ HTTP/1.1

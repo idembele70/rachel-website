@@ -36,9 +36,12 @@ function Categories() {
 
   return (
     <Container>
-      {categories.map((category) => (
-        <CategoryItem itemInfo={category} key={category._id} /> // eslint-disable-line no-underscore-dangle
-      ))}
+      {categories
+        .filter((category) => category.isActive)
+        .map((category) => (
+          <CategoryItem itemInfo={category} key={category._id} /> // eslint-disable-line no-underscore-dangle
+        ))
+        .slice(0, 3)}
     </Container>
   )
 }

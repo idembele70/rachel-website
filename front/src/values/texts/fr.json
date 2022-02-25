@@ -90,6 +90,11 @@
     "description": "Soyez les premiers a être informé sur les derniers changements.",
     "placeholder": "Votre adresse email"
   },
+  "order": {
+    "pending": "En Attente",
+    "proccessing": "En Traitement",
+    "send": "Envoyez"
+  },
   "products": {
     "addToCard": "AJOUTEZ AU PANIER",
     "cart": {
@@ -151,6 +156,7 @@
         "color": "Couleur"
       }
     },
+    "ModalMessage":"Votre produit à été ajouté au panier",
     "name": {
       "dresses": "Robes",
       "earing251220212148": "Boucle d'oreille carte d'afrique",
@@ -207,9 +213,11 @@
   "success": {
     "left": {
       "billingAddress": "Adresse de Facturation & Livraison",
-      "ordersDetails": "Order details",
+      "ordersDetails": "details de la commande",
+      "orderNumber": "Numéro de commande",
       "paymentMethod": "Méthode de payment",
       "product": "PRODUCT",
+      "status": "statut",
       "subTotal": "sous-total",
       "shippingFee": "Frais de port",
       "total": "Total"
@@ -243,14 +251,19 @@
       "article": "Articles",
       "empty": "Vos Prochaines commandes s'afficheront ici",
       "follow": "Suivre",
+      "isBeingPrepared": "Votre commande est en préparation",
       "itemTitle": "Les articles",
       "itemState": "État",
+      "laposte": "Suivre sur Le site de LAPOSTE",
       "orderDetail": "Details de ma commande",
       "orderNumber": "Numéro de commande",
       "pending": "En Attente",
       "proccessing": "En Traitement",
       "return": "Renvoyez L\u0027article",
       "send": "Envoyez",
+      "sentBack": "Pour une demande de retour contactez-nous par email",
+      "trackingNumber": "Numéro de suivi: ",
+      "trackingInfo": "Information de suivi",
       "title": "MES COMMANDES",
       "total": "Total"
     }

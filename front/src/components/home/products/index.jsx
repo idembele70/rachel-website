@@ -40,6 +40,7 @@ const Products = ({ category }) => {
             ? `http://localhost:5000/api/products?category=${category}`
             : "http://localhost:5000/api/products"
         )
+        console.log(data)
         setProducts(data)
       } catch (error) {
         console.error(error)
@@ -62,13 +63,13 @@ const Products = ({ category }) => {
     <Container>
       {category
         ? products.map((product) => (
-          <Product product={product} key={product.title} />
-        ))
-        : products
-          .slice(0, 8)
-          .map((product) => (
             <Product product={product} key={product.title} />
-          ))}
+          ))
+        : products
+            .slice(0, 8)
+            .map((product) => (
+              <Product product={product} key={product.title} />
+            ))}
     </Container>
   )
 }

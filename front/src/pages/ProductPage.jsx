@@ -11,6 +11,7 @@ import { addProduct, updateProduct } from "redux/cartRedux"
 import { publicRequest } from "requestMethods"
 import { mobile } from "responsive"
 import styled from "styled-components"
+import Modal from "../components/tools/Modal"
 
 const Container = styled.div`
   max-width: 1440px;
@@ -153,7 +154,7 @@ export default function ProductPage() {
       .finally(() => setLoading(false))
       .catch(console.error)
   }, [id])
-  const { price, title, description, img, sizes, colors, weight } = product
+  const { price, title, description, img, sizes, colors } = product
   const handleQuantity = (direction = String()) => {
     if (direction === "dec") {
       if (qte > 1) setQte(qte > 1 && qte - 1)
@@ -161,7 +162,12 @@ export default function ProductPage() {
   }
   // @ts-ignore
   const { products } = useSelector((state) => state.cart)
+  const [openModal, setOpenModal] = useState(false)
   const handleAddToCart = () => {
+    setOpenModal(true)
+    setTimeout(() => {
+      setOpenModal(false)
+    }, 2000)
     const exist = products.find(
       ({ _id, size: sizeFound, color: colorFound }) =>
         _id === id && sizeFound === size && colorFound === color
@@ -182,9 +188,13 @@ export default function ProductPage() {
       setQte(1)
     }
   }
-
   return (
     <Container>
+      {openModal && (
+        <Modal onClose={() => setOpenModal(false)}>
+          {t("products.ModalMessage")}
+        </Modal>
+      )}
       <Navbar />
       <Announcement />
       {loading ? (

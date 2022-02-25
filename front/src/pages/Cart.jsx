@@ -3,6 +3,7 @@
 import { Add, Delete, Remove } from "@mui/icons-material"
 import Announcement from "components/tools/Announcement"
 import Footer from "components/tools/Footer"
+import Modal from "components/tools/Modal"
 import Navbar from "components/tools/Navbar"
 import React, { Fragment, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -168,8 +169,9 @@ const Summary = styled.div`
   min-height: 314px;
   min-width: 275px;
   max-width: 365px;
+  max-height: 375px;
   ${tablet({ width: "100%" })};
-  ${mobile({ padding: 5, minWidth: "95vw" })};
+  ${mobile({ padding: 5, minWidth: "95vw", maxHeight: "none" })};
 `
 const SummaryTitle = styled.h1`
   font-weight: 200;
@@ -204,81 +206,10 @@ const ShippingText = styled.div`
 const EmailText = styled.h4`
   color: black;
 `
-const ModalContainer = styled.div`
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  position: fixed;
-  z-index: 1;
-  background-color: #00000047;
-  padding-top: 10%;
-  display: flex;
-  justify-content: center;
-  ${mobile({ paddingTop: "20%" })}
-`
-const Modal = styled.div`
-  max-width: 700px;
-  width: 90vw;
-  height: 50vh;
-  max-height: 225px;
-  background-color: #ffffff;
-  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.12);
-  border-radius: 16px;
-  padding: 40px;
-  ${tablet({ width: "calc(90vw - 40px)", padding: 20 })};
-  display: flex;
-  flex-direction: column;
-`
-const ModalTitle = styled.h2`
-  font-family: "IBM Plex Sans";
-  font-style: normal;
-  font-weight: bold;
-  font-size: 24px;
-  line-height: 33px;
-  flex-grow: 33px;
-  ${mobile({ fontSize: 16 })}
-`
-const ModalContent = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`
-const ModalEmailContainer = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
 const ModalEmail = styled.h3`
   font-size: 14px;
 `
-const ModalButtonContainer = styled.div`
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  ${mobile({ flexDirection: "column" })};
-`
-const ModalButton = styled.button`
-  margin: 0 10px;
-  padding: 16px 58px;
-  border: 1px solid #000000;
-  box-sizing: border-box;
-  border-radius: 6px;
-  background-color: transparent;
-  transition: all 500ms ease 50ms;
-  cursor: pointer;
-  &:hover {
-    background-color: #222222;
-    color: white;
-  }
-  ${mobile({ padding: "8px 29px", margin: "10px 0" })};
-`
-const Alert = styled.div`
-  position: relative;
-`
+
 export default function Cart() {
   const {
     cart: { products, quantity: cartQte, total },
@@ -405,24 +336,15 @@ export default function Cart() {
   return (
     <Container>
       {modal && (
-        <ModalContainer>
-          <Modal>
-            <ModalTitle>{t("cart.modal.title")}</ModalTitle>
-            <ModalContent>
-              <ModalEmailContainer>
-                <ModalEmail>{t("email")}</ModalEmail>
-              </ModalEmailContainer>
-              <ModalButtonContainer>
-                <ModalButton onClick={closeModal}>
-                  {t("cart.modal.cancel")}
-                </ModalButton>
-                <ModalButton onClick={handleCopy}>
-                  {copy ? t("cart.modal.copied") : t("cart.modal.copy")}
-                </ModalButton>
-              </ModalButtonContainer>
-            </ModalContent>
-          </Modal>
-        </ModalContainer>
+        <Modal
+          title={t("cart.modal.title")}
+          onClose={closeModal}
+          onCopy={handleCopy}
+          copy={copy}
+          canCopy
+        >
+          <ModalEmail>{t("email")}</ModalEmail>
+        </Modal>
       )}
       <Navbar />
       <Announcement />

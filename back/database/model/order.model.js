@@ -26,7 +26,10 @@ default: "pending"
 shippingPrice:{
   type: Number,
   default: 0,
-  required: true
+},
+trackingNumber: {
+  type: String,
+  default: ""
 }
 },
 {timestamps: true}

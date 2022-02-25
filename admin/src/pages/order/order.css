@@ -28,6 +28,26 @@
   padding: 5px;
   font-weight: 600;
 }
+.update {
+  margin: 5px auto;
+  border:none;
+  outline:none;
+  color: white;
+  background-color: black;
+  padding: 5px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 250ms ease-in 100ms;
+  text-transform: uppercase;
+}
+.trackingInput {
+  margin: 5px 0;
+}
+.update:hover{
+  border: 2px solid darkblue ;
+  color:black;
+  background-color: white;
+}
 .colorContainer {
   display: inline-block;
   height: 20px;
