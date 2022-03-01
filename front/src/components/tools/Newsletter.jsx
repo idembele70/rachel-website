@@ -5,14 +5,16 @@ import { useTranslation } from "react-i18next"
 import { mobile } from "responsive"
 
 const Container = styled.div`
-height: 60vh;
-max-width: 1440px
-background-color: #fcf5f5;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-direction: column;
-margin: 0 auto;
+  height: 195px;
+  width: 100%;
+  max-width: 1440px;
+  background-color: #fcf5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 10px 0;
 `
 const Title = styled.h1`
   font-size: 70px;
@@ -44,6 +46,7 @@ const Button = styled.button`
   border: none;
   background-color: teal;
   color: white;
+  cursor: pointer;
 `
 
 function Newsletter() {

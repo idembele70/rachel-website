@@ -1,6 +1,6 @@
 ### CREATE
 POST http://localhost:5000/api/products/new HTTP/1.1
-token:" "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MjIwMTE1OCwiZXhwIjoxNjQyNDYwMzU4fQ.31nCQSkaEQ2a7GF20kFOdWV6zESTBTMM2cXWQn7KRVg
+token:" eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTRkYzk1MDc5NzIzZjAzOGExNmY1YSIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MjIwMTE1OCwiZXhwIjoxNjQyNDYwMzU4fQ.31nCQSkaEQ2a7GF20kFOdWV6zESTBTMM2cXWQn7KRVg
 Content-Type: application/json
 
 {
@@ -14,6 +14,1034 @@ Content-Type: application/json
 "sizes": ["xl", "xs,", "l"],
 "title": "test"
 }
+
+### CREATE MANY
+POST http://localhost:5000/api/products/insertMany
+token: " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0NjA1MTAzNCwiZXhwIjoxNjQ2MTM3NDM0fQ.Oxq9E5W8OV9IGUhLs0aKxxBrS5RAMFagZvsc9dmNnno
+Content-Type: application/json
+
+[
+  {
+    "title": "PPG Industries, Inc.",
+    "description": "consectetuer adipiscing elit proin risus",
+    "img": "http://dummyimage.com/192x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 95,
+    "inStock": 50,
+    "colors": [
+      "#4affa1"
+    ],
+    "sizes": [
+      "2XL"
+    ],
+    "quantity": 9,
+    "weight": 215
+  },
+  {
+    "title": "Zions Bancorporation",
+    "description": "euismod scelerisque",
+    "img": "http://dummyimage.com/176x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 69,
+    "inStock": 68,
+    "colors": [
+      "#59e77e"
+    ],
+    "sizes": [
+      "XS"
+    ],
+    "quantity": 7,
+    "weight": 99
+  },
+  {
+    "title": "First Capital, Inc.",
+    "description": "cubilia curae duis",
+    "img": "http://dummyimage.com/120x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 98,
+    "inStock": 94,
+    "colors": [
+      "#c6107e"
+    ],
+    "sizes": [
+      "XS"
+    ],
+    "quantity": 81,
+    "weight": 145
+  },
+  {
+    "title": "Dell Technologies Inc.",
+    "description": "rutrum ac lobortis vel dapibus",
+    "img": "http://dummyimage.com/165x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 60,
+    "inStock": 63,
+    "colors": [
+      "#2c262f"
+    ],
+    "sizes": [
+      "L"
+    ],
+    "quantity": 15,
+    "weight": 228
+  },
+  {
+    "title": "Omega Healthcare Investors, Inc.",
+    "description": "some things",
+    "img": "http://dummyimage.com/200x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 78,
+    "inStock": 54,
+    "colors": [
+      "#824d62"
+    ],
+    "sizes": [
+      "XS"
+    ],
+    "quantity": 25,
+    "weight": 125
+  },
+  {
+    "title": "Diversified Real Asset Income Fund",
+    "description": "nulla suscipit ligula in",
+    "img": "http://dummyimage.com/212x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 55,
+    "inStock": 81,
+    "colors": [
+      "#f0c44a"
+    ],
+    "sizes": [
+      "XS"
+    ],
+    "quantity": 58,
+    "weight": 201
+  },
+  {
+    "title": "Sinovac Biotech, Ltd.",
+    "description": "pellentesque eget nunc donec quis",
+    "img": "http://dummyimage.com/158x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 68,
+    "inStock": 74,
+    "colors": [
+      "#5809c3"
+    ],
+    "sizes": [
+      "2XL"
+    ],
+    "quantity": 22,
+    "weight": 235
+  },
+  {
+    "title": "Insteel Industries, Inc.",
+    "description": "ac neque",
+    "img": "http://dummyimage.com/190x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 94,
+    "inStock": 68,
+    "colors": [
+      "#51b2ea"
+    ],
+    "sizes": [
+      "3XL"
+    ],
+    "quantity": 10,
+    "weight": 65
+  },
+  {
+    "title": "Randgold Resources Limited",
+    "description": "pretium iaculis",
+    "img": "http://dummyimage.com/222x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 50,
+    "inStock": 76,
+    "colors": [
+      "#bf84e7"
+    ],
+    "sizes": [
+      "M"
+    ],
+    "quantity": 14,
+    "weight": 73
+  },
+  {
+    "title": "Biohaven Pharmaceutical Holding Company Ltd.",
+    "description": "purus sit amet",
+    "img": "http://dummyimage.com/190x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 69,
+    "inStock": 52,
+    "colors": [
+      "#a2514a"
+    ],
+    "sizes": [
+      "L"
+    ],
+    "quantity": 48,
+    "weight": 135
+  },
+  {
+    "title": "First Trust/Aberdeen Emerging Opportunity Fund",
+    "description": "maecenas tincidunt",
+    "img": "http://dummyimage.com/158x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 73,
+    "inStock": 63,
+    "colors": [
+      "#889644"
+    ],
+    "sizes": [
+      "2XL"
+    ],
+    "quantity": 80,
+    "weight": 199
+  },
+  {
+    "title": "China Customer Relations Centers, Inc.",
+    "description": "some things",
+    "img": "http://dummyimage.com/118x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 70,
+    "inStock": 80,
+    "colors": [
+      "#5c1277"
+    ],
+    "sizes": [
+      "S"
+    ],
+    "quantity": 62,
+    "weight": 127
+  },
+  {
+    "title": "iStar Financial Inc.",
+    "description": "luctus et ultrices posuere cubilia",
+    "img": "http://dummyimage.com/201x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 55,
+    "inStock": 66,
+    "colors": [
+      "#84ebfb"
+    ],
+    "sizes": [
+      "S"
+    ],
+    "quantity": 6,
+    "weight": 136
+  },
+  {
+    "title": "Macquarie/First Trust Global",
+    "description": "mauris sit amet",
+    "img": "http://dummyimage.com/231x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 86,
+    "inStock": 81,
+    "colors": [
+      "#e6851e"
+    ],
+    "sizes": [
+      "XL"
+    ],
+    "quantity": 95,
+    "weight": 237
+  },
+  {
+    "title": "Columbus McKinnon Corporation",
+    "description": "adipiscing elit proin interdum",
+    "img": "http://dummyimage.com/238x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 88,
+    "inStock": 73,
+    "colors": [
+      "#808eab"
+    ],
+    "sizes": [
+      "M"
+    ],
+    "quantity": 45,
+    "weight": 171
+  },
+  {
+    "title": "Blackrock MuniYield Investment QualityFund",
+    "description": "some things",
+    "img": "http://dummyimage.com/237x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 100,
+    "inStock": 62,
+    "colors": [
+      "#9de8ae"
+    ],
+    "sizes": [
+      "XL"
+    ],
+    "quantity": 63,
+    "weight": 71
+  },
+  {
+    "title": "FirstEnergy Corporation",
+    "description": "diam vitae",
+    "img": "http://dummyimage.com/100x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 85,
+    "inStock": 65,
+    "colors": [
+      "#9f71ed"
+    ],
+    "sizes": [
+      "XS"
+    ],
+    "quantity": 27,
+    "weight": 193
+  },
+  {
+    "title": "Harte-Hanks, Inc.",
+    "description": "nec molestie sed",
+    "img": "http://dummyimage.com/140x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 87,
+    "inStock": 94,
+    "colors": [
+      "#4cb12b"
+    ],
+    "sizes": [
+      "L"
+    ],
+    "quantity": 75,
+    "weight": 190
+  },
+  {
+    "title": "Zhaopin Limited",
+    "description": "congue etiam",
+    "img": "http://dummyimage.com/153x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 88,
+    "inStock": 83,
+    "colors": [
+      "#9e9fde"
+    ],
+    "sizes": [
+      "L"
+    ],
+    "quantity": 4,
+    "weight": 189
+  },
+  {
+    "title": "CRH PLC",
+    "description": "ligula suspendisse ornare consequat",
+    "img": "http://dummyimage.com/192x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 86,
+    "inStock": 59,
+    "colors": [
+      "#2c10ca"
+    ],
+    "sizes": [
+      "XL"
+    ],
+    "quantity": 16,
+    "weight": 218
+  },
+  {
+    "title": "Yext, Inc.",
+    "description": "vel est donec odio",
+    "img": "http://dummyimage.com/180x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 50,
+    "inStock": 52,
+    "colors": [
+      "#3b52d1"
+    ],
+    "sizes": [
+      "3XL"
+    ],
+    "quantity": 96,
+    "weight": 227
+  },
+  {
+    "title": "REX American Resources Corporation",
+    "description": "accumsan tellus nisi",
+    "img": "http://dummyimage.com/120x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 83,
+    "inStock": 69,
+    "colors": [
+      "#f39c4d"
+    ],
+    "sizes": [
+      "M"
+    ],
+    "quantity": 86,
+    "weight": 135
+  },
+  {
+    "title": "Evoke Pharma, Inc.",
+    "description": "rutrum at",
+    "img": "http://dummyimage.com/144x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 84,
+    "inStock": 77,
+    "colors": [
+      "#33ab7e"
+    ],
+    "sizes": [
+      "M"
+    ],
+    "quantity": 67,
+    "weight": 201
+  },
+  {
+    "title": "Deluxe Corporation",
+    "description": "orci luctus et",
+    "img": "http://dummyimage.com/128x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 75,
+    "inStock": 64,
+    "colors": [
+      "#9e781a"
+    ],
+    "sizes": [
+      "XS"
+    ],
+    "quantity": 45,
+    "weight": 198
+  },
+  {
+    "title": "Horizon Pharma plc",
+    "description": "some things",
+    "img": "http://dummyimage.com/245x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 91,
+    "inStock": 88,
+    "colors": [
+      "#5a3ebd"
+    ],
+    "sizes": [
+      "S"
+    ],
+    "quantity": 33,
+    "weight": 177
+  },
+  {
+    "title": "Aemetis, Inc",
+    "description": "tincidunt eget tempus",
+    "img": "http://dummyimage.com/137x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 87,
+    "inStock": 53,
+    "colors": [
+      "#e6601f"
+    ],
+    "sizes": [
+      "3XL"
+    ],
+    "quantity": 66,
+    "weight": 126
+  },
+  {
+    "title": "KalVista Pharmaceuticals, Inc.",
+    "description": "nulla justo aliquam",
+    "img": "http://dummyimage.com/194x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 69,
+    "inStock": 59,
+    "colors": [
+      "#36b65a"
+    ],
+    "sizes": [
+      "XL"
+    ],
+    "quantity": 15,
+    "weight": 164
+  },
+  {
+    "title": "Wheeler Real Estate Investment Trust, Inc.",
+    "description": "velit nec nisi vulputate",
+    "img": "http://dummyimage.com/150x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 76,
+    "inStock": 50,
+    "colors": [
+      "#749a7d"
+    ],
+    "sizes": [
+      "L"
+    ],
+    "quantity": 41,
+    "weight": 160
+  },
+  {
+    "title": "MarineMax, Inc.",
+    "description": "at lorem integer tincidunt",
+    "img": "http://dummyimage.com/173x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 57,
+    "inStock": 98,
+    "colors": [
+      "#168670"
+    ],
+    "sizes": [
+      "3XL"
+    ],
+    "quantity": 34,
+    "weight": 246
+  },
+  {
+    "title": "America Movil, S.A.B. de C.V.",
+    "description": "quisque arcu libero",
+    "img": "http://dummyimage.com/157x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 74,
+    "inStock": 97,
+    "colors": [
+      "#6165fd"
+    ],
+    "sizes": [
+      "L"
+    ],
+    "quantity": 94,
+    "weight": 93
+  },
+  {
+    "title": "Central Europe, Russia and Turkey Fund, Inc. (The)",
+    "description": "quam a odio",
+    "img": "http://dummyimage.com/174x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 65,
+    "inStock": 75,
+    "colors": [
+      "#f6e639"
+    ],
+    "sizes": [
+      "M"
+    ],
+    "quantity": 80,
+    "weight": 246
+  },
+  {
+    "title": "Semgroup Corporation",
+    "description": "aliquet at",
+    "img": "http://dummyimage.com/105x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 85,
+    "inStock": 52,
+    "colors": [
+      "#41ce97"
+    ],
+    "sizes": [
+      "XL"
+    ],
+    "quantity": 64,
+    "weight": 99
+  },
+  {
+    "title": "Companhia Brasileira de Distribuicao",
+    "description": "massa donec dapibus",
+    "img": "http://dummyimage.com/186x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 70,
+    "inStock": 82,
+    "colors": [
+      "#646daa"
+    ],
+    "sizes": [
+      "S"
+    ],
+    "quantity": 40,
+    "weight": 140
+  },
+  {
+    "title": "United Community Banks, Inc.",
+    "description": "quis libero nullam",
+    "img": "http://dummyimage.com/151x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 94,
+    "inStock": 76,
+    "colors": [
+      "#9bdb31"
+    ],
+    "sizes": [
+      "S"
+    ],
+    "quantity": 33,
+    "weight": 81
+  },
+  {
+    "title": "PTC Therapeutics, Inc.",
+    "description": "tincidunt eu felis fusce posuere",
+    "img": "http://dummyimage.com/201x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 97,
+    "inStock": 71,
+    "colors": [
+      "#951bd4"
+    ],
+    "sizes": [
+      "XS"
+    ],
+    "quantity": 33,
+    "weight": 62
+  },
+  {
+    "title": "Invesco High Income 2023 Target Term Fund",
+    "description": "sapien iaculis congue vivamus",
+    "img": "http://dummyimage.com/150x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 77,
+    "inStock": 84,
+    "colors": [
+      "#505133"
+    ],
+    "sizes": [
+      "3XL"
+    ],
+    "quantity": 56,
+    "weight": 191
+  },
+  {
+    "title": "EZCORP, Inc.",
+    "description": "dui nec nisi",
+    "img": "http://dummyimage.com/181x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 75,
+    "inStock": 66,
+    "colors": [
+      "#638076"
+    ],
+    "sizes": [
+      "3XL"
+    ],
+    "quantity": 7,
+    "weight": 132
+  },
+  {
+    "title": "First Trust International IPO ETF",
+    "description": "lobortis ligula sit amet",
+    "img": "http://dummyimage.com/185x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 54,
+    "inStock": 92,
+    "colors": [
+      "#943a97"
+    ],
+    "sizes": [
+      "XS"
+    ],
+    "quantity": 24,
+    "weight": 69
+  },
+  {
+    "title": "Sunrun Inc.",
+    "description": "donec semper",
+    "img": "http://dummyimage.com/113x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 55,
+    "inStock": 99,
+    "colors": [
+      "#b95950"
+    ],
+    "sizes": [
+      "2XL"
+    ],
+    "quantity": 26,
+    "weight": 169
+  },
+  {
+    "title": "DXC Technology Company",
+    "description": "pede ac diam cras",
+    "img": "http://dummyimage.com/234x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 95,
+    "inStock": 87,
+    "colors": [
+      "#8fa3be"
+    ],
+    "sizes": [
+      "S"
+    ],
+    "quantity": 56,
+    "weight": 209
+  },
+  {
+    "title": "UMB Financial Corporation",
+    "description": "felis eu sapien cursus vestibulum",
+    "img": "http://dummyimage.com/124x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 58,
+    "inStock": 71,
+    "colors": [
+      "#0f0092"
+    ],
+    "sizes": [
+      "L"
+    ],
+    "quantity": 20,
+    "weight": 132
+  },
+  {
+    "title": "Payment Data Systems, Inc.",
+    "description": "eget vulputate ut",
+    "img": "http://dummyimage.com/149x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 71,
+    "inStock": 70,
+    "colors": [
+      "#c3efe6"
+    ],
+    "sizes": [
+      "S"
+    ],
+    "quantity": 96,
+    "weight": 191
+  },
+  {
+    "title": "PhaseRx, Inc.",
+    "description": "lacus purus",
+    "img": "http://dummyimage.com/198x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 81,
+    "inStock": 95,
+    "colors": [
+      "#921ae0"
+    ],
+    "sizes": [
+      "2XL"
+    ],
+    "quantity": 31,
+    "weight": 167
+  },
+  {
+    "title": "Eagle Pharmaceuticals, Inc.",
+    "description": "potenti nullam porttitor",
+    "img": "http://dummyimage.com/245x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 71,
+    "inStock": 66,
+    "colors": [
+      "#a3f0f4"
+    ],
+    "sizes": [
+      "L"
+    ],
+    "quantity": 21,
+    "weight": 224
+  },
+  {
+    "title": "FalconStor Software, Inc.",
+    "description": "ac leo pellentesque",
+    "img": "http://dummyimage.com/195x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 81,
+    "inStock": 72,
+    "colors": [
+      "#671836"
+    ],
+    "sizes": [
+      "2XL"
+    ],
+    "quantity": 30,
+    "weight": 140
+  },
+  {
+    "title": "Cousins Properties Incorporated",
+    "description": "pede lobortis ligula sit",
+    "img": "http://dummyimage.com/207x100.png/5fa2dd/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 69,
+    "inStock": 55,
+    "colors": [
+      "#0a89cc"
+    ],
+    "sizes": [
+      "XL"
+    ],
+    "quantity": 51,
+    "weight": 85
+  },
+  {
+    "title": "Brookfield Property Partners L.P.",
+    "description": "interdum eu tincidunt in",
+    "img": "http://dummyimage.com/108x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 53,
+    "inStock": 87,
+    "colors": [
+      "#315b17"
+    ],
+    "sizes": [
+      "XL"
+    ],
+    "quantity": 80,
+    "weight": 109
+  },
+  {
+    "title": "Medical Transcription Billing, Corp.",
+    "description": "id mauris",
+    "img": "http://dummyimage.com/207x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 90,
+    "inStock": 78,
+    "colors": [
+      "#0891ad"
+    ],
+    "sizes": [
+      "XS"
+    ],
+    "quantity": 37,
+    "weight": 108
+  },
+  {
+    "title": "Lions Gate Entertainment Corporation",
+    "description": "erat fermentum justo nec condimentum",
+    "img": "http://dummyimage.com/187x100.png/cc0000/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 91,
+    "inStock": 83,
+    "colors": [
+      "#6fc265"
+    ],
+    "sizes": [
+      "2XL"
+    ],
+    "quantity": 57,
+    "weight": 107
+  },
+  {
+    "title": "First Horizon National Corporation",
+    "description": "pellentesque ultrices",
+    "img": "http://dummyimage.com/185x100.png/ff4444/ffffff",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 82,
+    "inStock": 66,
+    "colors": [
+      "#f8b58d"
+    ],
+    "sizes": [
+      "M"
+    ],
+    "quantity": 8,
+    "weight": 148
+  },
+  {
+    "title": "Washington Trust Bancorp, Inc.",
+    "description": "id pretium",
+    "img": "http://dummyimage.com/222x100.png/dddddd/000000",
+    "categories": [
+      "62164d941bc759ebb37e61ac",
+      "62164de81bc759ebb37e61ae",
+      "61e2cf5db8b14a59d5363cec"
+    ],
+    "price": 60,
+    "inStock": 73,
+    "colors": [
+      "#9475fd"
+    ],
+    "sizes": [
+      "2XL"
+    ],
+    "quantity": 95,
+    "weight": 237
+  }
+]
 
 
 ### UPDATE

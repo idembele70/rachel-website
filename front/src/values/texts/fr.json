@@ -107,7 +107,8 @@
       "tShirts": "T-shirts",
       "loungewear": "Vêtements de dentente",
       "jackets": "Vestes",
-      "button": "ACHETEZ MAINTENANT"
+      "button": "ACHETEZ MAINTENANT",
+    "notFound": "Cette categories n'existe pas"
     },
     "currency": "€",
     "description": {

@@ -12,7 +12,7 @@ router.post("/new", verifyTokenAndAdmin, async (req, res) => {
 })
 
 // UPDATE one category
-router.put("/:id", verifyTokenAndAdmin,async (req, res) => {
+router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     const category = await Category.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
     res.status(200).json(category)
@@ -22,21 +22,34 @@ router.put("/:id", verifyTokenAndAdmin,async (req, res) => {
 })
 
 // DELETE one category
-router.delete("/:id", verifyTokenAndAdmin,async (req, res) => {
+router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     await Category.findByIdAndDelete(req.params.id)
     res.status(200).json("categoryDeleteSuccess")
   } catch (error) {
-    res.status(500).json("category.routes.js, in router.delete('/:id'):",error)
+    res.status(500).json("category.routes.js, in router.delete('/:id'):", error)
   }
 })
 
 // GET all categories
 router.get("/", (req, res) => {
-  Category.find()
-    .exec()
-    .then(categories => res.status(200).json(categories))
-    .catch(err => res.status(500).json({ file: "category.routes.js, in router.get('/'):", err }))
+  if (req.query.showCategory)
+    Category.find()
+      .select("name")
+      .sort({ name: 1 })
+      .exec()
+      .then(categories => res.status(200).json(categories))
+      .catch(err => res.status(500).json({ file: __filename, err }))
+  else if (req.query.isActive)
+    Category.find({ isActive: { $eq: true } })
+      .exec()
+      .then(categories => res.status(200).json(categories))
+      .catch(err => res.status(500).json({ file: __filename, err }))
+  else
+    Category.find()
+      .exec()
+      .then(categories => res.status(200).json(categories))
+      .catch(err => res.status(500).json({ file: "category.routes.js, in router.get('/'):", err }))
 })
 
 module.exports = router
