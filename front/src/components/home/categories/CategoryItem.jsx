@@ -6,12 +6,15 @@ import { mobile } from "responsive"
 import styled from "styled-components"
 
 const Container = styled.div`
-  flex: 1;
+  min-width: calc(50% - 30px);
+  ${mobile({ minWidth: "calc(100% - 30px)", height: "auto" })};
   height: 70vh;
-  margin: 3px;
+  background-color: rgba(0, 0, 0, 0.2);
+  margin: 5px;
+  padding: 10px;
   position: relative;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
   }
 `
 const Image = styled.img`

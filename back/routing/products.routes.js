@@ -14,6 +14,17 @@ router.post("/new", verifyTokenAndAdmin, async (req, res) => {
     res.status(500).json(error)
   }
 })
+// CREATE ENDPOINT
+// CREATE MANY
+router.post("/insertMany", verifyTokenAndAdmin, async (req, res) => {
+  try {
+    const products = await Product.insertMany(req.body)
+    res.status(200).json(products)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+})
+// CREATE MANY ENDPOINT
 
 // UPDATE
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
@@ -60,17 +71,15 @@ router.get("/", async (req, res) => {
   const qNew = req.query.new
   const qCategory = req.query.category
   try {
-    let products
+    let products = []
     if (qNew)
       products = await Product.find().sort({ createdAt: -1 }).limit(5)
     else if (qCategory) {
-      products = await Product.find({}).populate({
+      products = await Product.find().populate({
         path: "categories",
-        match: {
-          "categories.name": qCategory
-        }
+        select: "name",
+        match: { name: { $eq: qCategory } }
       })
-      console.log(products)
     }
     else
       products = await Product.find().populate("categories")

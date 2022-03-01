@@ -1,24 +1,28 @@
 /* eslint-disable no-restricted-syntax */
-import styled from "styled-components"
-import Newsletter from "components/tools/Newsletter"
 import Products from "components/home/products"
+import Announcement from "components/tools/Announcement"
 import Footer from "components/tools/Footer"
 import Navbar from "components/tools/Navbar"
-import React, { useEffect, useState } from "react"
+import Newsletter from "components/tools/Newsletter"
+import React from "react"
 import { useTranslation } from "react-i18next"
-import Announcement from "components/tools/Announcement"
-import { mobile } from "responsive"
 import { useLocation } from "react-router-dom"
-import axios from "axios"
+import styled from "styled-components"
 
 const Container = styled.div`
   max-width: 1440px;
+  min-height: 100vh;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 `
+const Main = styled.div`
+  flex-grow:1;
+`;
 const Title = styled.h1`
   margin: 20px;
 `
-const FilterContainer = styled.div`
+/* const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `
@@ -37,7 +41,7 @@ const Select = styled.select`
   margin-right: 20px;
   ${mobile({ margin: "10px 0" })};
 `
-const Option = styled.option``
+const Option = styled.option`` */
 
 const ProductList = () => {
   const { t } = useTranslation()
@@ -93,8 +97,9 @@ const ProductList = () => {
     <Container>
       <Navbar />
       <Announcement />
+      <Main>
       <Title>{category}</Title>
-      {/*     <FilterContainer>
+      {/* <FilterContainer>
         <Filter>
           <FilterText>{t("products.filter.text.filterProducts")}</FilterText>
           <Select name="color" value={color} onChange={handleFilters}>
@@ -128,6 +133,7 @@ const ProductList = () => {
         </Filter>
       </FilterContainer> */}
       <Products category={category} />
+      </Main>
       <Newsletter />
       <Footer />
     </Container>

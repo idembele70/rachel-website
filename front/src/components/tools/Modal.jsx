@@ -101,10 +101,18 @@ const Modal = ({ onClose, onCopy, children, title, copy, canCopy }) => {
 export default Modal
 
 Modal.propTypes = {
-  canCopy: PropTypes.bool.isRequired,
-  children: PropTypes.node.isRequired,
-  copy: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onCopy: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
+  canCopy: PropTypes.bool,
+  children: PropTypes.node,
+  copy: PropTypes.bool,
+  onClose: PropTypes.func,
+  onCopy: PropTypes.func,
+  title: PropTypes.string
+}
+Modal.defaultProps = {
+  canCopy: false,
+  children: null,
+  copy: false,
+  onClose: () => {},
+  onCopy: () => {},
+  title: ""
 }
