@@ -77,15 +77,15 @@ function Category() {
   return (
     <div className="category">
       <div className="categoryTitleContainer">
-        <h1 className="categoryTitle">Category</h1>
+        <h1 className="categoryTitle">Catégorie</h1>
         <Link to="newcategory">
-          <button className="categoryAddButton">Create</button>
+          <button className="categoryAddButton">Créer</button>
         </Link>
       </div>
       <div className="categoryFormContainer">
         <form onSubmit={handleUpdate} className="categoryForm">
           <div className="categoryFormItem">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">Nom</label>
             <input id="name" type="text" name="name" value={name}
               onChange={handleChange} />
           </div>
@@ -98,11 +98,11 @@ function Category() {
             </div>
           </div>
           <div className="categoryFormItem">
-            <label htmlFor="isActive" >isActive</label>
+            <label htmlFor="isActive" >Active</label>
             <input id="isActive" type="checkbox" name="isActive" checked={isActive}
               onChange={handleChange} />
           </div>
-          <button className="categoryButton">Update</button>
+          <button className="categoryButton">Mettre à jour</button>
         </form>
       </div>
     </div>

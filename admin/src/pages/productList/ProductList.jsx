@@ -17,10 +17,10 @@ export default function ProductList() {
   }, [dispatch])
 
   const columns = [
-    { field: "_id", headerName: "ID", width: 90 },
+    { field: "_id", headerName: "Identifiant", width: 90 },
     {
       field: "product",
-      headerName: "Product",
+      headerName: "Produit",
       width: 200,
       renderCell: (params) => {
         return (
@@ -33,25 +33,25 @@ export default function ProductList() {
     },
     {
       field: "quantity",
-      headerName: "Quantity",
+      headerName: "Quantité",
       width: 150,
       renderCell: (params) => <>{params.row.quantity ? "Oui" : "Non"}</>
     },
     {
       field: "price",
-      headerName: "Price",
+      headerName: "Prix",
       width: 150,
       renderCell: (params) => <>{`${params.row.price}€`}</>
     },
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Actions",
       width: 150,
       renderCell: (params) => {
         return (
           <>
             <Link to={"/product/" + params.row._id}>
-              <button className="productListEdit">Edit</button>
+              <button className="productListEdit">Modifier</button>
             </Link>
             <DeleteOutline
               className="productListDelete"

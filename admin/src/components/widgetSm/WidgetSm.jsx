@@ -19,7 +19,7 @@ export default function WidgetSm() {
 
   return (
     <div className="widgetSm">
-      <span className="widgetSmTitle">New Join Members</span>
+      <span className="widgetSmTitle">Nouveaux utilisateurs</span>
       <ul className="widgetSmList">{
         users.map(user =>
           <li key={user._id} className="widgetSmListItem">
@@ -33,7 +33,7 @@ export default function WidgetSm() {
             </div>
             <button className="widgetSmButton">
               <Visibility className="widgetSmIcon" />
-              Display
+              Afficher
             </button>
           </li>
         )
