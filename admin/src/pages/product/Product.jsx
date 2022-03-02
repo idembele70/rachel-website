@@ -146,8 +146,8 @@ export default function Product() {
                     </div>
                     <div className="productInfoBottom">
                         <div className="productInfoItem">
-                            <span className="productInfoKey">id:</span>
-                            <span className="productInfoValue">{` ${id}`}</span>
+                            <span className="productInfoKey">identifiant: </span>
+                            <span className="productInfoValue">{`${id}`}</span>
                         </div>
                         <div className="productInfoItem">
                             <span className="productInfoKey">ventes:</span>
@@ -160,7 +160,7 @@ export default function Product() {
                             <span className="productInfoValue">{quantity ? "Oui" : "Non"}</span>
                         </div>
                         <div className="productInfoItem">
-                            <span className="productInfoKey">Quantity:</span>
+                            <span className="productInfoKey">Quantité:</span>
                             <span className="productInfoValue">{data.quantity}</span>
                         </div>
                     </div>
@@ -173,7 +173,7 @@ export default function Product() {
                         <input name="title" type="text" value={data.title} onChange={handleUpdate} />
                         <label>Description</label>
                         <textarea name="description" cols="5" rows="3" value={data.description} onChange={handleUpdate} ></textarea>
-                        <label>categories</label>
+                        <label>catégories</label>
                         <div className="searchContainer">
                             <input onFocus={() => data.categories.length < categories.length && setShowCat(true)} onBlur={() => setShowCat(false)} type="search" value={cat} onChange={(e) => { setCat(e.target.value); setShowCat(true) }} />
                             {showCat && <div className="productSearched">
@@ -228,7 +228,7 @@ export default function Product() {
                                 )}
                             </div>
                         </div>
-                        <button className="productButton" onClick={onUpdataData}>Update</button>
+                        <button className="productButton" onClick={onUpdataData}>Mettre à jour</button>
                     </div>
                 </form>
             </div>

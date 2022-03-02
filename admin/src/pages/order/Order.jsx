@@ -124,7 +124,7 @@ const [data, setData] = useState({
   return <div className="container">
     <div className="productContainer">
           <div className="productRow">
-            <h3 className="rowItem">PRODUCT</h3>
+            <h3 className="rowItem">PRODUIT</h3>
             <h3 className="rowItem">TOTAL</h3>
           </div>
           {products?.map(
@@ -141,15 +141,15 @@ const [data, setData] = useState({
             )
           )}
           <div className="productRow">
-            <h3 className="rowItem">Subtotal</h3>
+            <h3 className="rowItem">Sous-total</h3>
             <h3 className="rowItem">{amount}€</h3>
           </div>
           <div className="productRow">
-            <h3 className="rowItem">Payment Method</h3>
+            <h3 className="rowItem">Mode de paiement</h3>
             <h3 className="rowItem">{card.brand}</h3>
           </div>
           <div className="productRow">
-            <h3 className="rowItem">Shipping Fee</h3>
+            <h3 className="rowItem">Frais de port</h3>
             <h3 className="rowItem">{shipping || 0}€</h3>
           </div>
           <div className="productRow">
@@ -161,23 +161,23 @@ const [data, setData] = useState({
             <h3 className="rowItem">{orderId}</h3>
           </div>
           <div className="productRow">
-            <h3 className="rowItem">Status</h3>
+            <h3 className="rowItem">Statut</h3>
             <select value={status} name="status" onChange={handleUpdate} >
-              <option value="pending">Pending</option>
-              <option value="proccessing">proccessing</option>
-              <option value="send">Send</option>
+              <option value="pending">En attente</option>
+              <option value="proccessing">En Traitement</option>
+              <option value="send">Expédier</option>
             </select>
           </div>
           <div className="productRow">
-            <h3 className="rowItem">Tracking Number</h3>
+            <h3 className="rowItem">Numéro de suivi</h3>
             <input type="text" className="trackingInput" name="trackingNumber" value={trackingNumber} onChange={handleUpdate} />
             </div>
             <div className="productRow">
-              <button onClick={onUpdate} className="update">update</button>
+              <button onClick={onUpdate} className="update">Mettre à jour</button>
               </div>
         </div>
         <div>
-          <h2 className="title">Billing Address</h2>
+          <h2 className="title">Adresse de facturation</h2>
           <h3 className="addressRow">{name}</h3>
           <h3 className="addressRow">{address.line1}</h3>
           <h3 className="addressRow">{`${address.postal_code}, ${address.city}, ${

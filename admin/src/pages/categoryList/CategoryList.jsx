@@ -15,10 +15,10 @@ const CategoryList = () => {
 
   useEffect(() => { getCategories(dispatch) }, [dispatch])
   const columns = [
-    { field: "_id", headerName: "ID", width: 200 },
+    { field: "_id", headerName: "Identifiant", width: 200 },
     {
       field: "category",
-      headerName: "Category",
+      headerName: "Catégorie",
       width: 200,
       renderCell: (params) => {
         return (
@@ -31,19 +31,19 @@ const CategoryList = () => {
     },
     {
       field: "isActive",
-      headerName: "isActive",
+      headerName: "Active",
       width: 190,
       renderCell: (params) => <>{params.row.isActive ? "Oui" : "Non"}</>
     },
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Actions",
       width: 150,
       renderCell: (params) => {
         return (
           <>
             <Link to={"/category/" + params.row._id}>
-              <button className="productListEdit">Edit</button>
+              <button className="productListEdit">Modifier</button>
             </Link>
             <DeleteOutline
               className="productListDelete"

@@ -13,9 +13,9 @@ export default function User() {
   return (
     <div className="user">
       <div className="userTitleContainer">
-        <h1 className="userTitle">Edit User</h1>
+        <h1 className="userTitle">Modifier un Utilisateur</h1>
         <Link to="/newUser">
-          <button className="userAddButton">Create</button>
+          <button className="userAddButton">Créer un utilisateur</button>
         </Link>
       </div>
       <div className="userContainer">
@@ -32,7 +32,7 @@ export default function User() {
             </div>
           </div>
           <div className="userShowBottom">
-            <span className="userShowTitle">Account Details</span>
+            <span className="userShowTitle">Informations</span>
             <div className="userShowInfo">
               <PermIdentity className="userShowIcon" />
               <span className="userShowInfoTitle">annabeck99</span>
@@ -41,7 +41,7 @@ export default function User() {
               <CalendarToday className="userShowIcon" />
               <span className="userShowInfoTitle">10.12.1999</span>
             </div>
-            <span className="userShowTitle">Contact Details</span>
+            <span className="userShowTitle">Contact</span>
             <div className="userShowInfo">
               <PhoneAndroid className="userShowIcon" />
               <span className="userShowInfoTitle">+1 123 456 67</span>
@@ -57,11 +57,11 @@ export default function User() {
           </div>
         </div>
         <div className="userUpdate">
-          <span className="userUpdateTitle">Edit</span>
+          <span className="userUpdateTitle">Modifier</span>
           <form className="userUpdateForm">
             <div className="userUpdateLeft">
               <div className="userUpdateItem">
-                <label>Username</label>
+                <label>Nom d'utilisateur</label>
                 <input
                   type="text"
                   placeholder="annabeck99"
@@ -69,7 +69,7 @@ export default function User() {
                 />
               </div>
               <div className="userUpdateItem">
-                <label>Full Name</label>
+                <label>Prénom Nom</label>
                 <input
                   type="text"
                   placeholder="Anna Becker"
@@ -85,7 +85,7 @@ export default function User() {
                 />
               </div>
               <div className="userUpdateItem">
-                <label>Phone</label>
+                <label>Numéro de Téléphone</label>
                 <input
                   type="text"
                   placeholder="+1 123 456 67"
@@ -93,7 +93,7 @@ export default function User() {
                 />
               </div>
               <div className="userUpdateItem">
-                <label>Address</label>
+                <label>Adresse</label>
                 <input
                   type="text"
                   placeholder="New York | USA"
@@ -113,7 +113,7 @@ export default function User() {
                 </label>
                 <input type="file" id="file" style={{ display: "none" }} />
               </div>
-              <button className="userUpdateButton">Update</button>
+              <button className="userUpdateButton">Mettre à jour</button>
             </div>
           </form>
         </div>

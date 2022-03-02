@@ -2,7 +2,6 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@mui/icons-material"
 import React, { useEffect, useRef, useState } from "react"
 import { publicRequest } from "requestMethods"
-import { mobile } from "responsive"
 import styled from "styled-components"
 import CategoryItem from "./CategoryItem"
 

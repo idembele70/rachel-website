@@ -145,7 +145,6 @@ const SearchOptions = styled.div`
   z-index: 1;
   padding: 5px;
   overflow-y: auto;
-  transition: all 150ms ease;
 `
 const SearchOption = styled.li`
   color: white;
@@ -201,9 +200,6 @@ const Navbar = () => {
     display: "inline-flex",
     verticalAlign: "middle"
   }
-  const closeOutlined = {
-    zIndex: 2
-  }
   const { innerWidth: winWidth } = window
   return (
     <Container>
@@ -250,8 +246,9 @@ const Navbar = () => {
                 zIndex: 2,
                 color: "red",
                 cursor: "pointer",
-                // when hover
-                background: "rgba(255,255,255,0.5)"
+                "&:hover": {
+                  background: "rgba(255,255,255,0.5)"
+                }
               }}
               onClick={() => setCanSearch(false)}
             />
