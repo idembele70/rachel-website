@@ -17,15 +17,15 @@ const Container = styled.div`
   padding: 10px 0;
 `
 const Title = styled.h1`
-  font-size: 70px;
+  font-size: 2.5rem;
   margin-bottom: 20px;
-  ${mobile({ fontSize: 50 })};
+  ${mobile({ fontSize: "2rem" })};
 `
 const Description = styled.div`
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 300;
   margin-bottom: 20px;
-  ${mobile({ textAlign: "center" })};
+  ${mobile({ textAlign: "center", fontSize: "1rem" })};
 `
 const InputContainer = styled.div`
   width: 50%;

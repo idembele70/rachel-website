@@ -119,7 +119,7 @@ export default function NewProduct() {
           <label htmlFor="quantity">quantité</label>
           <input name="quantity" value={quantity} onChange={handleChange} />
         </div>
-        <button className="addProductButton" onClick={handleCreate}>Creé</button>
+        <button className="addProductButton" onClick={handleCreate}>Créer</button>
       </form>
     </div>
   );

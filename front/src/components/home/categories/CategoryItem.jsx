@@ -1,14 +1,19 @@
 import PropTypes from "prop-types"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Link } from "react-router-dom"
-import { mobile } from "responsive"
+import { useHistory } from "react-router-dom"
+import { mobile, tablet } from "responsive"
 import styled from "styled-components"
 
 const Container = styled.div`
-  min-width: calc(50% - 30px);
-  ${mobile({ minWidth: "calc(100% - 30px)", height: "auto" })};
-  height: 70vh;
+  width: calc(50vw - 30px);
+  max-width: 690px;
+  height: calc(((50vw - 30px) / (2 / 3)) - 100px);
+  max-height: calc((690px / (2 / 3)) - 100px);
+  ${mobile({
+    width: "calc(100vw - 30px)",
+    height: "calc((100vw - 30px) / (2 / 3))"
+  })}
   background-color: rgba(0, 0, 0, 0.2);
   margin: 5px;
   padding: 10px;
@@ -16,12 +21,15 @@ const Container = styled.div`
   &:hover {
     background-color: rgba(0, 0, 0, 0.5);
   }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 const Image = styled.img`
   height: 100%;
+  max-width: 100%;
   object-fit: contain;
-  width: 100%;
-  ${mobile({ maxHeight: "90vh" })};
+  transition: all 150ms;
 `
 const Info = styled.div`
   align-items: center;
@@ -50,17 +58,19 @@ const Button = styled.button`
 
 const CategoryItem = ({ itemInfo }) => {
   const { t } = useTranslation()
+  const history = useHistory()
   const { img, name } = itemInfo
-
   return (
     <Container>
-      <Link to={`/products/${name}`}>
-        <Image src={img} alt={name} />
-        <Info>
-          <Title>{name.toUpperCase()}</Title>
-          <Button>{t(`products.categories.button`)} </Button>
-        </Info>
-      </Link>
+      <Image
+        onClick={() => history.push(`/products/${name}`)}
+        src={img}
+        alt={name}
+      />
+      <Info>
+        <Title>{name.toUpperCase()}</Title>
+        <Button>{t(`products.categories.button`)} </Button>
+      </Info>
     </Container>
   )
 }

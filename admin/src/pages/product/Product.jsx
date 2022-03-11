@@ -10,7 +10,6 @@ import { userRequest } from "../../requestMethod";
 import { ref, getDownloadURL, uploadBytesResumable, getStorage } from 'firebase/storage'
 import app from "../../firebase"
 import Swatches from "react-color/lib/components/swatches/Swatches";
-import styled from "styled-components";
 
 
 export default function Product() {
@@ -71,7 +70,7 @@ export default function Product() {
     }
     const onUpdataData = (e) => {
         e.preventDefault()
-        updateProduct(dispatch, { ...data, categories: data.categories.map(x => x._id) }, id)
+        updateProduct(dispatch,data, id)
     }
 
     const [pStats, setPStats] = useState([])
@@ -118,10 +117,9 @@ export default function Product() {
     const [cat, setCat] = useState("");
     const [showCat, setShowCat] = useState(false);
     const handleCategory = (item) => {
-        const isActivated = data.categories.find(category => category.name === item.name)
-        console.log(data.categories.length)
+        const isActivated = data.categories.find(category => category === item)
         if (isActivated) {
-            setdata({ ...data, categories: data.categories.filter(category => category.name !== item.name) })
+            setdata({ ...data, categories: data.categories.filter(category => category !== item) })
         } else {
             setdata({ ...data, categories: [...data.categories, item] })
         }
@@ -146,8 +144,8 @@ export default function Product() {
                     </div>
                     <div className="productInfoBottom">
                         <div className="productInfoItem">
-                            <span className="productInfoKey">id:</span>
-                            <span className="productInfoValue">{` ${id}`}</span>
+                            <span className="productInfoKey">identifiant: </span>
+                            <span className="productInfoValue">{`${id}`}</span>
                         </div>
                         <div className="productInfoItem">
                             <span className="productInfoKey">ventes:</span>
@@ -160,7 +158,7 @@ export default function Product() {
                             <span className="productInfoValue">{quantity ? "Oui" : "Non"}</span>
                         </div>
                         <div className="productInfoItem">
-                            <span className="productInfoKey">Quantity:</span>
+                            <span className="productInfoKey">Quantité:</span>
                             <span className="productInfoValue">{data.quantity}</span>
                         </div>
                     </div>
@@ -173,16 +171,15 @@ export default function Product() {
                         <input name="title" type="text" value={data.title} onChange={handleUpdate} />
                         <label>Description</label>
                         <textarea name="description" cols="5" rows="3" value={data.description} onChange={handleUpdate} ></textarea>
-                        <label>categories</label>
+                        <label>catégories</label>
                         <div className="searchContainer">
                             <input onFocus={() => data.categories.length < categories.length && setShowCat(true)} onBlur={() => setShowCat(false)} type="search" value={cat} onChange={(e) => { setCat(e.target.value); setShowCat(true) }} />
                             {showCat && <div className="productSearched">
                                 {categories.filter(
-                                    x => x?.name?.match(cat) && !(data.categories.find(category => category.name === x.name))
+                                    x => x.name.match(cat) && !(data.categories.find(category => category === x.name))
                                 ).map(x => <button key={x.name} className="categoryItem" onMouseDown={(e) => {
                                     e.preventDefault()
-                                    setdata({ ...data, categories: [...data.categories, x] })
-
+                                    setdata({ ...data, categories: [...data.categories, x.name] })
                                     if (data.categories.length + 1 === categories.length) {
                                         setShowCat(false)
                                     }
@@ -193,10 +190,10 @@ export default function Product() {
                         <div className="productCategoryContainer">
                             {data.categories?.map(
                                 category => <div className="productCategory"><input type="checkbox"
-                                    key={category.name} name={category.name}
-                                    checked={data.categories.find(x => x.name === category.name)}
+                                    key={category} name={category}
+                                    checked={data.categories.find(x => x === category)}
                                     onChange={() => handleCategory(category)} />
-                                    <label >{category.name}</label></div>
+                                    <label >{category}</label></div>
                             )}
                         </div>
                         <label>Tailles</label>
@@ -228,7 +225,7 @@ export default function Product() {
                                 )}
                             </div>
                         </div>
-                        <button className="productButton" onClick={onUpdataData}>Update</button>
+                        <button className="productButton" onClick={onUpdataData}>Mettre à jour</button>
                     </div>
                 </form>
             </div>

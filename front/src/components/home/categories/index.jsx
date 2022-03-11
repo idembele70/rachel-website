@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@mui/icons-material"
+import { Skeleton } from "@mui/material"
 import React, { useEffect, useRef, useState } from "react"
 import { publicRequest } from "requestMethods"
-import { mobile } from "responsive"
+import { mobile, tablet } from "responsive"
 import styled from "styled-components"
 import CategoryItem from "./CategoryItem"
 
@@ -11,13 +12,14 @@ const Container = styled.div`
   max-width: 1440px;
   overflow-x: hidden;
   margin: auto;
-  max-height: 816px;
+  //max-height: 816px;
   position: relative;
   display: flex;
 `
 const Wrapper = styled.div`
+  flex-grow: 1;
   display: flex;
-  transition: all 450ms ease;
+  transition: transform 450ms ease;
   transform: translateX(${(props) => -props.width * props.slideIndex}%);
 `
 const Arrow = styled.span`
@@ -39,6 +41,22 @@ const Arrow = styled.span`
   opacity: 0.5;
   z-index: 20;
 `
+const ImgSkeleton = styled.div`
+  width: calc(50vw - 30px);
+  height: calc(((50vw - 30px) / (2 / 3)) - 100px);
+  ${mobile({
+    width: "calc(100vw - 30px)",
+    height: "calc((100vw - 30px) / (2 / 3))"
+  })}
+  background-color: rgba(0, 0, 0, 0.2);
+  max-width: 690px;
+  max-height: calc((690px / (2 / 3)) - 100px);
+  margin: 5px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 function Categories() {
   const [categories, setCategories] = useState([])
   const [slideIndex, setSlideIndex] = useState(0)
@@ -46,6 +64,7 @@ function Categories() {
     state: true,
     direction: "right"
   })
+  const [loading, setLoading] = useState(true)
   const { innerWidth: winWidth } = window
   const TimeOutRef = useRef(null)
   useEffect(() => {
@@ -63,7 +82,7 @@ function Categories() {
         }
       }, 4000)
     return () => clearTimeout(TimeOutRef.current)
-  }, [autoSlide, categories.length, slideIndex])
+  }, [autoSlide, categories.length, slideIndex, winWidth])
 
   const handleClick = (direction) => {
     setAutoSlide({ ...autoSlide, state: false })
@@ -82,21 +101,47 @@ function Categories() {
   useEffect(() => {
     publicRequest
       .get("/category?isActive=true")
-      .then(({ data }) => setCategories(data))
+      .then(async ({ data }) => {
+        await setCategories([
+          ...data
+            .filter((category) => category.isActive)
+            .map((category) => (
+              <CategoryItem itemInfo={category} key={category._id} />
+            ))
+        ])
+        setLoading(false)
+      })
       .catch((e) => console.error(e))
   }, [])
-
+  const isMobile = winWidth <= 640
+  const imgSkeletonSx = {
+    transform: "scale(1,1)",
+    borderRadius: 0,
+    width: "100%",
+    height: "100%"
+  }
+  if (loading)
+    return (
+      <Container>
+        <Wrapper>
+          <ImgSkeleton>
+            <Skeleton sx={imgSkeletonSx} />
+          </ImgSkeleton>
+          {!isMobile ? (
+            <ImgSkeleton>
+              <Skeleton sx={imgSkeletonSx} />
+            </ImgSkeleton>
+          ) : null}
+        </Wrapper>
+      </Container>
+    )
   return (
     <Container>
       <Arrow direction="left" onClick={() => handleClick("left")}>
         <ArrowLeftOutlined fontSize="large" sx={{ color: "teal" }} />
       </Arrow>
-      <Wrapper width={winWidth <= 640 ? 100 : 50} slideIndex={slideIndex}>
-        {categories
-          .filter((category) => category.isActive)
-          .map((category) => (
-            <CategoryItem itemInfo={category} key={category._id} />
-          ))}
+      <Wrapper width={100 / categories.length} slideIndex={slideIndex}>
+        {categories}
       </Wrapper>
       <Arrow direction="right" onClick={() => handleClick("right")}>
         <ArrowRightOutlined fontSize="large" sx={{ color: "teal" }} />

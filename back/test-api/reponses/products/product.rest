@@ -17,7 +17,7 @@ Content-Type: application/json
 
 ### CREATE MANY
 POST http://localhost:5000/api/products/insertMany
-token: " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0NjA1MTAzNCwiZXhwIjoxNjQ2MTM3NDM0fQ.Oxq9E5W8OV9IGUhLs0aKxxBrS5RAMFagZvsc9dmNnno
+token: " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0NjU2NzYzNCwiZXhwIjoxNjQ2NjU0MDM0fQ.LJQHUvV2hIP5LlIkyaiAJ3BYngjhi-87Q_ra-7JSx78
 Content-Type: application/json
 
 [
@@ -26,9 +26,7 @@ Content-Type: application/json
     "description": "consectetuer adipiscing elit proin risus",
     "img": "http://dummyimage.com/192x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 95,
     "inStock": 50,
@@ -46,9 +44,7 @@ Content-Type: application/json
     "description": "euismod scelerisque",
     "img": "http://dummyimage.com/176x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 69,
     "inStock": 68,
@@ -66,9 +62,7 @@ Content-Type: application/json
     "description": "cubilia curae duis",
     "img": "http://dummyimage.com/120x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 98,
     "inStock": 94,
@@ -86,9 +80,7 @@ Content-Type: application/json
     "description": "rutrum ac lobortis vel dapibus",
     "img": "http://dummyimage.com/165x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 60,
     "inStock": 63,
@@ -106,9 +98,7 @@ Content-Type: application/json
     "description": "some things",
     "img": "http://dummyimage.com/200x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 78,
     "inStock": 54,
@@ -126,9 +116,7 @@ Content-Type: application/json
     "description": "nulla suscipit ligula in",
     "img": "http://dummyimage.com/212x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 55,
     "inStock": 81,
@@ -146,9 +134,7 @@ Content-Type: application/json
     "description": "pellentesque eget nunc donec quis",
     "img": "http://dummyimage.com/158x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 68,
     "inStock": 74,
@@ -166,9 +152,7 @@ Content-Type: application/json
     "description": "ac neque",
     "img": "http://dummyimage.com/190x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 94,
     "inStock": 68,
@@ -186,9 +170,7 @@ Content-Type: application/json
     "description": "pretium iaculis",
     "img": "http://dummyimage.com/222x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 50,
     "inStock": 76,
@@ -206,9 +188,7 @@ Content-Type: application/json
     "description": "purus sit amet",
     "img": "http://dummyimage.com/190x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 69,
     "inStock": 52,
@@ -226,9 +206,7 @@ Content-Type: application/json
     "description": "maecenas tincidunt",
     "img": "http://dummyimage.com/158x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 73,
     "inStock": 63,
@@ -246,9 +224,7 @@ Content-Type: application/json
     "description": "some things",
     "img": "http://dummyimage.com/118x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 70,
     "inStock": 80,
@@ -266,9 +242,7 @@ Content-Type: application/json
     "description": "luctus et ultrices posuere cubilia",
     "img": "http://dummyimage.com/201x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 55,
     "inStock": 66,
@@ -286,9 +260,7 @@ Content-Type: application/json
     "description": "mauris sit amet",
     "img": "http://dummyimage.com/231x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 86,
     "inStock": 81,
@@ -306,9 +278,7 @@ Content-Type: application/json
     "description": "adipiscing elit proin interdum",
     "img": "http://dummyimage.com/238x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 88,
     "inStock": 73,
@@ -326,9 +296,7 @@ Content-Type: application/json
     "description": "some things",
     "img": "http://dummyimage.com/237x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 100,
     "inStock": 62,
@@ -346,9 +314,7 @@ Content-Type: application/json
     "description": "diam vitae",
     "img": "http://dummyimage.com/100x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 85,
     "inStock": 65,
@@ -366,9 +332,7 @@ Content-Type: application/json
     "description": "nec molestie sed",
     "img": "http://dummyimage.com/140x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 87,
     "inStock": 94,
@@ -386,9 +350,7 @@ Content-Type: application/json
     "description": "congue etiam",
     "img": "http://dummyimage.com/153x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 88,
     "inStock": 83,
@@ -406,9 +368,7 @@ Content-Type: application/json
     "description": "ligula suspendisse ornare consequat",
     "img": "http://dummyimage.com/192x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 86,
     "inStock": 59,
@@ -426,9 +386,7 @@ Content-Type: application/json
     "description": "vel est donec odio",
     "img": "http://dummyimage.com/180x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 50,
     "inStock": 52,
@@ -446,9 +404,7 @@ Content-Type: application/json
     "description": "accumsan tellus nisi",
     "img": "http://dummyimage.com/120x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 83,
     "inStock": 69,
@@ -466,9 +422,7 @@ Content-Type: application/json
     "description": "rutrum at",
     "img": "http://dummyimage.com/144x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 84,
     "inStock": 77,
@@ -486,9 +440,7 @@ Content-Type: application/json
     "description": "orci luctus et",
     "img": "http://dummyimage.com/128x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 75,
     "inStock": 64,
@@ -506,9 +458,7 @@ Content-Type: application/json
     "description": "some things",
     "img": "http://dummyimage.com/245x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 91,
     "inStock": 88,
@@ -526,9 +476,7 @@ Content-Type: application/json
     "description": "tincidunt eget tempus",
     "img": "http://dummyimage.com/137x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 87,
     "inStock": 53,
@@ -546,9 +494,7 @@ Content-Type: application/json
     "description": "nulla justo aliquam",
     "img": "http://dummyimage.com/194x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 69,
     "inStock": 59,
@@ -566,9 +512,7 @@ Content-Type: application/json
     "description": "velit nec nisi vulputate",
     "img": "http://dummyimage.com/150x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 76,
     "inStock": 50,
@@ -586,9 +530,7 @@ Content-Type: application/json
     "description": "at lorem integer tincidunt",
     "img": "http://dummyimage.com/173x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 57,
     "inStock": 98,
@@ -606,9 +548,7 @@ Content-Type: application/json
     "description": "quisque arcu libero",
     "img": "http://dummyimage.com/157x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 74,
     "inStock": 97,
@@ -626,9 +566,7 @@ Content-Type: application/json
     "description": "quam a odio",
     "img": "http://dummyimage.com/174x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 65,
     "inStock": 75,
@@ -646,9 +584,7 @@ Content-Type: application/json
     "description": "aliquet at",
     "img": "http://dummyimage.com/105x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 85,
     "inStock": 52,
@@ -666,9 +602,7 @@ Content-Type: application/json
     "description": "massa donec dapibus",
     "img": "http://dummyimage.com/186x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 70,
     "inStock": 82,
@@ -686,9 +620,7 @@ Content-Type: application/json
     "description": "quis libero nullam",
     "img": "http://dummyimage.com/151x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 94,
     "inStock": 76,
@@ -706,9 +638,7 @@ Content-Type: application/json
     "description": "tincidunt eu felis fusce posuere",
     "img": "http://dummyimage.com/201x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 97,
     "inStock": 71,
@@ -726,9 +656,7 @@ Content-Type: application/json
     "description": "sapien iaculis congue vivamus",
     "img": "http://dummyimage.com/150x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 77,
     "inStock": 84,
@@ -746,9 +674,7 @@ Content-Type: application/json
     "description": "dui nec nisi",
     "img": "http://dummyimage.com/181x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 75,
     "inStock": 66,
@@ -766,9 +692,7 @@ Content-Type: application/json
     "description": "lobortis ligula sit amet",
     "img": "http://dummyimage.com/185x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 54,
     "inStock": 92,
@@ -786,9 +710,7 @@ Content-Type: application/json
     "description": "donec semper",
     "img": "http://dummyimage.com/113x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 55,
     "inStock": 99,
@@ -806,9 +728,7 @@ Content-Type: application/json
     "description": "pede ac diam cras",
     "img": "http://dummyimage.com/234x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 95,
     "inStock": 87,
@@ -826,9 +746,7 @@ Content-Type: application/json
     "description": "felis eu sapien cursus vestibulum",
     "img": "http://dummyimage.com/124x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 58,
     "inStock": 71,
@@ -846,9 +764,7 @@ Content-Type: application/json
     "description": "eget vulputate ut",
     "img": "http://dummyimage.com/149x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 71,
     "inStock": 70,
@@ -866,9 +782,7 @@ Content-Type: application/json
     "description": "lacus purus",
     "img": "http://dummyimage.com/198x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 81,
     "inStock": 95,
@@ -886,9 +800,7 @@ Content-Type: application/json
     "description": "potenti nullam porttitor",
     "img": "http://dummyimage.com/245x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 71,
     "inStock": 66,
@@ -906,9 +818,7 @@ Content-Type: application/json
     "description": "ac leo pellentesque",
     "img": "http://dummyimage.com/195x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 81,
     "inStock": 72,
@@ -926,9 +836,7 @@ Content-Type: application/json
     "description": "pede lobortis ligula sit",
     "img": "http://dummyimage.com/207x100.png/5fa2dd/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 69,
     "inStock": 55,
@@ -946,9 +854,7 @@ Content-Type: application/json
     "description": "interdum eu tincidunt in",
     "img": "http://dummyimage.com/108x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 53,
     "inStock": 87,
@@ -966,9 +872,7 @@ Content-Type: application/json
     "description": "id mauris",
     "img": "http://dummyimage.com/207x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 90,
     "inStock": 78,
@@ -986,9 +890,7 @@ Content-Type: application/json
     "description": "erat fermentum justo nec condimentum",
     "img": "http://dummyimage.com/187x100.png/cc0000/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 91,
     "inStock": 83,
@@ -1006,9 +908,7 @@ Content-Type: application/json
     "description": "pellentesque ultrices",
     "img": "http://dummyimage.com/185x100.png/ff4444/ffffff",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 82,
     "inStock": 66,
@@ -1026,9 +926,7 @@ Content-Type: application/json
     "description": "id pretium",
     "img": "http://dummyimage.com/222x100.png/dddddd/000000",
     "categories": [
-      "62164d941bc759ebb37e61ac",
-      "62164de81bc759ebb37e61ae",
-      "61e2cf5db8b14a59d5363cec"
+      "hommes","femmes","accessoires"
     ],
     "price": 60,
     "inStock": 73,
@@ -1042,6 +940,22 @@ Content-Type: application/json
     "weight": 237
   }
 ]
+### GET MANY
+DELETE http://localhost:5000/api/products/findMany
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### UPDATE

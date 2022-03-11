@@ -16,7 +16,7 @@ import Success from "pages/Success"
 import User from "pages/User"
 import React from "react"
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
-import ScrollToTop from "./components/tools/ScrollTopTop"
+import ScrollToTop from "./components/tools/ScrollToTop"
 
 function App() {
   const stripePromise = loadStripe(

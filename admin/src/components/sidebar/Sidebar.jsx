@@ -11,66 +11,66 @@ export default function Sidebar() {
     <div className="sidebar">
       <div className="sidebarWrapper">
         <div className="sidebarMenu">
-          <h3 className="sidebarTitle">Dashboard</h3>
+          <h3 className="sidebarTitle">Tableau de bord</h3>
           <ul className="sidebarList">
             <Link to="/" className="link">
-            <li className="sidebarListItem active">
-              <LineStyle className="sidebarIcon" />
-              Home
-            </li>
+              <li className="sidebarListItem active">
+                <LineStyle className="sidebarIcon" />
+                Accueil
+              </li>
             </Link>
             <li className="sidebarListItem">
               <Timeline className="sidebarIcon" />
-              Analytics
+              analytiques
             </li>
             <li className="sidebarListItem">
               <TrendingUp className="sidebarIcon" />
-              Sales
+              ventes
             </li>
           </ul>
         </div>
         <div className="sidebarMenu">
-          <h3 className="sidebarTitle">Quick Menu</h3>
+          <h3 className="sidebarTitle">Menu Rapide</h3>
           <ul className="sidebarList">
             <Link to="/users" className="link">
               <li className="sidebarListItem">
                 <PermIdentity className="sidebarIcon" />
-                Users
+                Utilisateurs
               </li>
             </Link>
             <Link to="/products" className="link">
               <li className="sidebarListItem">
                 <Storefront className="sidebarIcon" />
-                Products
+                Produits
               </li>
             </Link>
             <Link to="/categories" className="link">
               <li className="sidebarListItem">
                 <Storefront className="sidebarIcon" />
-                Categories
+                Catégories
               </li>
             </Link>
             <Link to="/newproduct" className="link">
               <li className="sidebarListItem">
                 <AddCircleOutlineOutlined className="sidebarIcon" />
-                Add Product
+                Ajouter un Produit
               </li>
             </Link>
             <Link to="/newcategory" className="link">
               <li className="sidebarListItem">
                 <AddCircleOutlineOutlined className="sidebarIcon" />
-                Add Category
+                Ajouter une Catégorie
               </li>
             </Link>
             <Link to="/orders" className="link" >
-            <li className="sidebarListItem">
-              <AttachMoney className="sidebarIcon" />
-              Orders
-            </li>
+              <li className="sidebarListItem">
+                <AttachMoney className="sidebarIcon" />
+                Commandes
+              </li>
             </Link>
             <li className="sidebarListItem">
               <BarChart className="sidebarIcon" />
-              Reports
+              Rapports
             </li>
           </ul>
         </div>
@@ -83,7 +83,7 @@ export default function Sidebar() {
             </li>
             <li className="sidebarListItem">
               <DynamicFeed className="sidebarIcon" />
-              Feedback
+              Commentaires
             </li>
             <li className="sidebarListItem">
               <ChatBubbleOutline className="sidebarIcon" />
@@ -92,19 +92,19 @@ export default function Sidebar() {
           </ul>
         </div>
         <div className="sidebarMenu">
-          <h3 className="sidebarTitle">Staff</h3>
+          <h3 className="sidebarTitle">équipe</h3>
           <ul className="sidebarList">
             <li className="sidebarListItem">
               <WorkOutline className="sidebarIcon" />
-              Manage
+              Gérer
             </li>
             <li className="sidebarListItem">
               <Timeline className="sidebarIcon" />
-              Analytics
+              Analytiques
             </li>
             <li className="sidebarListItem">
               <Report className="sidebarIcon" />
-              Reports
+              Bug
             </li>
           </ul>
         </div>
