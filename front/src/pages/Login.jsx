@@ -1,5 +1,5 @@
 import Navbar from "components/tools/Navbar"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
@@ -74,23 +74,17 @@ const Login = () => {
     email: "",
     password: ""
   })
-  const [error, setError] = useState("")
   const dispatch = useDispatch()
 
   const handleUpdate = (event) =>
     setData({ ...data, [event.target.name]: event.target.value })
 
   // @ts-ignore
-  const { isFetching, error: stateError } = useSelector((state) => state.user)
+  const { isFetching, error } = useSelector((state) => state.user)
   const handleLog = (e) => {
     e.preventDefault()
-    if (stateError) setError(t("signin.errorMessage"))
-    else {
-      setError("")
-      login(dispatch, data)
-    }
+    login(dispatch, data)
   }
-
   return (
     <>
       <Navbar />

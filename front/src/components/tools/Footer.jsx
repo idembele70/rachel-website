@@ -7,6 +7,7 @@ import {
 } from "@mui/icons-material"
 import React from "react"
 import { useTranslation } from "react-i18next"
+import { useHistory } from "react-router-dom"
 import { mobile, smallMobile, tablet } from "responsive"
 import styled from "styled-components"
 
@@ -22,7 +23,7 @@ const Container = styled.div`
     padding: 20px;
     flex: 1;
     ${mobile({ padding: 10 })};
-    ${smallMobile({minWidth: "calc(95vw - 10px)" ,padding:5 })};
+    ${smallMobile({ minWidth: "calc(95vw - 10px)", padding: 5 })};
   }
 `
 const Left = styled.div`
@@ -44,12 +45,18 @@ const SocialIcon = styled.div`
   border-radius: 50%;
   color: white;
   background-color: #${(props) =>
-    // eslint-disable-next-line react/prop-types
-    props.color};
+      // eslint-disable-next-line react/prop-types
+      props.color};
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 20px;
+  border: 2px solid transparent;
+  transition: border-color 500ms;
+  cursor: pointer;
+  &:hover {
+    border: 2px solid teal;
+  }
 `
 
 const Center = styled.div`
@@ -68,6 +75,7 @@ const List = styled.ul`
 const ListItem = styled.li`
   width: 50%;
   margin-bottom: 10px;
+  cursor: pointer;
 `
 const Right = styled.div`
   ${mobile({ backgroundColor: "#fff8f8" })};
@@ -83,7 +91,10 @@ const Payment = styled.img`
 
 const Footer = () => {
   const { t } = useTranslation()
-
+  const history = useHistory()
+  const handleRedirect = (to = "") => {
+    history.push(to)
+  }
   return (
     <Container>
       <Left>
@@ -101,15 +112,27 @@ const Footer = () => {
       <Center>
         <Title>{t("footer.center.title")}</Title>
         <List>
-          <ListItem>{t("footer.center.listItem.home")}</ListItem>
-          <ListItem>{t("footer.center.listItem.cart")}</ListItem>
-          <ListItem>{t("footer.center.listItem.manFashion")}</ListItem>
-          <ListItem>{t("footer.center.listItem.womamFashion")}</ListItem>
-          <ListItem>{t("footer.center.listItem.accessories")}</ListItem>
-          <ListItem>{t("footer.center.listItem.myAcount")}</ListItem>
-          <ListItem>{t("footer.center.listItem.orderTracking")}</ListItem>
-          <ListItem>{t("footer.center.listItem.wishlist")}</ListItem>
-          <ListItem>{t("footer.center.listItem.terms")}</ListItem>
+          <ListItem onClick={() => handleRedirect("/")}>
+            {t("footer.center.listItem.home")}
+          </ListItem>
+          <ListItem onClick={() => handleRedirect("/cart")}>
+            {t("footer.center.listItem.cart")}
+          </ListItem>
+          <ListItem onClick={() => handleRedirect("/products/hommes")}>
+            {t("footer.center.listItem.manFashion")}
+          </ListItem>
+          <ListItem onClick={() => handleRedirect("/products/femmes")}>
+            {t("footer.center.listItem.womamFashion")}
+          </ListItem>
+          <ListItem onClick={() => handleRedirect("/products/accessoires")}>
+            {t("footer.center.listItem.accessories")}
+          </ListItem>
+          <ListItem onClick={() => handleRedirect("/user/")}>
+            {t("footer.center.listItem.myAcount")}
+          </ListItem>
+          {/*           <ListItem onClick={()=> handleRedirect("/")} >{t("footer.center.listItem.orderTracking")}</ListItem>
+          <ListItem onClick={()=> handleRedirect("/")} >{t("footer.center.listItem.wishlist")}</ListItem>
+          <ListItem onClick={()=> handleRedirect("/")} >{t("footer.center.listItem.terms")}</ListItem> */}
         </List>
       </Center>
       <Right>

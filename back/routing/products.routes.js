@@ -1,3 +1,4 @@
+const { verify } = require("jsonwebtoken")
 const mongoose = require("mongoose")
 const Product = require("../database/model/product.model")
 const { verifyTokenAndAdmin, verifyTokenAndAuthorization } = require("./verifyToken")
@@ -25,6 +26,18 @@ router.post("/insertMany", verifyTokenAndAdmin, async (req, res) => {
   }
 })
 // CREATE MANY ENDPOINT
+// DELETE MANY
+router.delete("/findMany", verifyTokenAndAdmin ,async (req, res) => {
+  try {
+  const products = await Product.deleteMany(
+    {img: {$regex : /dummyimage.com/i }}
+  )
+    res.status(200).json(products)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+})
+// CREATE MANY ENDPOINT
 
 // UPDATE
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
@@ -37,7 +50,7 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
       {
         new: true
       }
-    ).populate("categories")
+    )
     res.status(200).json(productUpdated)
   } catch (err) {
     console.log(req.body)
@@ -74,15 +87,12 @@ router.get("/", async (req, res) => {
     let products = []
     if (qNew)
       products = await Product.find().sort({ createdAt: -1 }).limit(5)
-    else if (qCategory) {
-      products = await Product.find().populate({
-        path: "categories",
-        select: "name",
-        match: { name: { $eq: qCategory } }
+    else if (qCategory)
+      products = await Product.find({
+        categories : {$eq : qCategory}
       })
-    }
     else
-      products = await Product.find().populate("categories")
+      products = await Product.find()
     res.status(200).json(products)
   } catch (err) {
     res.status(500).json(err)

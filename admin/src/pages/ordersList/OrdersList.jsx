@@ -19,7 +19,7 @@ export default function OrdersList() {
   const columns = [
     {
       field: "_id",
-      headerName: "ID",
+      headerName: "Identifiant",
       width: 200
     },
     {
@@ -31,24 +31,24 @@ export default function OrdersList() {
     },
     {
       field: "operator",
-      headerName: "operator",
+      headerName: "opérateur",
       width: 150,
       renderCell: (params) => <>{`${params.row.user?.firstname} ${params.row.user?.firstname}`}</>
     },
     {
       field: "createdAt",
-      headerName: "CreatedAt",
+      headerName: "Date",
       width: 150,
       renderCell: (params) => <>{`${convertDate(params.row.createdAt)}`}</>
     },
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Actions",
       width: 150,
       renderCell: (params) => {
         return (
           <Link to={`/order/${params.row._id}`}>
-            <button className="orderListEdit">Edit</button>
+            <button className="orderListEdit">Modifier</button>
           </Link>
         );
       },

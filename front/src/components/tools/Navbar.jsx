@@ -1,18 +1,19 @@
+// @ts-nocheck
 import {
   CloseOutlined,
-  GpsFixed,
   PersonOutlined,
   Search,
   SearchOutlined,
   ShoppingCartOutlined
 } from "@mui/icons-material"
-import { Badge } from "@mui/material"
-import React, { useState } from "react"
+import { Badge, CircularProgress } from "@mui/material"
+import Product from "components/home/products/Product"
+import React, { useEffect, useLayoutEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 import { logout } from "redux/apiCalls"
-import { userRequest } from "requestMethods"
+import { publicRequest, userRequest } from "requestMethods"
 import styled from "styled-components"
 import { mobile, smallMobile, tablet } from "../../responsive"
 
@@ -73,8 +74,8 @@ const Input = styled.input`
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 20px;
-  ${tablet({ fontSize: "14px" })};
-  ${mobile({ fontSize: "10px", width: "100%" })};
+  ${tablet({ fontSize: "16px" })};
+  ${mobile({ width: "100%" })};
   ${smallMobile({ fontSize: 20, maxWidth: 200 })}
 `
 
@@ -113,6 +114,11 @@ const MenuItem = styled.div`
     background-color: rgba(0, 0, 0, 0.2);
   }
 `
+
+const SmMenuItem = styled(MenuItem)`
+  display: none;
+  ${smallMobile({ display: "inline-flex" })};
+`
 const MenuInfo = styled.div`
   position: absolute;
   bottom: -60px;
@@ -135,17 +141,22 @@ const MenuInfoItem = styled.div`
   }
 `
 const SearchOptions = styled.div`
+  opacity: ${(props) => props.opacity};
+  transition: ${(props) => `opacity ${props.transition}ms, top 150ms`};
   max-height: 110px;
   left: -1px;
   right: -1px;
   background-color: rgba(0, 0, 0, 0.7);
   list-style-type: none;
   position: absolute;
-  top: 41px;
-  z-index: 1;
+  top: ${(props) => props.top}px;
+  z-index: ${(props) => props.zIndex};
   padding: 5px;
   overflow-y: auto;
-  transition: all 150ms ease;
+  display: ${(props) => props.display};
+  align-items: center;
+  justify-content: center;
+  height: ${(props) => props.height};
 `
 const SearchOption = styled.li`
   color: white;
@@ -163,9 +174,19 @@ const SearchOption = styled.li`
     }
   }
 `
+const SearchingContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 3;
+`
 const Navbar = () => {
   const { t } = useTranslation()
   const history = useHistory()
+  const location = useLocation()
   const states = useSelector((state) => state)
   const dispatch = useDispatch()
   const [search, setSearch] = useState("")
@@ -182,31 +203,55 @@ const Navbar = () => {
     logout(dispatch)
   }
   const [showOption, setShowOption] = useState(false)
-  const handleSearch = (link) => {
-    if (link || search) {
-      history.push(`/products/${link || search}`)
-      setSearch("")
+  const [searching, setSearching] = useState(false)
+  const handleSearch = (link = "") => {
+    if (typeof link === "string") {
+      setShowOption(false)
+      ;(async () => {
+        setSearching(true)
+        const { data } = await publicRequest.get(`/products?category=${link}`)
+        const skeletonLength = data.length <= 15 ? data.length : 15
+        history.push({
+          pathname: `/products/${link || search}`,
+          state: { data, skeletonLength }
+        })
+        setSearching(false)
+        setSearch("")
+      })()
     }
-    setShowOption(false)
   }
   const [categories, setcategories] = useState([])
+  const [loading, setLoading] = useState(false)
   const handleCategories = () => {
     setShowOption(true)
     ;(async () => {
+      setLoading(true)
       const { data } = await userRequest.get("/category?showCategory=true")
       setcategories(data)
+      setLoading(false)
     })()
   }
   const outlinedSx = {
     display: "inline-flex",
     verticalAlign: "middle"
   }
-  const closeOutlined = {
-    zIndex: 2
-  }
   const { innerWidth: winWidth } = window
+  const loaderSx = {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%,-50%)",
+    zIndex: 3
+  }
+  const searchSx = { color: "gray", fontSize: 16, cursor: "pointer" }
+
   return (
     <Container>
+      {searching ? (
+        <SearchingContainer>
+          <CircularProgress sx={loaderSx} />{" "}
+        </SearchingContainer>
+      ) : null}
       <Wrapper>
         <Left canSearch={canSearch}>
           <Language> {t("siteLanguage")}</Language>
@@ -223,13 +268,19 @@ const Navbar = () => {
                 if (winWidth <= 360) setCanSearch(false)
               }}
             />
-            <Search
-              sx={{ color: "gray", fontSize: 16, cursor: "pointer" }}
-              onClick={handleSearch}
-            />
-            {showOption && (
-              <SearchOptions>
-                {categories
+            <Search sx={searchSx} onClick={handleSearch} />
+            <SearchOptions
+              transition={showOption ? "500" : "200"}
+              top={showOption ? "41" : "0"}
+              zIndex={showOption ? 1 : -1}
+              opacity={showOption ? 1 : 0}
+              display={loading ? "flex" : "block"}
+              height={loading ? "50px" : "auto"}
+            >
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                categories
                   .filter((category) =>
                     new RegExp(search, "gi").test(category.name)
                   )
@@ -240,18 +291,19 @@ const Navbar = () => {
                     >
                       {category.name}
                     </SearchOption>
-                  ))}
-              </SearchOptions>
-            )}
+                  ))
+              )}
+            </SearchOptions>
           </SearchContainer>
-          {canSearch && winWidth <= 360 ? (
+          {canSearch ? (
             <CloseOutlined
               sx={{
                 zIndex: 2,
                 color: "red",
                 cursor: "pointer",
-                // when hover
-                background: "rgba(255,255,255,0.5)"
+                "&:hover": {
+                  background: "rgba(255,255,255,0.5)"
+                }
               }}
               onClick={() => setCanSearch(false)}
             />
@@ -261,15 +313,13 @@ const Navbar = () => {
           <Logo onClick={() => handleRedirect("/")}>{t("siteName")} </Logo>
         </Center>
         <Right canSearch={canSearch}>
-          <MenuItem>
-            {winWidth <= 360 ? (
-              <SearchOutlined
-                fontSize="medium"
-                sx={outlinedSx}
-                onClick={() => setCanSearch(true)}
-              />
-            ) : null}
-          </MenuItem>
+          <SmMenuItem>
+            <SearchOutlined
+              fontSize="medium"
+              sx={outlinedSx}
+              onClick={() => setCanSearch(true)}
+            />
+          </SmMenuItem>
           <MenuItem
             onMouseEnter={() => setAccountInfo(true)}
             onMouseLeave={() => setAccountInfo(false)}

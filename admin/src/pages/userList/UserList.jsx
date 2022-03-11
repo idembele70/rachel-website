@@ -13,10 +13,10 @@ export default function UserList() {
   };
   
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "Identifiant", width: 90 },
     {
       field: "user",
-      headerName: "User",
+      headerName: "Utilisateur",
       width: 200,
       renderCell: (params) => {
         return (
@@ -30,23 +30,23 @@ export default function UserList() {
     { field: "email", headerName: "Email", width: 200 },
     {
       field: "status",
-      headerName: "Status",
+      headerName: "Statut",
       width: 120,
     },
     {
       field: "transaction",
-      headerName: "Transaction Volume",
+      headerName: "volume des transactions",
       width: 160,
     },
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Actions",
       width: 150,
       renderCell: (params) => {
         return (
           <>
             <Link to={"/user/" + params.row.id}>
-              <button className="userListEdit">Edit</button>
+              <button className="userListEdit">Modifier</button>
             </Link>
             <DeleteOutline
               className="userListDelete"

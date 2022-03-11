@@ -70,7 +70,7 @@ export default function NewCategory() {
 
   return (
     <div className="newCategory">
-      <h1 className="addCategoryTitle">Nouvelles Categorie</h1>
+      <h1 className="addCategoryTitle">Nouvelle Catégorie</h1>
       <form onSubmit={handleCreate}>
         <div className="addProductItem">
           <label htmlFor="name">Nom:</label>
@@ -81,10 +81,10 @@ export default function NewCategory() {
           <input name="img" id="img" type="file" accept=".jpg,.png,.jpeg" onChange={handleUpdate} />
         </div>
         <div className="addProductItem">
-          <label htmlFor="isActive">Activer:</label>
+          <label htmlFor="isActive">Active:</label>
           <input type="checkbox" checked={data.isActive} name="isActive" id="isActive" onChange={handleUpdate} />
         </div>
-        <button className="addProductButton" type="submit">Creé</button>
+        <button className="addProductButton" type="submit">Créer</button>
       </form>
     </div>
   )

@@ -1,9 +1,10 @@
 import { SearchOutlined } from "@mui/icons-material"
 import PropTypes from "prop-types"
-import React from "react"
+import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
+import { Skeleton } from "@mui/material"
 
 const Container = styled.div`
   align-items: center;
@@ -50,7 +51,7 @@ const Info = styled.div`
 `
 const Icon = styled.div`
   background-color: white;
-  borderradius: 50%;
+  //borderradius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,11 +85,18 @@ export default function Product(props) {
       }
     }
   } */
-
+  const [loading, setLoading] = useState(true)
   return (
     <Container>
       <Circle />
-      <Image src={img} alt={title} />
+      {loading ? (
+        <Skeleton
+          sx={{ transform: "scale(1,1)", borderRadius: 0 }}
+          width={196}
+          height={263}
+        />
+      ) : null}
+      <Image src={img} alt={title} onLoad={() => setLoading(false)} />
       <Info>
         {/* <Icon onClick={handleAddToCart}>
           <ShoppingCartOutlined />
