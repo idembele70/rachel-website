@@ -1,14 +1,30 @@
 import Navbar from "components/tools/Navbar"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch, useSelector } from "react-redux"
-import { Link, useHistory } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { useHistory } from "react-router-dom"
 import { mobile } from "responsive"
 import styled from "styled-components"
 import { register } from "../redux/apiCalls"
 
 const Container = styled.div`
   width: 100vw;
+  min-height: calc(100vh + 40px);
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("https://images.pexels.com/photos/6984661/pexels-photo-6984661.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
+      center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+`
+const Main = styled.div`
+  width: 100%;
+  flex: 1;
+  padding: 20px 0;
+  border-top: 1px solid #fff;
   height: calc(100vh - 60px);
   background: linear-gradient(
       rgba(255, 255, 255, 0.5),
@@ -18,9 +34,8 @@ const Container = styled.div`
       center;
   background-size: cover;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  ${mobile("height: calc(100vh - 50px)")}
 `
 const Wrapper = styled.div`
   width: 40%;
@@ -93,8 +108,7 @@ function Register() {
   })
   const [consent, setConsent] = useState(false)
   const [error, setError] = useState("")
-  const user = useSelector((state) => state.user)
-
+  
   const handleUpdate = (e) => {
     const { name, value } = e.target
     setData({ ...data, [name]: value.toLowerCase() })
@@ -122,9 +136,9 @@ function Register() {
   }
 
   return (
-    <>
+    <Container>
       <Navbar />
-      <Container>
+      <Main>
         <Wrapper>
           <Title>{t("signup.title")}</Title>
           <Form onSubmit={handleRegister}>
@@ -204,8 +218,8 @@ function Register() {
             </ButtonContainer>
           </Form>
         </Wrapper>
-      </Container>
-    </>
+      </Main>
+    </Container>
   )
 }
 

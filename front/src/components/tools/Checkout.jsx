@@ -6,7 +6,7 @@ import {
   useElements,
   useStripe
 } from "@stripe/react-stripe-js"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useHistory, useLocation } from "react-router-dom"
@@ -38,10 +38,15 @@ const FormItem = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  ${mobile({ flexDirection: "column" })}
 `
 const ItemRow = styled.div`
-  flex-grow: 1;
+  flex: 1;
+  max-width: 50%;
   margin: 0 5px;
+  display: flex;
+  flex-direction: column;
+  ${mobile({ maxWidth: "initial" })}
   ${smallMobile({ margin: 0 })}
 `
 const Label = styled.label`
@@ -50,8 +55,7 @@ const Label = styled.label`
   letter-spacing: 0.025em;
 `
 const Input = styled.input`
-  display: block;
-  width: -webkit-fill-available;
+  width: calc(100% - 28px);
   margin: 10px 0 20px 0;
   max-width: 500px;
   padding: 10px 14px;
@@ -70,14 +74,18 @@ const Input = styled.input`
       rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
     transition: all 150ms ease;
   }
+  ${mobile({ maxWidth: 300 })}
 `
 const Select = styled.select`
-  display: block;
-  width: -webkit-fill-available;
-  margin: 10px 0 20px 0;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 20px;
   max-width: 500px;
-  padding: 8px 14px;
+  padding: 10px 14px;
+  -webkit-appearance: none;
+  border-radius: 4px;
   font-size: 1em;
+  ${mobile({ maxWidth: 328 })}
 `
 const Option = styled.option``
 const StripeFormItem = styled.div`
@@ -132,6 +140,9 @@ const Button = styled.button`
     transform: translateY(-1px);
     box-shadow: 0 7px 14px rgba(50, 50, 93, 0.11), 0 3px 6px rgba(0, 0, 0, 0.08);
   }
+  &:disabled{
+    cursor: not-allowed;
+  }
 `
 const Error = styled.span`
   color: red;
@@ -142,7 +153,10 @@ const Error = styled.span`
 function Checkout() {
   const location = useLocation()
   const history = useHistory()
-  const { currentUser } = useSelector((state) => state.user)
+  const {
+    user: { currentUser },
+    cart
+  } = useSelector((state) => state)
   const [info, setInfo] = useState({
     firstname: "",
     lastname: "",
@@ -155,6 +169,7 @@ function Checkout() {
   })
 
   useEffect(() => {
+    if (cart.products.length === 0) history.push("/")
     const {
       _id,
       isAdmin,
@@ -166,7 +181,7 @@ function Checkout() {
       ...billing
     } = currentUser
     setInfo({ ...billing, zip })
-  }, [currentUser])
+  }, [currentUser, location])
 
   const { firstname, lastname, email, address, zip, city, country, phone } =
     info
@@ -261,8 +276,10 @@ function Checkout() {
     []
   )
   const { total, products } = useSelector((state) => state.cart)
+  const [paying, setPaying] = useState(false)
   const handleSubmit = async (ev) => {
     ev.preventDefault()
+    setPaying(true)
     if (canPay) {
       if (!stripe || !elements) {
         console.log("stripe js has not loaded!")
@@ -288,7 +305,7 @@ function Checkout() {
           data: { id: stripeId }
         } = await userRequest.post("/checkout/payment/intents", {
           id: payload.paymentMethod?.id,
-          amount: (total + location.state?.shippingPrice || 0) * 100
+          amount: total + location.state?.shippingPrice || 0
         })
         const cartProducts = products.map(
           ({ title, price, qte, size, color }) => ({
@@ -331,6 +348,7 @@ function Checkout() {
       setCanPay(true)
       setError(false)
     }
+    setPaying(false)
   }
   const handleReset = (e) => {
     e.preventDefault()
@@ -461,9 +479,10 @@ function Checkout() {
           <Button back type="Reset">
             {canPay ? t("checkout.goBack") : t("checkout.backToCard")}
           </Button>
-          <Button type="submit" disabled={!stripe}>
+          <Button type="submit" disabled={!stripe || paying}>
             {canPay
-              ? `${t("checkout.pay")} ${
+              ? (paying && t("checkout.loading")) ||
+                `${t("checkout.pay")} ${
                   total + location.state?.shippingPrice
                 }${t("currency")}`
               : t("checkout.proceedToPayment")}

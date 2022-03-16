@@ -3,13 +3,15 @@ import {
   HomeSharp,
   LocalGroceryStore
 } from "@mui/icons-material"
-import React from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
 import { logout } from "redux/apiCalls"
+import { userRequest } from "requestMethods"
 import { mobile, smallMobile, tablet } from "responsive"
 import styled from "styled-components"
+import Loader from "./Loader"
 
 const Container = styled.div`
   flex: 1;
@@ -91,8 +93,14 @@ export default function Sidebar() {
   const { t } = useTranslation()
   const history = useHistory()
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
+  const {
+    currentUser: { _id: id }
+    // @ts-ignore
+  } = useSelector((state) => state.user)
   return (
     <Container>
+      {loading && <Loader />}
       <LogoContainer>
         <Logo onClick={() => history.push("/")}>{t("siteName")}</Logo>
       </LogoContainer>
@@ -101,7 +109,20 @@ export default function Sidebar() {
           <HomeSharp />
           <MainItemTitle>{t("navbar.home")}</MainItemTitle>
         </MainItem>
-        <MainItem onClick={() => history.push("/user/orders")}>
+        <MainItem
+          onClick={() => {
+            ;(async () => {
+              setLoading(true)
+              const { data: orderLength } = await userRequest.get(
+                `orders/${id}?count=true`
+              )
+              history.push({
+                pathname: "/user/orders",
+                state: { orderLength }
+              })
+            })()
+          }}
+        >
           <LocalGroceryStore />
           <MainItemTitle>{t("navbar.orders")}</MainItemTitle>
         </MainItem>

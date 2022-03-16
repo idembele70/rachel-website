@@ -16,6 +16,7 @@ import { logout } from "redux/apiCalls"
 import { publicRequest, userRequest } from "requestMethods"
 import styled from "styled-components"
 import { mobile, smallMobile, tablet } from "../../responsive"
+import Loader from "./Loader"
 
 const Container = styled.div`
   flex: 0 0 60px;
@@ -77,6 +78,7 @@ const Input = styled.input`
   ${tablet({ fontSize: "16px" })};
   ${mobile({ width: "100%" })};
   ${smallMobile({ fontSize: 20, maxWidth: 200 })}
+  z-index:4;
 `
 
 const Center = styled.div`
@@ -103,6 +105,7 @@ const Right = styled.div`
 
 const MenuItem = styled.div`
   cursor: pointer;
+  z-index: 200;
   margin-left: 25px;
   ${tablet({ fontSize: 24, marginLeft: 16 })};
   margin-right: ${(props) =>
@@ -135,6 +138,7 @@ const MenuInfoItem = styled.div`
   margin: 5px 0;
   font-size: 16px;
   color: white;
+  cursor: pointer;
   &:hover {
     background: rgb(255, 255, 255, 0.42);
     color: white;
@@ -151,12 +155,13 @@ const SearchOptions = styled.div`
   position: absolute;
   top: ${(props) => props.top}px;
   z-index: ${(props) => props.zIndex};
-  padding: 5px;
-  overflow-y: auto;
+  padding: 0 5px;
+  overflow-y: scroll;
   display: ${(props) => props.display};
   align-items: center;
   justify-content: center;
   height: ${(props) => props.height};
+  ${smallMobile({ maxWidth: 200 })}
 `
 const SearchOption = styled.li`
   color: white;
@@ -173,15 +178,6 @@ const SearchOption = styled.li`
       background-color: rgba(255, 255, 255, 0.5);
     }
   }
-`
-const SearchingContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.2);
-  z-index: 3;
 `
 const Navbar = () => {
   const { t } = useTranslation()
@@ -209,11 +205,12 @@ const Navbar = () => {
       setShowOption(false)
       ;(async () => {
         setSearching(true)
-        const { data } = await publicRequest.get(`/products?category=${link}`)
-        const skeletonLength = data.length <= 15 ? data.length : 15
+        const { data: skeletonLength } = await publicRequest.get(
+          `/products?category=${link}&page=0&count=true`
+        )
         history.push({
           pathname: `/products/${link || search}`,
-          state: { data, skeletonLength }
+          state: { skeletonLength }
         })
         setSearching(false)
         setSearch("")
@@ -236,22 +233,11 @@ const Navbar = () => {
     verticalAlign: "middle"
   }
   const { innerWidth: winWidth } = window
-  const loaderSx = {
-    position: "fixed",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%,-50%)",
-    zIndex: 3
-  }
-  const searchSx = { color: "gray", fontSize: 16, cursor: "pointer" }
 
+  const searchSx = { color: "gray", fontSize: 16, cursor: "pointer" }
   return (
     <Container>
-      {searching ? (
-        <SearchingContainer>
-          <CircularProgress sx={loaderSx} />{" "}
-        </SearchingContainer>
-      ) : null}
+      {searching ? <Loader /> : null}
       <Wrapper>
         <Left canSearch={canSearch}>
           <Language> {t("siteLanguage")}</Language>
@@ -278,7 +264,7 @@ const Navbar = () => {
               height={loading ? "50px" : "auto"}
             >
               {loading ? (
-                <CircularProgress />
+                <CircularProgress sx={{ margin: "10px 0" }} />
               ) : (
                 categories
                   .filter((category) =>
@@ -310,7 +296,13 @@ const Navbar = () => {
           ) : null}
         </Left>
         <Center canSearch={canSearch}>
-          <Logo onClick={() => handleRedirect("/")}>{t("siteName")} </Logo>
+          <Logo
+            onClick={() =>
+              location.pathname !== "/" ? handleRedirect("/") : null
+            }
+          >
+            {t("siteName")}
+          </Logo>
         </Center>
         <Right canSearch={canSearch}>
           <SmMenuItem>
@@ -321,8 +313,11 @@ const Navbar = () => {
             />
           </SmMenuItem>
           <MenuItem
-            onMouseEnter={() => setAccountInfo(true)}
-            onMouseLeave={() => setAccountInfo(false)}
+            onMouseEnter={() => (winWidth > 1024 ? setAccountInfo(true) : null)}
+            onMouseLeave={() =>
+              winWidth > 1024 ? setAccountInfo(false) : null
+            }
+            onClick={() => (winWidth <= 1024 ? history.push("/user") : null)}
           >
             <PersonOutlined fontSize="medium" sx={outlinedSx} />
             {Object.keys(currentUser).length
@@ -341,7 +336,14 @@ const Navbar = () => {
                   </MenuInfo>
                 )
               : accountInfo && (
-                  <MenuInfo onMouseEnter={() => setAccountInfo(true)}>
+                  <MenuInfo
+                    onClick={() =>
+                      winWidth <= 1024 ? handleRedirect("/login") : null
+                    }
+                    onMouseEnter={() =>
+                      winWidth >= 1024 ? setAccountInfo(true) : null
+                    }
+                  >
                     <MenuInfoItem onClick={() => handleRedirect("/register")}>
                       {t("sign.signup")}
                     </MenuInfoItem>

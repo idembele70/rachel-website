@@ -59,12 +59,17 @@ const Button = styled.button`
 
 const Error = styled.span`
   color: red;
+  font-size: 14px;
+  display: inline-block;
+  height: 38px;
+  margin-bottom: 10px;
 `
 
 const LinkStyle = {
   fontSize: "12px",
   margin: "5px 0",
-  textDecoration: "underline",
+  textDecoration: "none",
+  color: "black",
   cursor: "pointer"
 }
 
@@ -111,15 +116,15 @@ const Login = () => {
             <Button disabled={isFetching} type="submit">
               {t("signin.login")}
             </Button>
-            {error && <Error>{error} </Error>}
-            {/*  <Link href="/">{t("signin.forgotPassword")}</Link> */}
-            <Link
-              to={{ pathname: "register", state: { redirectToCart: true } }}
-              style={LinkStyle}
-            >
-              {t("signin.newUser")}
-            </Link>
           </Form>
+          {error ? <Error>{t("signin.errorMessage")}</Error> : null}
+          {/*  <Link href="/">{t("signin.forgotPassword")}</Link> */}
+          <Link
+            to={{ pathname: "register", state: { redirectToCart: true } }}
+            style={LinkStyle}
+          >
+            {t("signin.newUser")}
+          </Link>
         </Wrapper>
       </Container>
     </>

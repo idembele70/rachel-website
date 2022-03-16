@@ -78,7 +78,7 @@ const CardButton = styled.div`
 const CardBottom = styled.div`
   flex: 1;
   width: 100%;
-  height: 570px;
+  min-height: 570px;
 `
 const CardBottomWrapper = styled.div`
   margin: 15px;
@@ -121,6 +121,7 @@ const Select = styled.select`
   margin: 0 5px 15px;
   color: black;
   font-size: 16px;
+  //height: 20px;
   &:focus-visible {
     outline: 2px solid #4f9ae7;
   }
@@ -233,6 +234,7 @@ const User = () => {
     createdAt: "",
     country: ""
   })
+  const [loading, setLoading] = useState(true)
   // @ts-ignore
   const { currentUser, isFetching, error } = useSelector((state) => state.user)
   const countries = useMemo(

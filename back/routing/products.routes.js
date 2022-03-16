@@ -1,5 +1,4 @@
-const { verify } = require("jsonwebtoken")
-const mongoose = require("mongoose")
+
 const Product = require("../database/model/product.model")
 const { verifyTokenAndAdmin, verifyTokenAndAuthorization } = require("./verifyToken")
 
@@ -27,11 +26,11 @@ router.post("/insertMany", verifyTokenAndAdmin, async (req, res) => {
 })
 // CREATE MANY ENDPOINT
 // DELETE MANY
-router.delete("/findMany", verifyTokenAndAdmin ,async (req, res) => {
+router.delete("/findMany", verifyTokenAndAdmin, async (req, res) => {
   try {
-  const products = await Product.deleteMany(
-    {img: {$regex : /dummyimage.com/i }}
-  )
+    const products = await Product.deleteMany(
+      { img: { $regex: /dummyimage.com/i } }
+    )
     res.status(200).json(products)
   } catch (err) {
     res.status(500).json(err)
@@ -81,23 +80,46 @@ router.get("/find/:id", async (req, res) => {
 
 // GET ALL PRODUCTS
 router.get("/", async (req, res) => {
+  
   const qNew = req.query.new
   const qCategory = req.query.category
+  const qCount = req.query.count
+  const qPage = req.query.page
   try {
     let products = []
+    const productPerPage = 15
     if (qNew)
       products = await Product.find().sort({ createdAt: -1 }).limit(5)
-    else if (qCategory)
-      products = await Product.find({
-        categories : {$eq : qCategory}
-      })
+    else if (qCategory){
+      if (qCount) {
+        if(qPage)
+           Product.find({
+            categories: { $eq: qCategory }
+          }).skip(productPerPage * qPage).limit(productPerPage).count().exec()
+          .then(count => res.status(200).json(count))
+          else{
+          Product.find({
+            categories: { $eq: qCategory }
+          }).count().exec()
+          .then(count => res.status(200).json(count))}
+        }
+      else if (qPage) 
+        products = await Product.find({
+          categories: {$eq: qCategory},
+        }).skip(productPerPage * qPage).limit(productPerPage)
+      else
+        products = await Product.find({
+          categories: { $eq: qCategory }
+        })
+      }
     else
       products = await Product.find()
-    res.status(200).json(products)
+      if(products.length){
+        res.status(200).json(products)
+      }
   } catch (err) {
     res.status(500).json(err)
   }
 })
 
 module.exports = router
-

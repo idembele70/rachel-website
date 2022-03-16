@@ -17,7 +17,7 @@ router.post("/new/:id", verifyTokenAndAuthorization, async (req, res) => {
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     const orderUpdated = await Order.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
-    .populate("products.product")
+      .populate("products.product")
     res.status(200).json(orderUpdated)
   } catch (err) {
     res.status(500).json(err)
@@ -73,21 +73,34 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
 // GET ALL ORDER FROM ONE USER
 router.get("/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
-    const userOders = await Order.find({ user: req.params.id })
-    res.status(200).json(userOders)
+    const qCount = req.query.count
+    if (qCount){
+      Order.find({ user: req.params.id }).count().exec()
+      .then(count=>res.status(200).json(count))
+    }
+    else {
+      const userOders = await Order.find({ user: req.params.id })
+      res.status(200).json(userOders)
+    }
   } catch (err) {
-    res.status(500).json(err)
+    res.status(500).json({ file: __filename, err })
   }
 });
 // GET ALL ORDER FROM ONE USER ENDPOINT
 // GET ONE OF USER'S ORDER
 router.get("/find/:id/:orderId", verifyTokenAndAuthorization, async (req, res) => {
- try {
-    const order = await Order.findById(req.params.orderId)
-    .populate("products.product")
+  const qCount = req.query.count
+  try {
+    let order = ""
+    if(qCount){
+      order = await Order.findById(req.params.orderId).select("products").count()
+    }
+    else
+    order = await Order.findById(req.params.orderId)
+      .populate("products.product")
     res.status(200).json(order)
   } catch (err) {
-    res.status(500).json(err)
+    res.status(500).json({ file: __filename, err })
   }
 });
 // GET ONE OF USER'S ORDER ENDPOINT
@@ -96,8 +109,8 @@ router.get("/find/:id/:orderId", verifyTokenAndAuthorization, async (req, res) =
 router.get("/", verifyTokenAndAdmin, async (req, res) => {
   try {
     const orders = await Order.find()
-    .populate("products.product")
-    .populate("user")
+      .populate("products.product")
+      .populate("user")
     res.status(200).json(orders)
   } catch (err) {
     res.status(500).json(err)

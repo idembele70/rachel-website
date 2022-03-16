@@ -4,7 +4,7 @@ const category = createSlice({
   initialState: {
     categories: [],
     isFetching: false,
-    error: false
+    error: false,
   },
   reducers: {
     //ADD a new category

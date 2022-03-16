@@ -1,7 +1,9 @@
+import { CircularProgress } from "@mui/material"
 import PropTypes from "prop-types"
-import React from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
+import { publicRequest } from "requestMethods"
 import { mobile, tablet } from "responsive"
 import styled from "styled-components"
 
@@ -55,21 +57,41 @@ const Button = styled.button`
   font-weight: 600;
   padding: 10px;
 `
-
-const CategoryItem = ({ itemInfo }) => {
+const LoadingContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 3;
+`
+const CategoryItem = ({ itemInfo, onSearch }) => {
   const { t } = useTranslation()
   const history = useHistory()
   const { img, name } = itemInfo
+  const handleRedirect = (e) => {
+    onSearch(true)
+    ;(async () => {
+      const { data: dataLength } = await publicRequest.get(
+        `/products?count=true&category=${name}`
+      )
+      const skeletonLength = dataLength <= 15 ? dataLength : 15
+      history.push({
+        pathname: `/products/${name}`,
+        state: { skeletonLength }
+      })
+      onSearch(false)
+    })()
+  }
   return (
     <Container>
-      <Image
-        onClick={() => history.push(`/products/${name}`)}
-        src={img}
-        alt={name}
-      />
+      <Image src={img} alt={name} />
       <Info>
         <Title>{name.toUpperCase()}</Title>
-        <Button>{t(`products.categories.button`)} </Button>
+        <Button onClick={handleRedirect}>
+          {t(`products.categories.button`)}
+        </Button>
       </Info>
     </Container>
   )
@@ -79,6 +101,7 @@ CategoryItem.propTypes = {
   itemInfo: PropTypes.shape({
     img: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  onSearch: PropTypes.func.isRequired
 }
 export default CategoryItem

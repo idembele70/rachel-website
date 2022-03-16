@@ -6,6 +6,7 @@ import PrivateRoute from "components/tools/PrivateRoute"
 import SignRoute from "components/tools/SignRoute"
 import Cart from "pages/Cart"
 import Home from "pages/Home"
+import LegalMentions from "pages/LegalMentions"
 import Login from "pages/Login"
 import Order from "pages/Order"
 import Orders from "pages/Orders"
@@ -39,6 +40,9 @@ function App() {
           </Route>
           <Route path="/product/:id" exact>
             <ProductPage />
+          </Route>
+          <Route path="/cgv" exact>
+            <LegalMentions />
           </Route>
           <SignRoute component={Login} path="/login" />
           <SignRoute component={Register} path="/register" exact />

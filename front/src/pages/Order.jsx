@@ -1,5 +1,6 @@
+import { Skeleton } from "@mui/material"
 import Sidebar from "components/tools/Sidebar"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useLocation } from "react-router-dom"
@@ -132,7 +133,18 @@ export default function Order() {
   )
   // @ts-ignore
   const { _id: userId } = useSelector((state) => state.user.currentUser)
-  const [, , , orderId] = useLocation().pathname.split(/\//g)
+  const location = useLocation()
+  const [, , , orderId] = location.pathname.split(/\//g)
+  const [loading, setLoading] = useState(true)
+  const productsSkeleton = useRef(
+    [...Array(location.state?.productsLength)].map(() => (
+      <Skeleton width="100%" height={34} />
+    ))
+  )
+  const addressSkeleton = useRef(
+    [...Array(5)].map(() => <Skeleton width="100%" height={23} />)
+  )
+
   useEffect(() => {
     ;(async () => {
       try {
@@ -143,6 +155,7 @@ export default function Order() {
           `/checkout/payment/intents/${ordersData.stripeId}`
         )
         setData({ stripeData: stripeData.charges.data[0], ordersData })
+        setLoading(false)
       } catch (err) {
         console.error("Error while fetching order in Order.jsx", err)
       }
@@ -153,7 +166,7 @@ export default function Order() {
       billing_details: { address, name, email, phone },
       payment_method_details: { card }
     },
-    ordersData: {amount, products, shippingPrice, status }
+    ordersData: { amount, products, shippingPrice, status }
   } = data
   const { t } = useTranslation()
   return (
@@ -166,23 +179,24 @@ export default function Order() {
             <RowItem>{t("success.left.product")}</RowItem>
             <RowItem>{t("success.left.total")}</RowItem>
           </ProductRow>
-          {products?.map(
-            ({ product, color, size, quantity, _id: productId }) => (
-              // eslint-disable-next-line no-underscore-dangle
-              <ProductRow key={productId}>
-                <RowItemContainer>
-                  <RowItem isName>
-                    {product.title} {` X${quantity}`} {"-" && size}
+          {(loading && productsSkeleton.current) ||
+            products?.map(
+              ({ product, color, size, quantity, _id: productId }) => (
+                // eslint-disable-next-line no-underscore-dangle
+                <ProductRow key={productId}>
+                  <RowItemContainer>
+                    <RowItem isName>
+                      {product.title} {` X${quantity}`} {"-" && size}
+                    </RowItem>
+                    <ColorContainer color={color} />
+                  </RowItemContainer>
+                  <RowItem>
+                    {quantity * product.price}
+                    {t("currency")}
                   </RowItem>
-                  <ColorContainer color={color} />
-                </RowItemContainer>
-                <RowItem>
-                  {quantity * product.price}
-                  {t("currency")}
-                </RowItem>
-              </ProductRow>
-            )
-          )}
+                </ProductRow>
+              )
+            )}
           <ProductRow>
             <RowItem>{t("success.left.subTotal")}</RowItem>
             <RowItem>{amount + t("currency")}</RowItem>
@@ -205,18 +219,28 @@ export default function Order() {
           </ProductRow>
           <ProductRow>
             <RowItem>{t("success.left.status")}</RowItem>
-            <RowItem>{t(`order.${status}`)}</RowItem>
+            {loading ? (
+              <Skeleton width="50%" height={33} />
+            ) : (
+              <RowItem>{t(`order.${status}`)}</RowItem>
+            )}
           </ProductRow>
         </ProductContainer>
         <AddressContainer>
           <LeftTitle>{t("success.left.billingAddress")}</LeftTitle>
-          <AddressRow>{name}</AddressRow>
-          <AddressRow>{address.line1}</AddressRow>
-          <AddressRow>{`${address.postal_code}, ${address.city}, ${
-            countries.find((c) => c.code === address.country)?.country
-          }`}</AddressRow>
-          <AddressRow>{email}</AddressRow>
-          <AddressRow>{phone}</AddressRow>
+          {loading ? (
+            addressSkeleton.current
+          ) : (
+            <>
+              <AddressRow>{name}</AddressRow>
+              <AddressRow>{address.line1}</AddressRow>
+              <AddressRow>{`${address.postal_code}, ${address.city}, ${
+                countries.find((c) => c.code === address.country)?.country
+              }`}</AddressRow>
+              <AddressRow>{email}</AddressRow>
+              <AddressRow>{phone}</AddressRow>
+            </>
+          )}
         </AddressContainer>
       </OrderContainer>
     </Container>

@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 // @ts-nocheck
 import { Add, Delete, Remove } from "@mui/icons-material"
+import { Skeleton } from "@mui/material"
 import Announcement from "components/tools/Announcement"
 import Footer from "components/tools/Footer"
 import Modal from "components/tools/Modal"
 import Navbar from "components/tools/Navbar"
-import React, { Fragment, useEffect, useMemo, useState } from "react"
+import React, { Fragment, useEffect, useMemo, useState, useRef } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
@@ -98,6 +99,16 @@ const StyledDelete = styled(Delete)`
   right: 0;
   top: 0;
 `
+const DeleteSkeleton = styled(Skeleton)`
+  && {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+    height: 18px;
+    width: 14px;
+    transform: scale(1);
+  }
+`
 const ProductDetail = styled.div`
   flex: 2;
   display: flex;
@@ -105,8 +116,16 @@ const ProductDetail = styled.div`
   justify-content: center;
 `
 const Image = styled.img`
-  width: 200px;
-  min-height: 200px;
+  height: 250px;
+  object-fit: contain;
+  aspect-ratio: 567/850;
+`
+const ImageSkeleton = styled(Skeleton)`
+  && {
+    transform: scale(1);
+    height: 250px;
+    width: 175.56px;
+  }
 `
 const Details = styled.div`
   padding: 20px;
@@ -115,6 +134,16 @@ const Details = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+`
+const DetailSkeleton = styled(Skeleton)`
+  && {
+    transform: scale(1);
+    width: 100%;
+    height: 19px;
+    &:not(:last-of-type) {
+      margin-bottom: 1px;
+    }
+  }
 `
 const ProductName = styled.span``
 const ProductId = styled.span``
@@ -142,6 +171,14 @@ const ProductAmountContainer = styled.div`
   align-items: center;
   margin-bottom: 20px;
 `
+const AmountContainerSkeleton = styled(Skeleton)`
+  && {
+    width: 84px;
+    height: 39px;
+    transform: scale(1);
+    margin-bottom: 20px;
+  }
+`
 const ProductAmount = styled.div`
   font-size: 24px;
   margin: 5px;
@@ -160,6 +197,14 @@ const ProductPrice = styled.div`
   ${mobile({ marginBottom: 20 })};
   font-size: 30px;
   font-weight: 200;
+`
+const PriceSkeleton = styled(Skeleton)`
+  && {
+    transform: scale(1);
+    width: 50px;
+    height: 36px;
+    margin-bottom: 20px;
+  }
 `
 const Summary = styled.div`
   flex: 1;
@@ -218,6 +263,32 @@ export default function Cart() {
   const { t } = useTranslation()
   const history = useHistory()
   const dispatch = useDispatch()
+  const skeleton = useRef(
+    Array(cartQte)
+      .fill("")
+      .map((_, idx) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <Fragment key={idx}>
+          <Product>
+            <DeleteSkeleton />
+            <ProductDetail>
+              <ImageSkeleton />
+              <Details>
+                <DetailSkeleton />
+                <DetailSkeleton />
+                <DetailSkeleton />
+                <DetailSkeleton />
+              </Details>
+            </ProductDetail>
+            <PriceDetail>
+              <AmountContainerSkeleton />
+              <PriceSkeleton />
+            </PriceDetail>
+          </Product>
+        </Fragment>
+      ))
+  )
+  const [loading, setLoading] = useState(true)
   const handleDelete = (data) => {
     dispatch(deleteProduct(data))
   }
@@ -307,9 +378,10 @@ export default function Cart() {
         0
       )
       const { price } = FranceTarif.find((tarif) => tarif.weight > weight)
-      if (price) setShippingPrice(price)
+      if (price) setShippingPrice(Math.ceil(price))
       else setShippingPrice(0)
     } else setShippingPrice(0)
+    setLoading(false)
   }, [countryCode, products, FranceTarif])
 
   const [modal, setModal] = useState(false)
@@ -371,95 +443,96 @@ export default function Cart() {
             </Top>
             <Bottom>
               <Info>
-                {products?.map((product) => {
-                  const {
-                    img,
-                    title,
-                    _id: id,
-                    color,
-                    size,
-                    qte,
-                    price
-                  } = product
-                  return (
-                    <Fragment key={id + size + color}>
-                      <Product>
-                        <StyledDelete
-                          onClick={() =>
-                            handleDelete({
-                              id,
-                              totalPrice: price * qte,
-                              size,
-                              color
-                            })
-                          }
-                        />
-                        <ProductDetail>
-                          <Image src={img} alt={title} />
-                          <Details>
-                            <ProductName>
-                              <b>{t("products.cart.product")}: </b>
-                              {title}
-                            </ProductName>
-                            <ProductId>
-                              <b>{t("products.cart.productId")}: </b>
-                              {id}
-                            </ProductId>
-                            <ProductColorContainer>
-                              <b>{t("products.cart.color")}: </b>
-                              <ProductColor color={color} />
-                            </ProductColorContainer>
-                            {(size?.length && size?.includes("") && (
-                              <ProductSize>
-                                <b>{t("products.cart.productSize")}: </b>
-                                {size}
-                              </ProductSize>
-                            )) ||
-                              ""}
-                          </Details>
-                        </ProductDetail>
-                        <PriceDetail>
-                          <ProductAmountContainer>
-                            <QuantityButton
-                              component={<Add />}
-                              onClick={() => {
-                                dispatch(
-                                  updateProduct({
-                                    id,
-                                    qte: 1,
-                                    price,
-                                    size,
-                                    color
-                                  })
-                                )
-                              }}
-                            />
-                            <ProductAmount>{qte}</ProductAmount>
-                            <QuantityButton
-                              component={<Remove />}
-                              onClick={() => {
-                                if (qte > 1)
+                {(loading && skeleton.current) ||
+                  products?.map((product) => {
+                    const {
+                      img,
+                      title,
+                      _id: id,
+                      color,
+                      size,
+                      qte,
+                      price
+                    } = product
+                    return (
+                      <Fragment key={id + size + color}>
+                        <Product>
+                          <StyledDelete
+                            onClick={() =>
+                              handleDelete({
+                                id,
+                                totalPrice: price * qte,
+                                size,
+                                color
+                              })
+                            }
+                          />
+                          <ProductDetail>
+                            <Image src={img} alt={title} />
+                            <Details>
+                              <ProductName>
+                                <b>{t("products.cart.product")}: </b>
+                                {title}
+                              </ProductName>
+                              <ProductId>
+                                <b>{t("products.cart.productId")}: </b>
+                                {id}
+                              </ProductId>
+                              <ProductColorContainer>
+                                <b>{t("products.cart.color")}: </b>
+                                <ProductColor color={color} />
+                              </ProductColorContainer>
+                              {(size?.length && size?.includes("") && (
+                                <ProductSize>
+                                  <b>{t("products.cart.productSize")}: </b>
+                                  {size}
+                                </ProductSize>
+                              )) ||
+                                ""}
+                            </Details>
+                          </ProductDetail>
+                          <PriceDetail>
+                            <ProductAmountContainer>
+                              <QuantityButton
+                                component={<Add />}
+                                onClick={() => {
                                   dispatch(
                                     updateProduct({
                                       id,
-                                      qte: -1,
+                                      qte: 1,
                                       price,
                                       size,
                                       color
                                     })
                                   )
-                              }}
-                            />
-                          </ProductAmountContainer>
-                          <ProductPrice>
-                            {price * qte}
-                            {t("products.currency")}
-                          </ProductPrice>
-                        </PriceDetail>
-                      </Product>
-                    </Fragment>
-                  )
-                })}
+                                }}
+                              />
+                              <ProductAmount>{qte}</ProductAmount>
+                              <QuantityButton
+                                component={<Remove />}
+                                onClick={() => {
+                                  if (qte > 1)
+                                    dispatch(
+                                      updateProduct({
+                                        id,
+                                        qte: -1,
+                                        price,
+                                        size,
+                                        color
+                                      })
+                                    )
+                                }}
+                              />
+                            </ProductAmountContainer>
+                            <ProductPrice>
+                              {price * qte}
+                              {t("products.currency")}
+                            </ProductPrice>
+                          </PriceDetail>
+                        </Product>
+                      </Fragment>
+                    )
+                  })}
               </Info>
               <Summary>
                 <SummaryTitle>{t("cart.title")}</SummaryTitle>

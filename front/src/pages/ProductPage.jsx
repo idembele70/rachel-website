@@ -38,6 +38,7 @@ const ImageContainer = styled.div`
 
 const Image = styled.img`
   object-fit: contain;
+  aspect-ratio: 567/850;
   height: 80vh;
   max-height: 850px;
   ${tablet({ maxHeight: "50vh" })};
