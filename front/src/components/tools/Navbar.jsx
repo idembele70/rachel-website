@@ -7,8 +7,7 @@ import {
   ShoppingCartOutlined
 } from "@mui/icons-material"
 import { Badge, CircularProgress } from "@mui/material"
-import Product from "components/home/products/Product"
-import React, { useEffect, useLayoutEffect, useState } from "react"
+import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory, useLocation } from "react-router-dom"
@@ -153,15 +152,10 @@ const SearchOptions = styled.div`
   background-color: rgba(0, 0, 0, 0.7);
   list-style-type: none;
   position: absolute;
-  top: ${(props) => props.top}px;
-  z-index: ${(props) => props.zIndex};
-  padding: 0 5px;
-  overflow-y: scroll;
-  display: ${(props) => props.display};
-  align-items: center;
-  justify-content: center;
-  height: ${(props) => props.height};
-  ${smallMobile({ maxWidth: 200 })}
+  top: 41px;
+  z-index: 1;
+  padding: 5px;
+  overflow-y: auto;
 `
 const SearchOption = styled.li`
   color: white;
