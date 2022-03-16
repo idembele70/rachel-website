@@ -25,7 +25,7 @@ router.post("/payment/intents", async (req, res) => {
   const { id,amount } = req.body
   try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
+      amount: amount*100,
       currency: 'EUR',
      payment_method:id,
      confirm:true,

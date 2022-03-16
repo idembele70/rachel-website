@@ -1,11 +1,12 @@
 import Sidebar from "components/tools/Sidebar"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 import { userRequest } from "requestMethods"
 import { mobile, tablet } from "responsive"
 import styled from "styled-components"
+import { Skeleton } from "@mui/material"
 import Modal from "../components/tools/Modal"
 
 const Container = styled.div`
@@ -56,6 +57,13 @@ const ListItemHeader = styled.div`
   color: #767676;
   ${mobile({ display: "flex", flexDirection: "column" })}
 `
+const ListItemHeaderSkeleton = styled(Skeleton)`
+  && {
+    flex: 0 1 28px;
+    transform: scale(1);
+    border-radius: 0;
+  }
+`
 const HeaderHour = styled.span`
   margin-right: 10px;
   margin-left: 21px;
@@ -88,6 +96,15 @@ const RowItem = styled.div`
     })}
   }
 `
+
+const RowItemSkeleton = styled(Skeleton)`
+  && {
+    border-radius: 0;
+    transform: scale(1);
+    width: 50%;
+  }
+`
+
 const Status = styled.span``
 const Button = styled.div`
   padding: 4px;
@@ -103,6 +120,17 @@ const Button = styled.div`
     cursor: pointer;
   }
   ${tablet({ padding: 2 })}
+`
+const RowItemBtnSkeleton = styled(Skeleton)`
+  && {
+    transform: scale(1);
+    border-radius: 0;
+    padding: 4px;
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    width: 80%;
+  }
 `
 const EmptyOrderContainer = styled.div`
   position: absolute;
@@ -144,8 +172,41 @@ function Orders() {
     // @ts-ignore
   } = useSelector((state) => state.user)
   const [orders, setOrders] = useState([])
+  const location = useLocation()
+  const [loading, setLoading] = useState(true)
+  const skeleton = useRef(
+    Array(location.state?.orderLength)
+      .fill("")
+      .map((_, idx) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <ListItem key={idx}>
+          <ListItemHeader>
+            <ListItemHeaderSkeleton />
+          </ListItemHeader>
+          <ListItemRow>
+            <RowItem>
+              <RowItemSkeleton />
+            </RowItem>
+            <RowItem>
+              <RowItemSkeleton />
+            </RowItem>
+            <RowItem>
+              <RowItemSkeleton />
+              <RowItemBtnSkeleton />
+            </RowItem>
+            <RowItem>
+              <RowItemSkeleton />
+              <RowItemSkeleton style={{ marginTop: 5 }} />
+            </RowItem>
+          </ListItemRow>
+        </ListItem>
+      ))
+  )
   useEffect(() => {
-    userRequest.get(`orders/${id}`).then(({ data }) => setOrders(data))
+    userRequest.get(`orders/${id}`).then(({ data }) => {
+      setOrders(data)
+      setLoading(false)
+    })
   }, [id])
   const { t } = useTranslation()
   const convertDate = (date) => {
@@ -166,6 +227,29 @@ function Orders() {
     setOpenModal(false)
     setCopy(false)
     setSentBack(false)
+  }
+  const handleOrdersDetails = ({ orderId, productsLength }) => {
+    history.push({
+      pathname: `/user/order/${orderId}`,
+      state: { productsLength }
+    })
+  }
+  if (loading && location.state?.orderLength) {
+    return (
+      <Container>
+        <Sidebar />
+        <Main>
+          <MainTitle>{t("user.orders.title")}</MainTitle>
+          <ItemTitleContainer>
+            <ItemTitle>{t("user.orders.itemTitle")}</ItemTitle>
+            <ItemTitle>{t("user.orders.total")}</ItemTitle>
+            <ItemTitle>{t("user.orders.itemState")}</ItemTitle>
+            <ItemTitle>{t("user.orders.activity")}</ItemTitle>
+          </ItemTitleContainer>
+          <ListBody>{skeleton.current}</ListBody>
+        </Main>
+      </Container>
+    )
   }
   return (
     <Container>
@@ -220,45 +304,84 @@ function Orders() {
                 }) => (
                   <ListItem key={orderId}>
                     <ListItemHeader>
-                      <HeaderHour>{convertDate(createdAt)}</HeaderHour>
-                      <HeaderOrderNumber>
-                        {t("user.orders.orderNumber")} {orderId}
-                      </HeaderOrderNumber>
+                      {loading ? (
+                        // @ts-ignore
+                        <ListItemHeaderSkeleton />
+                      ) : (
+                        <>
+                          <HeaderHour>{convertDate(createdAt)}</HeaderHour>
+                          <HeaderOrderNumber>
+                            {t("user.orders.orderNumber")} {orderId}
+                          </HeaderOrderNumber>
+                        </>
+                      )}
                     </ListItemHeader>
                     <ListItemRow>
                       <RowItem>
-                        {products.length} {t("user.orders.article")}
+                        {loading ? (
+                          <RowItemSkeleton />
+                        ) : (
+                          `${products.length} ${t("user.orders.article")}`
+                        )}
                       </RowItem>
                       <RowItem>
-                        {amount + shippingPrice}
-                        {t("currency")}
+                        {loading ? (
+                          <RowItemSkeleton />
+                        ) : (
+                          `${amount + shippingPrice}${t("currency")}`
+                        )}
                       </RowItem>
                       <RowItem>
-                        <Status>{t(`user.orders.${status}`)}</Status>
-                        <Button
-                          onClick={() => history.push(`/user/order/${orderId}`)}
-                        >
-                          {t("user.orders.orderDetail")}
-                        </Button>
+                        {loading ? (
+                          <>
+                            <RowItemSkeleton />
+                            <RowItemBtnSkeleton />
+                          </>
+                        ) : (
+                          <>
+                            <Status>{t(`user.orders.${status}`)}</Status>
+                            <Button
+                              onClick={() =>
+                                handleOrdersDetails({
+                                  orderId,
+                                  productsLength: products.length
+                                })
+                              }
+                            >
+                              {t("user.orders.orderDetail")}
+                            </Button>
+                          </>
+                        )}
                       </RowItem>
                       <RowItem>
-                        <Button
-                          onClick={() => {
-                            setOpenModal(true)
-                            setTrackingNumber(trackNum)
-                          }}
-                        >
-                          {t("user.orders.follow")}
-                        </Button>
-                        {trackNum && (
-                          <Button
-                            onClick={() => {
-                              setOpenModal(true)
-                              setSentBack(true)
-                            }}
-                          >
-                            {t("user.orders.return")}
-                          </Button>
+                        {loading ? (
+                          <>
+                            <RowItemSkeleton />
+                            {trackNum && (
+                              <RowItemSkeleton style={{ marginTop: 5 }} />
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              onClick={() => {
+                                setOpenModal(true)
+                                setTrackingNumber(trackNum)
+                              }}
+                            >
+                              {t("user.orders.follow")}
+                            </Button>
+                            {trackNum && (
+                              <Button
+                                onClick={() => {
+                                  setOpenModal(true)
+                                  setSentBack(true)
+                                }}
+                              >
+                                {t("user.orders.return")}
+                              </Button>
+                            )}
+                          </>
                         )}
                       </RowItem>
                     </ListItemRow>

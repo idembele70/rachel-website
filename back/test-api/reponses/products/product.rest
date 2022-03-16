@@ -943,7 +943,11 @@ Content-Type: application/json
 ### GET MANY
 DELETE http://localhost:5000/api/products/findMany
 
+### GET Product per page
 
+GET http://localhost:5000/api/products?category=pull&page=0&count=true HTTP/1.1 
+### GET Product count by category
+GET http://localhost:5000/api/products?category=hommes&count=true HTTP/1.1 
 
 
 

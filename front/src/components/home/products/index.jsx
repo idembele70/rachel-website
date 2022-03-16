@@ -1,11 +1,13 @@
-import { CircularProgress, Skeleton } from "@mui/material"
+import { Skeleton } from "@mui/material"
 import Pagination from "@mui/material/Pagination"
 import axios from "axios"
+import Loader from "components/tools/Loader"
 import PropTypes from "prop-types"
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import styled from "styled-components"
 import { useLocation } from "react-router-dom"
+import { publicRequest } from "requestMethods"
+import styled from "styled-components"
 import Product from "./Product"
 
 const Container = styled.div`
@@ -40,18 +42,8 @@ const SkeletonContainer = styled.div`
   max-width: 400px;
   position: relative;
 `
-const ProgressContainer = styled.div`
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.2);
-  z-index: 2;
-`
 const Products = ({ category }) => {
   const [products, setProducts] = useState([])
-  const [Allproducts, setAllProducts] = useState([])
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(1)
   const location = useLocation()
@@ -71,43 +63,79 @@ const Products = ({ category }) => {
     }
   } */
   const [loading, setLoading] = useState(true)
-  const skeletonLength = useRef(location.state?.skeletonLength)
+  const [searching, setSearching] = useState(false)
+  const skeletonGenerator = (length = 0) =>
+    Array.from(
+      // @ts-ignore
+      { length },
+      () => (
+        <SkeletonContainer key={Math.random() + Date.now()}>
+          <Skeleton
+            sx={{ transform: "scale(1,1)", borderRadius: 0 }}
+            width={196}
+            height={263}
+          />
+        </SkeletonContainer>
+      )
+    )
+  const productsSkeleton = useRef(
+    skeletonGenerator(category ? location.state?.skeletonLength : 8)
+  )
+  useLayoutEffect(() => {
+    publicRequest
+      .get(`products?category=${category}&count=true`)
+      .then(({ data }) => {
+        const productsperPage = 15
+        setCount(Math.ceil(data / productsperPage))
+      })
+      .catch(console.error)
+  }, [category])
+  const { t } = useTranslation()
   useEffect(() => {
-    setLoading(true)
-    const getProducts = async () => {
-      let data = []
+    ;(async () => {
+      if (!location.state?.skeletonLength && category) {
+        setLoading(false)
+        setSearching(false)
+        setProducts([])
+        return
+      }
+      productsSkeleton.current = skeletonGenerator(
+        location.state?.skeletonLength
+      )
+      setLoading(true)
+      setSearching(false)
       try {
         // @ts-ignore
-        if (!location.state?.data?.length) {
-          const res = await axios.get(
-            category
-              ? `${process.env.REACT_APP_BASE_URL}/products?category=${category}`
-              : `${process.env.REACT_APP_BASE_URL}/products`
-          )
-          data = res.data
-        } else data = location.state?.data
+        const { data } = await axios.get(
+          category
+            ? `${
+                process.env.REACT_APP_BASE_URL
+              }/products?category=${category}&page=${page - 1}`
+            : `${process.env.REACT_APP_BASE_URL}/products`
+        )
         if (category) {
-          setAllProducts(data)
-          setCount(Math.ceil(data.length / 15))
+          setProducts(
+            data.map((product) => (
+              // eslint-disable-next-line no-underscore-dangle
+              <Product product={product} key={product._id} />
+            ))
+          )
         } else
           setProducts(
-            data
-              .slice(0, 8)
-              .map((product) => (
-                <Product product={product} key={product.title} />
-              ))
+            data.slice(0, 8).map((product) => (
+              <Product
+                product={product}
+                // eslint-disable-next-line no-underscore-dangle
+                key={product._id}
+              />
+            ))
           )
-        setLoading(false)
       } catch (error) {
         console.error(error)
       }
-    }
-    getProducts()
-  }, [category, location])
-  useEffect(() => {
-    const currentCount = (page - 1) * 15
-    setProducts(Allproducts.slice(currentCount, currentCount + 15))
-  }, [page, Allproducts])
+      setLoading(false)
+    })()
+  }, [category, location, page])
   /* useEffect(() => {
     if ((category && filters.colors !== "none") || filters.sizes !== "size") {
       const filtered = products.filter((item) =>
@@ -119,50 +147,35 @@ const Products = ({ category }) => {
     } else setFilteredProducts(sortProducts({ value: sort, arr: products }))
   }, [category, products, sort]) */
 
-  const { t } = useTranslation()
-  const productsRender = products.length ? (
-    products.map((product) => <Product product={product} key={product.title} />)
-  ) : (
-    <EmptyProduct>{t("products.categories.notFound")}</EmptyProduct>
-  )
-  const skeletonGenerator = (length = Number()) =>
-    Array.from({ length }, () => (
-      <SkeletonContainer>
-        <Skeleton
-          sx={{ transform: "scale(1,1)", borderRadius: 0 }}
-          width={196}
-          height={263}
-        />
-      </SkeletonContainer>
-    ))
-  const progressSx = {
-    color: "teal",
-    position: "fixed",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%,-50%)",
-    zIndex: 2
-  }
-  if (loading && (skeletonLength.current || !category))
+  /* 
+    category ? (
+          products
+        ) : (
+          <EmptyProduct>{t("products.categories.notFound")}</EmptyProduct>
+        )}
+  */
+  if (loading)
     return (
       <Container>
         <ProductContainer>
-          {category
-            ? skeletonGenerator(skeletonLength.current)
-            : skeletonGenerator(8)}
+          {productsSkeleton.current.length ? (
+            productsSkeleton.current
+          ) : (
+            <EmptyProduct>{t("products.categories.notFound")}</EmptyProduct>
+          )}
         </ProductContainer>
       </Container>
     )
 
   return (
     <Container>
-      {loading && !skeletonLength && category ? (
-        <ProgressContainer>
-          <CircularProgress sx={progressSx} />
-        </ProgressContainer>
-      ) : null}
+      {searching && category ? <Loader /> : null}
       <ProductContainer>
-        {category ? productsRender : products}
+        {products.length ? (
+          products
+        ) : (
+          <EmptyProduct>{t("products.categories.notFound")}</EmptyProduct>
+        )}
       </ProductContainer>
       {category ? (
         <PaginationContainer>
@@ -171,6 +184,7 @@ const Products = ({ category }) => {
             page={page}
             onChange={(_, value) => {
               setPage(value)
+              setSearching(true)
               window.scrollTo(0, 0)
             }}
           />

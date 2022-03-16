@@ -10,12 +10,10 @@ const ModalContainer = styled.div`
   right: 0;
   left: 0;
   position: fixed;
-  z-index: 1;
+  z-index: 5;
   background-color: #00000047;
-  padding-top: 10%;
   display: flex;
   justify-content: center;
-  ${mobile({ paddingTop: "20%" })}
 `
 const Main = styled.div`
   max-width: 700px;
@@ -29,6 +27,9 @@ const Main = styled.div`
   ${tablet({ width: "calc(90vw - 40px)", padding: 20 })};
   display: flex;
   flex-direction: column;
+  margin-top: 10%;
+  ${mobile({ marginTop: "20%" })}
+
 `
 const ModalTitle = styled.h2`
   font-family: "IBM Plex Sans";

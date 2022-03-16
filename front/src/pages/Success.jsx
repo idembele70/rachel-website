@@ -1,8 +1,9 @@
 // @ts-nocheck
+import { Skeleton } from "@mui/material"
 import Announcement from "components/tools/Announcement"
 import Footer from "components/tools/Footer"
 import Navbar from "components/tools/Navbar"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { useLocation, useHistory } from "react-router-dom"
@@ -50,16 +51,15 @@ const RowItem = styled.h3`
     // @ts-ignore
     props.isName ? 100 : 600};
 `
-
+const RowItemSkeleton = styled(Skeleton)`
+  width: 50px;
+  height: 33px;
+`
 const AddressContainer = styled.div``
 const AddressRow = styled.h3`
   font-style: italic;
   font-weight: 300;
-  &:first-of-type {
-    margin-top: 18px;
-  }
 `
-
 const Right = styled.div`
   flex-grow: 0.66;
   box-shadow: 2px 2px #c0bebe;
@@ -80,9 +80,13 @@ const RightTitle = styled.h3`
 const RightList = styled.ul`
   ${smallMobile({ padding: 0, listStyleType: "none" })}
 `
-const RightListItem = styled.li``
+const RightListItem = styled.li`
+  display: flex;
+  flex-wrap: wrap;
+`
 const ItemTitle = styled.h3`
-  display: ${(props) => props.id || "inline"};
+  flex-basis: ${(props) => props.flexBasis};
+  flex: ${(props) => props.flex};
   font-weight: ${(props) => (props.isBold === true ? 600 : "normal")};
   white-space: ${(props) => (props.isBold === true ? "wrap" : "initial")};
 `
@@ -98,6 +102,17 @@ export default function Success() {
   const location = useLocation()
   const history = useHistory()
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(true)
+  const { current: productsSkeleton } = useRef(
+    [...Array(location.state?.cartProducts.length)].map(() => (
+      <Skeleton width="100%" height={34} />
+    ))
+  )
+  const { current: addressSkeleton } = useRef(
+    [...Array(5)].map(() => (
+      <Skeleton key={Math.random()} width="100%" height={23} />
+    ))
+  )
   const [data, setData] = useState({
     cartProducts: [],
     stripeData: {
@@ -179,6 +194,7 @@ export default function Success() {
   useEffect(() => {
     if (!location.state) history.push({ pathname: "/" })
     else {
+      location.state.shippingPrice = 0
       dispatch(initializeCart())
       ;(async () => {
         const { stripeId } = location.state.ordersData
@@ -186,13 +202,13 @@ export default function Success() {
           const { data: stripeData } = await publicRequest.get(
             `/checkout/payment/intents/${stripeId}`
           )
-
           setData({
             ...location.state,
             stripeData:
               stripeData.charges
                 .data[0] /* eslint-disable-line react/jsx-props-no-spreading */
           })
+          setLoading(false)
         } catch (error) {
           console.error(error)
         }
@@ -221,43 +237,66 @@ export default function Success() {
               <RowItem>{t("success.left.product")}</RowItem>
               <RowItem>{t("success.left.total")}</RowItem>
             </ProductRow>
-            {cartProducts.map((product) => (
-              <ProductRow key={product.size + product.color + product.name}>
-                <RowItemContainer>
-                  <RowItem isName>
-                    {product.title} {` X${product.qte}`} {"-" && product?.size}
-                  </RowItem>
-                  <ColorContainer color={product.color} />
-                </RowItemContainer>
-                <RowItem>{product.qte * product.price + t("currency")}</RowItem>
-              </ProductRow>
-            ))}
+            {loading
+              ? productsSkeleton
+              : cartProducts.map((product) => (
+                  <ProductRow key={product.size + product.color + product.name}>
+                    <RowItemContainer>
+                      <RowItem isName>
+                        {product.title} {` X${product.qte}`}
+                        {"-" && product?.size}
+                      </RowItem>
+                      <ColorContainer color={product.color} />
+                    </RowItemContainer>
+                    <RowItem>
+                      {product.qte * product.price + t("currency")}
+                    </RowItem>
+                  </ProductRow>
+                ))}
             <ProductRow>
               <RowItem>{t("success.left.subTotal")}</RowItem>
-              <RowItem>{`${amount}${t("currency")}`}</RowItem>
+              <RowItem>
+                {loading ? <RowItemSkeleton /> : `${amount}${t("currency")}`}
+              </RowItem>
             </ProductRow>
             <ProductRow>
               <RowItem>{t("success.left.paymentMethod")}</RowItem>
-              <RowItem>{card.brand}</RowItem>
+              <RowItem>{loading ? <RowItemSkeleton /> : card.brand}</RowItem>
             </ProductRow>
             <ProductRow>
               <RowItem>{t("success.left.shippingFee")}</RowItem>
-              <RowItem>{shippingPrice + t("currency")}</RowItem>
+              <RowItem>
+                {loading ? <RowItemSkeleton /> : shippingPrice + t("currency")}
+              </RowItem>
             </ProductRow>
             <ProductRow>
               <RowItem>{t("success.left.total")}</RowItem>
-              <RowItem>{`${amount + shippingPrice}${t("currency")}`}</RowItem>
+              <RowItem>
+                {loading ? (
+                  <RowItemSkeleton />
+                ) : (
+                  `${amount + shippingPrice}${t("currency")}`
+                )}
+              </RowItem>
             </ProductRow>
           </ProductContainer>
           <AddressContainer>
-            <LeftTitle>{t("success.left.billingAddress")}</LeftTitle>
-            <AddressRow>{name}</AddressRow>
-            <AddressRow>{address.line1}</AddressRow>
-            <AddressRow>{`${address.postal_code}, ${address.city}, ${
-              countries.find((c) => c.code === address.country)?.country
-            }`}</AddressRow>
-            <AddressRow>{email}</AddressRow>
-            <AddressRow>{phone}</AddressRow>
+            <LeftTitle style={{ marginBottom: 18 }}>
+              {t("success.left.billingAddress")}
+            </LeftTitle>
+            {loading ? (
+              addressSkeleton
+            ) : (
+              <>
+                <AddressRow>{name}</AddressRow>
+                <AddressRow>{address.line1}</AddressRow>
+                <AddressRow>{`${address.postal_code}, ${address.city}, ${
+                  countries.find((c) => c.code === address.country)?.country
+                }`}</AddressRow>
+                <AddressRow>{email}</AddressRow>
+                <AddressRow>{phone}</AddressRow>
+              </>
+            )}
           </AddressContainer>
         </Left>
         <Right>
@@ -265,22 +304,30 @@ export default function Success() {
           <RightList>
             <RightListItem>
               <ItemTitle>{t("success.right.orderNumber")}&nbsp;</ItemTitle>
-              <ItemTitle isBold id="block">
-                {id}
+              <ItemTitle isBold flexBasis="310px">
+                {loading ? <Skeleton /> : id}
               </ItemTitle>
             </RightListItem>
             <RightListItem>
               <ItemTitle>{t("success.right.date")}&nbsp;</ItemTitle>
-              <ItemTitle isBold>{convertDate(created * 1000)}</ItemTitle>
+              <ItemTitle isBold flex={1}>
+                {loading ? <Skeleton /> : convertDate(created * 1000)}
+              </ItemTitle>
             </RightListItem>
             <RightListItem>
               <ItemTitle>{t("success.right.email")}&nbsp;</ItemTitle>
-              <ItemTitle isBold>{email}</ItemTitle>
+              <ItemTitle isBold flex={1}>
+                {loading ? <Skeleton /> : email}
+              </ItemTitle>
             </RightListItem>
             <RightListItem>
               <ItemTitle>{t("success.right.total")}&nbsp;</ItemTitle>
-              <ItemTitle isBold>
-                {amount + shippingPrice + t("currency")}
+              <ItemTitle isBold flex={1}>
+                {loading ? (
+                  <Skeleton />
+                ) : (
+                  amount + shippingPrice + t("currency")
+                )}
               </ItemTitle>
             </RightListItem>
           </RightList>

@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@mui/icons-material"
 import { Skeleton } from "@mui/material"
+import Loader from "components/tools/Loader"
 import React, { useEffect, useRef, useState } from "react"
 import { publicRequest } from "requestMethods"
-import { mobile, tablet } from "responsive"
+import { mobile } from "responsive"
 import styled from "styled-components"
 import CategoryItem from "./CategoryItem"
 
@@ -97,7 +98,10 @@ function Categories() {
       )
     }
   }
-
+  const [searching, setSearching] = useState(false)
+  const handleSearch = (state) => {
+    setSearching(state)
+  }
   useEffect(() => {
     publicRequest
       .get("/category?isActive=true")
@@ -106,7 +110,11 @@ function Categories() {
           ...data
             .filter((category) => category.isActive)
             .map((category) => (
-              <CategoryItem itemInfo={category} key={category._id} />
+              <CategoryItem
+                itemInfo={category}
+                onSearch={handleSearch}
+                key={category._id}
+              />
             ))
         ])
         setLoading(false)
@@ -120,28 +128,26 @@ function Categories() {
     width: "100%",
     height: "100%"
   }
-  if (loading)
-    return (
-      <Container>
-        <Wrapper>
-          <ImgSkeleton>
-            <Skeleton sx={imgSkeletonSx} />
-          </ImgSkeleton>
-          {!isMobile ? (
-            <ImgSkeleton>
-              <Skeleton sx={imgSkeletonSx} />
-            </ImgSkeleton>
-          ) : null}
-        </Wrapper>
-      </Container>
-    )
+  const { current: categorySkeleton } = useRef(
+    <>
+      <ImgSkeleton>
+        <Skeleton sx={imgSkeletonSx} />
+      </ImgSkeleton>
+      {!isMobile ? (
+        <ImgSkeleton>
+          <Skeleton sx={imgSkeletonSx} />
+        </ImgSkeleton>
+      ) : null}
+    </>
+  )
   return (
     <Container>
+      {searching ? <Loader /> : null}
       <Arrow direction="left" onClick={() => handleClick("left")}>
         <ArrowLeftOutlined fontSize="large" sx={{ color: "teal" }} />
       </Arrow>
       <Wrapper width={100 / categories.length} slideIndex={slideIndex}>
-        {categories}
+        {loading ? categorySkeleton : categories}
       </Wrapper>
       <Arrow direction="right" onClick={() => handleClick("right")}>
         <ArrowRightOutlined fontSize="large" sx={{ color: "teal" }} />
