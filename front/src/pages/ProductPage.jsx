@@ -213,7 +213,7 @@ export default function ProductPage() {
       })
       .catch(console.error)
   }, [id])
-  const { price, title, description, img, sizes, colors } = product
+  const { price, title, description, img, sizes, colors, weight } = product
   const handleQuantity = (direction = String()) => {
     if (direction === "dec") {
       if (qte > 1) setQte(qte > 1 && qte - 1)
@@ -228,8 +228,8 @@ export default function ProductPage() {
       setOpenModal(false)
     }, 2000)
     const exist = products.find(
-      ({ _id, size: sizeFound, color: colorFound }) =>
-        _id === id && sizeFound === size && colorFound === color
+      ({ id: pId, size: sizeFound, color: colorFound }) =>
+        pId === id && sizeFound === size && colorFound === color
     )
     if (exist) {
       dispatch(updateProduct({ id, qte, price: price * qte, size, color }))
@@ -237,11 +237,14 @@ export default function ProductPage() {
     } else {
       dispatch(
         addProduct({
-          ...product,
-          price,
-          qte,
+          img,
+          title,
+          id,
           color,
-          size
+          size,
+          qte,
+          price,
+          weight
         })
       )
       setQte(1)

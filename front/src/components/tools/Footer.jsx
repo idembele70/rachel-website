@@ -8,7 +8,7 @@ import {
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { useHistory } from "react-router-dom"
-import { mobile, smallMobile, tablet } from "responsive"
+import { mobile, smallMobile } from "responsive"
 import styled from "styled-components"
 
 const Container = styled.div`
@@ -31,9 +31,8 @@ const Left = styled.div`
   flex-direction: column;
   padding: 20px;
 `
-const Logo = styled.h1``
-const Description = styled.p`
-  margin: 20px 0;
+const Logo = styled.h1`
+  margin-bottom: 1rem;
 `
 const SocialContainer = styled.div`
   display: flex;
@@ -63,7 +62,7 @@ const Center = styled.div`
   ${mobile({ display: "none" })};
 `
 const Title = styled.h3`
-  margin-bottom: 30px;
+  margin-bottom: 1rem;
 `
 const List = styled.ul`
   margin: 0;
@@ -73,7 +72,7 @@ const List = styled.ul`
   flex-wrap: wrap;
 `
 const ListItem = styled.li`
-  width: 50%;
+  width: ${(props) => (props.fullWidth ? 100 : 50)}%;
   margin-bottom: 10px;
   cursor: pointer;
 `
@@ -98,8 +97,21 @@ const Footer = () => {
   return (
     <Container>
       <Left>
-        <Logo>{t("siteName")}</Logo>
-        <Description>{t("footer.left.description")}</Description>
+        <Title>{t("footer.left.faq")}</Title>
+        <List>
+          <ListItem fullWidth onClick={() => handleRedirect("legal-notices")}>
+            {t("legalNotice.title")}
+          </ListItem>
+          <ListItem fullWidth onClick={() => handleRedirect("sent-back")}>
+            {t("footer.left.sentback")}
+          </ListItem>
+          <ListItem fullWidth onClick={() => handleRedirect("cgv")}>
+            {t("footer.left.cgv")}
+          </ListItem>
+          <ListItem fullWidth onClick={() => handleRedirect("wholesaler")}>
+            {t("footer.left.wholesaler")}
+          </ListItem>
+        </List>
         <SocialContainer>
           <SocialIcon color="385999">
             <Facebook />

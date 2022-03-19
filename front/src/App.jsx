@@ -5,16 +5,20 @@ import Checkout from "components/tools/Checkout"
 import PrivateRoute from "components/tools/PrivateRoute"
 import SignRoute from "components/tools/SignRoute"
 import Cart from "pages/Cart"
+import GeneralConditions from "pages/GeneralConditions"
 import Home from "pages/Home"
-import LegalMentions from "pages/LegalMentions"
+import LegalNotices from "pages/LegalNotices"
 import Login from "pages/Login"
 import Order from "pages/Order"
 import Orders from "pages/Orders"
+import Politics from "pages/Politics"
 import ProductList from "pages/ProductList"
 import ProductPage from "pages/ProductPage"
 import Register from "pages/Register"
+import SentBack from "pages/SentBack"
 import Success from "pages/Success"
 import User from "pages/User"
+import Wholesaler from "pages/Wholesaler"
 import React from "react"
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import ScrollToTop from "./components/tools/ScrollToTop"
@@ -42,7 +46,16 @@ function App() {
             <ProductPage />
           </Route>
           <Route path="/cgv" exact>
-            <LegalMentions />
+            <GeneralConditions />
+          </Route>
+          <Route path="/legal-notices" exact>
+            <LegalNotices />
+          </Route>
+          <Route path="/sent-back" exact>
+            <SentBack />
+          </Route>
+          <Route path="/wholesaler" exact>
+            <Wholesaler />
           </Route>
           <SignRoute component={Login} path="/login" />
           <SignRoute component={Register} path="/register" exact />

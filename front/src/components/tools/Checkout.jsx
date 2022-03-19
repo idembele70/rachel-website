@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { send } from "@emailjs/browser"
 import {
   CardCvcElement,
   CardExpiryElement,
@@ -6,7 +7,13 @@ import {
   useElements,
   useStripe
 } from "@stripe/react-stripe-js"
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useHistory, useLocation } from "react-router-dom"
@@ -140,7 +147,7 @@ const Button = styled.button`
     transform: translateY(-1px);
     box-shadow: 0 7px 14px rgba(50, 50, 93, 0.11), 0 3px 6px rgba(0, 0, 0, 0.08);
   }
-  &:disabled{
+  &:disabled {
     cursor: not-allowed;
   }
 `
@@ -167,9 +174,11 @@ function Checkout() {
     country: "",
     phone: ""
   })
-
+  useLayoutEffect(() => {
+    if (cart.products.length === 0 || Object.keys(currentUser).length === 0)
+      history.push("/")
+  })
   useEffect(() => {
-    if (cart.products.length === 0) history.push("/")
     const {
       _id,
       isAdmin,
@@ -317,7 +326,7 @@ function Checkout() {
           })
         )
         const ordersProducts = products.map((product) => ({
-          product: product._id, // eslint-disable-line no-underscore-dangle
+          productId: product.id, // eslint-disable-line no-underscore-dangle
           quantity: product.qte,
           color: product.color,
           size: product.size
@@ -326,18 +335,41 @@ function Checkout() {
           // eslint-disable-next-line no-underscore-dangle
           `/orders/new/${currentUser._id}`,
           {
-            user: currentUser._id, // eslint-disable-line no-underscore-dangle
+            userId: currentUser._id, // eslint-disable-line no-underscore-dangle
             products: ordersProducts,
             amount: total,
             stripeId,
             shippingPrice: location.state?.shippingPrice
           }
         )
-        if (data)
+        if (data) {
+          const {
+            REACT_APP_SERVICE_ID,
+            REACT_APP_PAYMENT_TEMPLATE_ID,
+            REACT_APP_USER_ID
+          } = process.env
+          send(
+            REACT_APP_SERVICE_ID,
+            REACT_APP_PAYMENT_TEMPLATE_ID,
+            {
+              first_name: firstname,
+              order_number: data._id, // eslint-disable-line no-underscore-dangle
+              name: `${firstname} ${lastname}`,
+              address,
+              city,
+              postal_code: zip,
+              country,
+              to_email: email
+            },
+            REACT_APP_USER_ID
+          )
+            .then(() => console.log("Email has been sent!"))
+            .catch(console.err)
           history.push({
             pathname: "/success",
             state: { ordersData: data, cartProducts }
           })
+        }
       } catch (err) {
         // eslint-disable-next-line no-underscore-dangle
         console.error(err)

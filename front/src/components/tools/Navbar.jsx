@@ -19,7 +19,7 @@ import Loader from "./Loader"
 
 const Container = styled.div`
   flex: 0 0 60px;
-  width: 100%;
+  width: 100vw;
   max-width: 1440px;
   margin: 0 auto;
   ${mobile({ flex: "0 0 50px" })};
@@ -29,8 +29,8 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  ${tablet({ padding: "10px 0" })};
-  ${mobile({ padding: "10px 0" })};
+  ${tablet({ padding: 10 })};
+  ${smallMobile({ padding: "10px 5px" })};
 `
 const Left = styled.div`
   display: flex;
