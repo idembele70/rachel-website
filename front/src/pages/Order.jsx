@@ -181,9 +181,9 @@ export default function Order() {
           </ProductRow>
           {(loading && productsSkeleton.current) ||
             products?.map(
-              ({ product, color, size, quantity, _id: productId }) => (
+              ({ productId:product, color, size, quantity, _id: pId }) => (
                 // eslint-disable-next-line no-underscore-dangle
-                <ProductRow key={productId}>
+                <ProductRow key={pId}>
                   <RowItemContainer>
                     <RowItem isName>
                       {product.title} {` X${quantity}`} {"-" && size}

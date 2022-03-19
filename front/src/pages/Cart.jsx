@@ -377,7 +377,8 @@ export default function Cart() {
         (somme, product) => somme + +product.weight * product.qte,
         0
       )
-      const { price } = FranceTarif.find((tarif) => tarif.weight > weight)
+
+      const price = FranceTarif.find((tarif) => tarif.weight > weight)?.price
       if (price) setShippingPrice(Math.ceil(price))
       else setShippingPrice(0)
     } else setShippingPrice(0)
@@ -389,8 +390,8 @@ export default function Cart() {
   const handlePay = () => {
     if (isDisconnected)
       history.push({
-        pathname: "/register",
-        state: { redirectTo: "cart" }
+        pathname: "/login",
+        state: { ...history.location }
       })
     else if (!shippingPrice) setModal(true)
     else history.push({ pathname: "/pay", state: { shippingPrice } })
@@ -445,15 +446,7 @@ export default function Cart() {
               <Info>
                 {(loading && skeleton.current) ||
                   products?.map((product) => {
-                    const {
-                      img,
-                      title,
-                      _id: id,
-                      color,
-                      size,
-                      qte,
-                      price
-                    } = product
+                    const { img, title, id, color, size, qte, price } = product
                     return (
                       <Fragment key={id + size + color}>
                         <Product>

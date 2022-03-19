@@ -1,11 +1,11 @@
 const { Schema, model } = require("mongoose")
 
 const orderSchema = Schema({
-user: {type: Schema.Types.ObjectId, ref:"users", required: true},
+userId: {type: Schema.Types.ObjectId, ref:"users", required: true},
 products : [
   {
-    product: {
-      type : Schema.Types.ObjectId, ref: "product", required:true
+    productId: {
+      type :Schema.Types.ObjectId , ref:"product",required:true
     },
     color: {type: String, required: true},
     size: {type: String, default : ""},

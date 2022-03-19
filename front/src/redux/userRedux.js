@@ -5,7 +5,7 @@ const userSlice = createSlice({
   initialState: {
     currentUser: {},
     isFetching: Boolean(),
-    error: Boolean()
+    error: Boolean(),
   },
   reducers: {
     loginStart: (state) => {
@@ -37,7 +37,7 @@ const userSlice = createSlice({
       })
     },
     signUpStart: (state) => {
-      Object.assign(state, { isFetching: true })
+      Object.assign(state, { isFetching: true, error: false })
     },
     signUpSuccess: (state) => {
       Object.assign(state, { isFetching: false, error: false })

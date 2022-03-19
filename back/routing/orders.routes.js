@@ -9,7 +9,11 @@ router.post("/new/:id", verifyTokenAndAuthorization, async (req, res) => {
     const savedOrder = await newOrder.save()
     res.status(200).json(savedOrder)
   } catch (err) {
-    res.status(500).json(err)
+    res.status(500).json(
+      {
+        message: "Error creating order",
+      error:err
+    })
   }
 })
 
@@ -17,14 +21,13 @@ router.post("/new/:id", verifyTokenAndAuthorization, async (req, res) => {
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     const orderUpdated = await Order.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
-      .populate("products.product")
     res.status(200).json(orderUpdated)
   } catch (err) {
     res.status(500).json(err)
   }
 })
 
-// DELETE
+// DELETE ONE ORDER
 router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     await Order.findByIdAndDelete(req.params.id)
@@ -75,11 +78,11 @@ router.get("/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
     const qCount = req.query.count
     if (qCount){
-      Order.find({ user: req.params.id }).count().exec()
+      Order.find({ userId: req.params.id }).count().exec()
       .then(count=>res.status(200).json(count))
     }
     else {
-      const userOders = await Order.find({ user: req.params.id })
+      const userOders = await Order.find({ userId: req.params.id })
       res.status(200).json(userOders)
     }
   } catch (err) {
@@ -96,8 +99,7 @@ router.get("/find/:id/:orderId", verifyTokenAndAuthorization, async (req, res) =
       order = await Order.findById(req.params.orderId).select("products").count()
     }
     else
-    order = await Order.findById(req.params.orderId)
-      .populate("products.product")
+    order = await Order.findById(req.params.orderId).populate("products.productId")
     res.status(200).json(order)
   } catch (err) {
     res.status(500).json({ file: __filename, err })
@@ -109,8 +111,7 @@ router.get("/find/:id/:orderId", verifyTokenAndAuthorization, async (req, res) =
 router.get("/", verifyTokenAndAdmin, async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate("products.product")
-      .populate("user")
+      .populate("userId")
     res.status(200).json(orders)
   } catch (err) {
     res.status(500).json(err)

@@ -1,28 +1,24 @@
 import Navbar from "components/tools/Navbar"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { useDispatch } from "react-redux"
-import { useHistory } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { useHistory, useLocation, Link } from "react-router-dom"
 import { mobile } from "responsive"
 import styled from "styled-components"
+import Emailjs from "@emailjs/browser"
 import { register } from "../redux/apiCalls"
 
 const Container = styled.div`
   width: 100vw;
-  min-height: calc(100vh + 40px);
-  background: linear-gradient(
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.5)
-    ),
-    url("https://images.pexels.com/photos/6984661/pexels-photo-6984661.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
-      center;
+  ${mobile({ minHeight: "calc(100vh + 40px)" })}
+  min-height: 100vh;
   background-size: cover;
   display: flex;
   flex-direction: column;
 `
 const Main = styled.div`
-  width: 100%;
   flex: 1;
+  max-height: 100%;
   padding: 20px 0;
   border-top: 1px solid #fff;
   height: calc(100vh - 60px);
@@ -32,7 +28,7 @@ const Main = styled.div`
     ),
     url("https://images.pexels.com/photos/6984661/pexels-photo-6984661.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
       center;
-  background-size: cover;
+  //background-size: cover;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -57,13 +53,23 @@ const Input = styled.input`
   margin: 20px 10px 0px 0px;
   padding: 10px;
 `
-const Agreement = styled.span`
+const Agreement = styled.div`
   font-size: 12px;
+  line-height: 15px;
   width: 100%;
-  margin: 20px 0;
+  margin: 10px 0;
 `
 const InputRadio = styled.input`
-  margin-right: 5px;
+  margin-right: 3px;
+  height: 15px;
+  cursor: pointer;
+  vertical-align: bottom;
+  position: relative;
+  bottom: 1px;
+`
+const InlineText = styled.span`
+  line-height: 15px;
+  font-size: 12px;
 `
 const ButtonContainer = styled.div`
   display: flex;
@@ -80,10 +86,19 @@ const Button = styled.button`
   background-color: teal;
   color: white;
   cursor: pointer;
+  &:disabled {
+    cursor: not-allowed;
+  }
 `
 
-const Error = styled.span`
+const Error = styled.div`
   color: red;
+  width: 100%;
+  height: 20px;
+  transition: opacity 400ms ease-in;
+  line-height: 20px;
+  margin: 10px 0 0;
+  opacity: ${(props) => props.opacity};
 `
 
 const LoginButton = styled.span`
@@ -94,10 +109,34 @@ const LoginButton = styled.span`
     color: white;
   }
 `
+const StyledLink = styled(Link)`
+  color: black;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  position: relative;
+  &:hover {
+    ::after {
+      width: 100%;
+    }
+  }
+  ::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    transition: all 500ms ease-in;
+    height: 2px;
+    background-color: teal;
+  }
+`
 
 function Register() {
   const { t } = useTranslation()
   const history = useHistory()
+  const location = useLocation()
+  const { isFetching, error: formError } = useSelector((state) => state.user)
   const [data, setData] = useState({
     firstname: "",
     lastname: "",
@@ -108,32 +147,57 @@ function Register() {
   })
   const [consent, setConsent] = useState(false)
   const [error, setError] = useState("")
-  
   const handleUpdate = (e) => {
     const { name, value } = e.target
     setData({ ...data, [name]: value.toLowerCase() })
   }
-
+  const [redirect, setRedirect] = useState(false)
+  const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
-  const state = {
-    redirectTo: history.location.state?.redirectTo === "cart" ? "cart" : "/"
-  }
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
+    setLoading(true)
     e.preventDefault()
-    const { password, confirmPassword } = data
-    if (!consent || password !== confirmPassword) {
+    const { password, confirmPassword, email, confirmEmail } = data
+    if (!consent || password !== confirmPassword || email !== confirmEmail) {
       if (!consent) setError(t("signup.agreementError"))
+      else if (email !== confirmEmail) setError(t("signup.email"))
       else setError(t("signup.passwordError"))
+      setLoading(false)
     } else {
-      const { confirmEmail, confirmPassword: ignoredPassword, ...others } = data
+      const { confirmPassword: ignoredPassword, ...others } = data
       setError("")
       register(dispatch, others)
-      history.push({
-        pathname: "/login",
-        state
-      })
+      setRedirect(true)
     }
   }
+
+  useEffect(() => {
+    const {
+      REACT_APP_SERVICE_ID,
+      REACT_APP_WELCOME_TEMPLATE_ID,
+      REACT_APP_USER_ID
+    } = process.env
+    if (redirect && !formError && !isFetching) {
+      setError("")
+      Emailjs.send(
+        REACT_APP_SERVICE_ID,
+        REACT_APP_WELCOME_TEMPLATE_ID,
+        {
+          email_to: data.email
+        },
+        REACT_APP_USER_ID
+      )
+        .then(() => setLoading(false))
+        .catch(console.log)
+      history.push({
+        pathname: "/login",
+        state: location.state
+      })
+    } else if (Object.entries(data).every((x) => x[0] && x[1] && formError)) {
+      setError(t("signup.emailError"))
+      setLoading(false)
+    }
+  }, [redirect, formError, isFetching, history, location])
 
   return (
     <Container>
@@ -188,28 +252,31 @@ function Register() {
               name="confirmPassword"
               placeholder={t("signup.confirmPassword")}
             />
+            <Error opacity={error ? 1 : 0}>{error}</Error>
             <Agreement>
-              {error && (
-                <>
-                  <Error>{error}</Error>
-                  <br />
-                </>
-              )}
               <InputRadio
                 type="checkbox"
                 checked={consent}
                 onChange={() => setConsent(!consent)}
               />
-              {t("signup.agreement")}
-              <b> {t("signup.privacyPolicy")}.</b>
+              <InlineText>{t("signup.agreement")}</InlineText>
+              <StyledLink target="_blank" to="/cgv">
+                {t("signup.privacyPolicy")}
+              </StyledLink>
+              <InlineText>{t("signup.agreementand")}</InlineText>
+              <StyledLink target="_blank" to="/cgv">
+                {t("signup.generalCondition")}
+              </StyledLink>
             </Agreement>
             <ButtonContainer>
-              <Button type="submit">{t("signup.create")}</Button>
+              <Button disabled={isFetching} type="submit">
+                {loading ? t("sign.loading") : t("signup.create")}
+              </Button>
               <LoginButton
                 onClick={() =>
                   history.push({
                     pathname: "/login",
-                    state
+                    state: location.state
                   })
                 }
               >

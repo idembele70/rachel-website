@@ -1,7 +1,7 @@
 import PropTypes from "prop-types"
 import React, { useEffect } from "react"
 import { useSelector } from "react-redux"
-import { useHistory, Redirect, Route } from "react-router-dom"
+import { Redirect, Route, useHistory } from "react-router-dom"
 
 const SignRoute = ({ component: Component, path, ...rest }) => {
   const { currentUser } = useSelector((state) => state.user)
@@ -9,23 +9,20 @@ const SignRoute = ({ component: Component, path, ...rest }) => {
   const history = useHistory()
   useEffect(
     () => () => {
-      history.go(0)
+      if (isDisconnected) history.go(0)
     },
     [history]
   )
-
-  const pathHandler = () =>
-    history.location.state?.redirectTo === "cart" ? "/cart" : "/"
+  const pathHandler = () => history.location.state?.pathname || "/"
   return (
     <Route
       {...rest}
-      render={(props) =>
-        (path === "/register" || path === "/login") && isDisconnected ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={{ pathname: pathHandler() }} />
-        )
-      }
+      render={(props) => {
+        if ((path === "/register" || path === "/login") && isDisconnected) {
+          return <Component {...props} />
+        }
+        return <Redirect to={{ pathname: pathHandler() }} />
+      }}
     />
   )
 }

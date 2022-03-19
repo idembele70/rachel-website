@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { send } from "@emailjs/browser"
 import { Skeleton } from "@mui/material"
 import Announcement from "components/tools/Announcement"
 import Footer from "components/tools/Footer"
@@ -191,6 +192,15 @@ export default function Success() {
     ],
     []
   )
+  const {
+    stripeData: {
+      billing_details: { address, name, email, phone },
+      payment_method_details: { card },
+      created
+    },
+    ordersData: { _id: id, amount, shippingPrice },
+    cartProducts
+  } = data
   useEffect(() => {
     if (!location.state) history.push({ pathname: "/" })
     else {
@@ -215,15 +225,8 @@ export default function Success() {
       })()
     }
   }, [dispatch, history, location])
-  const {
-    stripeData: {
-      billing_details: { address, name, email, phone },
-      payment_method_details: { card },
-      created
-    },
-    ordersData: { _id: id, amount, shippingPrice },
-    cartProducts
-  } = data
+
+ 
   const { t } = useTranslation()
   return (
     <Container>
@@ -243,8 +246,8 @@ export default function Success() {
                   <ProductRow key={product.size + product.color + product.name}>
                     <RowItemContainer>
                       <RowItem isName>
-                        {product.title} {` X${product.qte}`}
-                        {"-" && product?.size}
+                        {product.title}&nbsp;{` X${product.qte}`}
+                        &nbsp;{product?.size}
                       </RowItem>
                       <ColorContainer color={product.color} />
                     </RowItemContainer>

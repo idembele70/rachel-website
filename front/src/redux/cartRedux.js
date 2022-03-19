@@ -19,7 +19,7 @@ const cartSlice = createSlice({
     },
     updateProduct: (state, { payload }) => {
       state.products = state.products.map((product) =>
-        product._id === payload.id &&
+        product.id === payload.id &&
         product.size === payload.size &&
         product.color === payload.color
           ? { ...product, qte: product.qte + payload.qte }
@@ -30,7 +30,7 @@ const cartSlice = createSlice({
     deleteProduct: (state, { payload }) => {
       state.quantity -= 1
       state.products = state.products.filter(
-        ({ _id: id, size, color }) =>
+        ({ id, size, color }) =>
           id !== payload.id || size !== payload.size || color !== payload.color
       )
       state.total -= payload.totalPrice

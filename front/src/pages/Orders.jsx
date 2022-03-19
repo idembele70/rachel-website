@@ -1,12 +1,12 @@
+import { Skeleton } from "@mui/material"
 import Sidebar from "components/tools/Sidebar"
-import React, { useEffect, useState, useRef, useLayoutEffect } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useHistory, useLocation } from "react-router-dom"
 import { userRequest } from "requestMethods"
 import { mobile, tablet } from "responsive"
 import styled from "styled-components"
-import { Skeleton } from "@mui/material"
 import Modal from "../components/tools/Modal"
 
 const Container = styled.div`
