@@ -8,7 +8,7 @@ products : [
       type :Schema.Types.ObjectId , ref:"product",required:true
     },
     color: {type: String, required: true},
-    size: {type: String, default : ""},
+    size: {type: String},
     quantity: {
       type : Number,
       default : 1
@@ -18,18 +18,17 @@ products : [
 amount : {
   type : Number, required: true
 },
-stripeId : {type: String, required: true},
+stripeId : {type: String, trim:true},
+paypalId : {type: String, trim:true},
 status : {
 type : String,
 default: "pending"
 },
-shippingPrice:{
-  type: Number,
-  default: 0,
-},
+shippingPrice: {type : Number, required: true},
 trackingNumber: {
   type: String,
-  default: ""
+  default: "",
+  trim: true
 }
 },
 {timestamps: true}

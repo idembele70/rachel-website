@@ -4,6 +4,7 @@ import { Add, Delete, Remove } from "@mui/icons-material"
 import { Skeleton } from "@mui/material"
 import Announcement from "components/tools/Announcement"
 import Footer from "components/tools/Footer"
+import Loader from "components/tools/Loader"
 import Modal from "components/tools/Modal"
 import Navbar from "components/tools/Navbar"
 import React, { Fragment, useEffect, useMemo, useState, useRef } from "react"
@@ -371,19 +372,27 @@ export default function Cart() {
     ],
     []
   )
+  const isMounted = useRef(false)
   useEffect(() => {
-    if (["FR"].includes(countryCode)) {
-      const weight = products.reduce(
-        (somme, product) => somme + +product.weight * product.qte,
-        0
-      )
-
-      const price = FranceTarif.find((tarif) => tarif.weight > weight)?.price
-      if (price) setShippingPrice(Math.ceil(price))
+    isMounted.current = true
+    if (isMounted.current) {
+      if (["FR"].includes(countryCode) && total < 100) {
+        const weight = products.reduce(
+          (somme, product) => somme + +product.weight * product.qte,
+          0
+        )
+        const price = FranceTarif.find((tarif) => tarif.weight > weight)?.price
+        if (price) setShippingPrice(Math.ceil(price))
+        else setShippingPrice(0)
+      } else if (total >= 100 && ["FR"].includes(countryCode))
+        setShippingPrice(-1)
       else setShippingPrice(0)
-    } else setShippingPrice(0)
-    setLoading(false)
-  }, [countryCode, products, FranceTarif])
+      setLoading(false)
+    }
+    return () => {
+      isMounted.current = false
+    }
+  }, [countryCode, products, FranceTarif, total])
 
   const [modal, setModal] = useState(false)
 
@@ -393,7 +402,7 @@ export default function Cart() {
         pathname: "/login",
         state: { ...history.location }
       })
-    else if (!shippingPrice) setModal(true)
+    else if (shippingPrice === 0) setModal(true)
     else history.push({ pathname: "/pay", state: { shippingPrice } })
   }
 
@@ -408,6 +417,7 @@ export default function Cart() {
   }
   return (
     <Container>
+      {loading && <Loader />}
       {modal && (
         <Modal
           title={t("cart.modal.title")}
@@ -446,7 +456,8 @@ export default function Cart() {
               <Info>
                 {(loading && skeleton.current) ||
                   products?.map((product) => {
-                    const { img, title, id, color, size, qte, price } = product
+                    const { img, title, id, color, size, qte, price, maxQte } =
+                      product
                     return (
                       <Fragment key={id + size + color}>
                         <Product>
@@ -488,17 +499,19 @@ export default function Cart() {
                             <ProductAmountContainer>
                               <QuantityButton
                                 component={<Add />}
-                                onClick={() => {
-                                  dispatch(
-                                    updateProduct({
-                                      id,
-                                      qte: 1,
-                                      price,
-                                      size,
-                                      color
-                                    })
-                                  )
-                                }}
+                                onClick={() =>
+                                  qte < maxQte
+                                    ? dispatch(
+                                        updateProduct({
+                                          id,
+                                          qte: 1,
+                                          price,
+                                          size,
+                                          color
+                                        })
+                                      )
+                                    : null
+                                }
                               />
                               <ProductAmount>{qte}</ProductAmount>
                               <QuantityButton
@@ -553,13 +566,13 @@ export default function Cart() {
                     ))}
                   </SummarySelect>
                 </SummaryItem>
-                {shippingPrice ? (
+                {shippingPrice !== 0 ? (
                   <SummaryItem>
                     <SummaryItemText>
                       {t("cart.orderSummary.shippingPrice")}
                     </SummaryItemText>
                     <SummaryItemPrice>
-                      {shippingPrice + t("products.currency")}
+                      {shippingPrice > 0 ? shippingPrice + t("products.currency") : t("cart.freeShipping")}
                     </SummaryItemPrice>
                   </SummaryItem>
                 ) : (
@@ -577,7 +590,7 @@ export default function Cart() {
                     {t("cart.orderSummary.total")}
                   </SummaryItemText>
                   <SummaryItemPrice>
-                    {total + shippingPrice}
+                    {total + (shippingPrice <= 0 ? 0 : shippingPrice)}
                     {t("products.currency")}
                   </SummaryItemPrice>
                 </SummaryItem>

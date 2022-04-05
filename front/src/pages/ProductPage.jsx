@@ -4,7 +4,7 @@ import Announcement from "components/tools/Announcement"
 import Footer from "components/tools/Footer"
 import Navbar from "components/tools/Navbar"
 import Newsletter from "components/tools/Newsletter"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation } from "react-router-dom"
@@ -191,33 +191,70 @@ export default function ProductPage() {
     title: String(),
     description: String(),
     img: String(),
-    sizes: [],
-    colors: [],
+    colors: [
+      {
+        name: String(),
+        details: [
+          {
+            size: String(),
+            quantity: Number()
+          }
+        ]
+      }
+    ],
     weight: String()
   })
   const [loading, setLoading] = useState(true)
   const id = useLocation().pathname.split("/")[2]
   const [qte, setQte] = useState(1)
   const [color, setColor] = useState(null)
+  const [colors, setColors] = useState(null)
   const [size, setSize] = useState("")
   const dispatch = useDispatch()
-
+  const isMounted = useRef(false)
   useEffect(() => {
-    publicRequest
-      .get(`/products/find/${id}`)
-      .then((res) => {
-        setProduct(res.data)
-        setColor(res.data.colors[0])
-        setSize(res.data.sizes[0])
-        setLoading(false)
-      })
-      .catch(console.error)
+    isMounted.current = true
+    if (isMounted.current) {
+      publicRequest
+        .get(`/products/find/${id}`)
+        .then((res) => {
+          setProduct(res.data)
+          const currentColor = res.data.colors.find((item) =>
+            item.details.find((detail) => detail.quantity)
+          )
+          setColors(
+            res.data.colors.filter((item) =>
+              item.details.find((detail) => detail.quantity)
+            )
+          )
+          setColor(currentColor.name)
+          if (currentColor) {
+            setSize(
+              currentColor.details.filter((detail) => detail.quantity)[0].size
+            )
+          }
+          setLoading(false)
+        })
+        .catch(console.error)
+    }
+    return () => {
+      isMounted.current = false
+    }
   }, [id])
-  const { price, title, description, img, sizes, colors, weight } = product
+  const {
+    price,
+    title,
+    description,
+    img,
+    colors: productColors,
+    weight
+  } = product
   const handleQuantity = (direction = String()) => {
+    const { details } = productColors.find((x) => x.name === color)
+    const { quantity } = details.find((x) => x.size === size)
     if (direction === "dec") {
       if (qte > 1) setQte(qte > 1 && qte - 1)
-    } else setQte(qte + 1)
+    } else if (qte < quantity) setQte(qte + 1)
   }
   // @ts-ignore
   const { products } = useSelector((state) => state.cart)
@@ -226,14 +263,23 @@ export default function ProductPage() {
     setOpenModal(true)
     setTimeout(() => {
       setOpenModal(false)
-    }, 2000)
+    }, 1500)
+    const { details } = colors.find((x) => x.name === color)
+    const { quantity } = details.find((x) => x.size === size)
     const exist = products.find(
       ({ id: pId, size: sizeFound, color: colorFound }) =>
         pId === id && sizeFound === size && colorFound === color
     )
     if (exist) {
-      dispatch(updateProduct({ id, qte, price: price * qte, size, color }))
-      setQte(1)
+      dispatch(
+        updateProduct({
+          id,
+          qte,
+          price: price * qte,
+          size,
+          color
+        })
+      )
     } else {
       dispatch(
         addProduct({
@@ -244,11 +290,12 @@ export default function ProductPage() {
           size,
           qte,
           price,
-          weight
+          weight,
+          maxQte: quantity
         })
       )
-      setQte(1)
     }
+    setQte(1)
   }
   /* if (loading)
     return (
@@ -266,7 +313,6 @@ export default function ProductPage() {
         <Footer />
       </Container>
     ) */
-
   return (
     <Container>
       {openModal && (
@@ -304,23 +350,35 @@ export default function ProductPage() {
                 {colors?.map((c) => (
                   <FilterColor
                     // @ts-ignore
-                    isSelected={c === color}
-                    onClick={() => setColor(c)}
-                    color={c}
-                    key={c}
+                    isSelected={c.name === color}
+                    onClick={() => {
+                      setColor(c.name)
+                      setQte(1)
+                    }}
+                    color={c.name}
+                    // eslint-disable-next-line no-underscore-dangle
+                    key={c._id}
                   />
                 ))}
               </Filter>
-              {(sizes.length && !sizes.includes("") && (
+              {(colors[0]?.details?.length && colors[0]?.name?.length && (
                 <Filter>
                   <FilterTitle>{t("products.filter.sizes.size")}</FilterTitle>
                   <FilterSize
                     value={size}
                     onChange={(e) => setSize(e.target.value)}
                   >
-                    {sizes?.map((s) => (
-                      <FilterSizeOption key={s}>{s}</FilterSizeOption>
-                    ))}
+                    {colors
+                      .find((x) => x.name === color)
+                      .details?.map(
+                        (detail) =>
+                          detail.quantity && (
+                            // eslint-disable-next-line no-underscore-dangle
+                            <FilterSizeOption key={detail.size}>
+                              {detail.size}
+                            </FilterSizeOption>
+                          )
+                      )}
                   </FilterSize>
                 </Filter>
               )) ||

@@ -68,21 +68,28 @@ function Categories() {
   const [loading, setLoading] = useState(true)
   const { innerWidth: winWidth } = window
   const TimeOutRef = useRef(null)
+  const isMounted = useRef(false)
   useEffect(() => {
-    clearTimeout(TimeOutRef.current)
-    if (autoSlide.state)
-      TimeOutRef.current = setTimeout(() => {
-        if (autoSlide.direction === "right") {
-          if (slideIndex < categories.length - (winWidth <= 640 ? 1 : 2))
-            setSlideIndex(slideIndex + 1)
-          else setAutoSlide({ ...autoSlide, direction: "left" })
-        } else if (slideIndex > 0) {
-          setSlideIndex(slideIndex - 1)
-        } else {
-          setAutoSlide({ ...autoSlide, direction: "right" })
-        }
-      }, 4000)
-    return () => clearTimeout(TimeOutRef.current)
+    isMounted.current = true
+    if (isMounted.current) {
+      clearTimeout(TimeOutRef.current)
+      if (autoSlide.state)
+        TimeOutRef.current = setTimeout(() => {
+          if (autoSlide.direction === "right") {
+            if (slideIndex < categories.length - (winWidth <= 640 ? 1 : 2))
+              setSlideIndex(slideIndex + 1)
+            else setAutoSlide({ ...autoSlide, direction: "left" })
+          } else if (slideIndex > 0) {
+            setSlideIndex(slideIndex - 1)
+          } else {
+            setAutoSlide({ ...autoSlide, direction: "right" })
+          }
+        }, 4000)
+    }
+    return () => {
+      clearTimeout(TimeOutRef.current)
+      isMounted.current = false
+    }
   }, [autoSlide, categories.length, slideIndex, winWidth])
 
   const handleClick = (direction) => {
@@ -103,23 +110,25 @@ function Categories() {
     setSearching(state)
   }
   useEffect(() => {
-    publicRequest
-      .get("/category?isActive=true")
-      .then(async ({ data }) => {
-        await setCategories([
-          ...data
-            .filter((category) => category.isActive)
-            .map((category) => (
-              <CategoryItem
-                itemInfo={category}
-                onSearch={handleSearch}
-                key={category._id}
-              />
-            ))
-        ])
-        setLoading(false)
-      })
-      .catch((e) => console.error(e))
+    if (isMounted.current) {
+      publicRequest
+        .get("/category?isActive=true")
+        .then(async ({ data }) => {
+          await setCategories([
+            ...data
+              .filter((category) => category.isActive)
+              .map((category) => (
+                <CategoryItem
+                  itemInfo={category}
+                  onSearch={handleSearch}
+                  key={category._id}
+                />
+              ))
+          ])
+          setLoading(false)
+        })
+        .catch((e) => console.error(e))
+    }
   }, [])
   const isMobile = winWidth <= 640
   const imgSkeletonSx = {

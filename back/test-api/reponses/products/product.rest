@@ -949,28 +949,14 @@ GET http://localhost:5000/api/products?category=pull&page=0&count=true HTTP/1.1
 ### GET Product count by category
 GET http://localhost:5000/api/products?category=hommes&count=true HTTP/1.1 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-### UPDATE
-PUT http://localhost:5000/api/products/61be65c42974aea7e9b60a5d HTTP/1.1
+### UPDATE ONE
+PUT http://localhost:5000/api/products/61bfac2b92f879c9590f2b7f?decreaseQte=1 HTTP/1.1
 Content-Type: application/json
-token: " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0NTYyNzczMSwiZXhwIjoxNjQ1NzE0MTMxfQ.ptVhRREL5aV_pnMosCsihngt2w2rat94S79fJ9v-m7k
+token: " eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0ODMwODA3MywiZXhwIjoxNjQ4Mzk0NDczfQ.XpJwFt3UMLRbyt-MwkG2TJSl-qRDBtaQH--wdo0syI8
 
 {
-  "categories" : [
-   "61e2cf5db8b14a59d5363cec"
-  ]
+  "name": "#FFFFFF",
+  "size":"xs"
 }
 
 

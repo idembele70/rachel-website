@@ -2,6 +2,7 @@
 import { send } from "@emailjs/browser"
 import { Skeleton } from "@mui/material"
 import Announcement from "components/tools/Announcement"
+import { getCountries, mongoDBDateConverter } from "components/tools/utils"
 import Footer from "components/tools/Footer"
 import Navbar from "components/tools/Navbar"
 import React, { useEffect, useMemo, useRef, useState } from "react"
@@ -105,100 +106,31 @@ export default function Success() {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(true)
   const { current: productsSkeleton } = useRef(
-    [...Array(location.state?.cartProducts.length)].map(() => (
-      <Skeleton width="100%" height={34} />
+    [...Array(location.state?.cartProducts.length)].map((_, idx) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <Skeleton key={idx} width="100%" height={34} />
     ))
   )
   const { current: addressSkeleton } = useRef(
-    [...Array(5)].map(() => (
-      <Skeleton key={Math.random()} width="100%" height={23} />
+    [...Array(5)].map((_, idx) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <Skeleton key={Math.random() + idx} width="100%" height={23} />
     ))
   )
   const [data, setData] = useState({
     cartProducts: [],
     stripeData: {
       billing_details: { address: "", name: "", email: "", phone: "" },
-      payment_method_details: { card: "" },
-      created: 0
+      payment_method_details: { card: "" }
     },
-    ordersData: { _id: "", amount: 0, shippingPrice: 0 }
+    ordersData: { _id: "", amount: 0, shippingPrice: 0, createdAt: 0 }
   })
-  function convertDate(inputFormat) {
-    function pad(s) {
-      return s < 10 ? `0${s}` : s
-    }
-    const d = new Date(inputFormat)
-    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join("/")
-  }
-  const countries = useMemo(
-    () => [
-      { country: "Argentina", code: "AR" },
-      { country: "Australia", code: "AU" },
-      { country: "Austria", code: "AT" },
-      { country: "Belgium", code: "BE" },
-      { country: "Bolivia", code: "BO" },
-      { country: "Brazil", code: "BR" },
-      { country: "Bulgaria", code: "BG" },
-      { country: "Canada", code: "CA" },
-      { country: "Chile", code: "CL" },
-      { country: "Colombia", code: "CO" },
-      { country: "Costa Rica", code: "CR" },
-      { country: "Croatia", code: "HR" },
-      { country: "Cyprus", code: "CY" },
-      { country: "Czech Republic", code: "CZ" },
-      { country: "Denmark", code: "DK" },
-      { country: "Dominican Republic", code: "DO" },
-      { country: "Egypt", code: "EG" },
-      { country: "Estonia", code: "EE" },
-      { country: "Finland", code: "FI" },
-      { country: "France", code: "FR" },
-      { country: "Germany", code: "DE" },
-      { country: "Greece", code: "GR" },
-      { country: "Hong Kong SAR China", code: "HK" },
-      { country: "Hungary", code: "HU" },
-      { country: "Iceland", code: "IS" },
-      { country: "India", code: "IN" },
-      { country: "Indonesia", code: "ID" },
-      { country: "Ireland", code: "IE" },
-      { country: "Israel", code: "IL" },
-      { country: "Italy", code: "IT" },
-      { country: "Japan", code: "JP" },
-      { country: "Latvia", code: "LV" },
-      { country: "Liechtenstein", code: "LI" },
-      { country: "Lithuania", code: "LT" },
-      { country: "Luxembourg", code: "LU" },
-      { country: "Malta", code: "MT" },
-      { country: "Mexico ", code: "MX" },
-      { country: "Netherlands", code: "NL" },
-      { country: "New Zealand", code: "NZ" },
-      { country: "Norway", code: "NO" },
-      { country: "Paraguay", code: "PY" },
-      { country: "Peru", code: "PE" },
-      { country: "Poland", code: "PL" },
-      { country: "Portugal", code: "PT" },
-      { country: "Romania", code: "RO" },
-      { country: "Singapore", code: "SG" },
-      { country: "Slovakia", code: "SK" },
-      { country: "Slovenia", code: "SI" },
-      { country: "Spain", code: "ES" },
-      { country: "Sweden", code: "SE" },
-      { country: "Switzerland", code: "CH" },
-      { country: "Thailand", code: "TH" },
-      { country: "Trinidad & Tobago", code: "TT" },
-      { country: "United Arab Emirates", code: "AE" },
-      { country: "United Kingdom", code: "GB" },
-      { country: "United States", code: "US" },
-      { country: "Uruguay", code: "UY" }
-    ],
-    []
-  )
   const {
     stripeData: {
       billing_details: { address, name, email, phone },
-      payment_method_details: { card },
-      created
+      payment_method_details: { card }
     },
-    ordersData: { _id: id, amount, shippingPrice },
+    ordersData: { _id: id, amount, shippingPrice, createdAt },
     cartProducts
   } = data
   useEffect(() => {
@@ -207,17 +139,28 @@ export default function Success() {
       location.state.shippingPrice = 0
       dispatch(initializeCart())
       ;(async () => {
-        const { stripeId } = location.state.ordersData
+        const { stripeId, paypalId } = location.state.ordersData
+
         try {
-          const { data: stripeData } = await publicRequest.get(
-            `/checkout/payment/intents/${stripeId}`
-          )
-          setData({
-            ...location.state,
-            stripeData:
-              stripeData.charges
-                .data[0] /* eslint-disable-line react/jsx-props-no-spreading */
-          })
+          if (stripeId) {
+            const { data: stripeData } = await publicRequest.get(
+              `/checkout/payment/intents/${stripeId}`
+            )
+            setData({
+              ...location.state,
+              stripeData:
+                stripeData.charges
+                  .data[0] /* eslint-disable-line react/jsx-props-no-spreading */
+            })
+          } else {
+            const { data: stripeData } = await publicRequest.get(
+              `paypal/payment/${paypalId}`
+            )
+            setData({
+              ...location.state,
+              stripeData
+            })
+          }
           setLoading(false)
         } catch (error) {
           console.error(error)
@@ -226,7 +169,6 @@ export default function Success() {
     }
   }, [dispatch, history, location])
 
- 
   const { t } = useTranslation()
   return (
     <Container>
@@ -294,7 +236,10 @@ export default function Success() {
                 <AddressRow>{name}</AddressRow>
                 <AddressRow>{address.line1}</AddressRow>
                 <AddressRow>{`${address.postal_code}, ${address.city}, ${
-                  countries.find((c) => c.code === address.country)?.country
+                  getCountries({
+                    code: address.country,
+                    country: false
+                  })?.country
                 }`}</AddressRow>
                 <AddressRow>{email}</AddressRow>
                 <AddressRow>{phone}</AddressRow>
@@ -314,7 +259,11 @@ export default function Success() {
             <RightListItem>
               <ItemTitle>{t("success.right.date")}&nbsp;</ItemTitle>
               <ItemTitle isBold flex={1}>
-                {loading ? <Skeleton /> : convertDate(created * 1000)}
+                {loading ? (
+                  <Skeleton />
+                ) : (
+                  mongoDBDateConverter({ date: createdAt, noHour: false })
+                )}
               </ItemTitle>
             </RightListItem>
             <RightListItem>

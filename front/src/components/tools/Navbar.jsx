@@ -40,6 +40,7 @@ const Left = styled.div`
     display: (props) => (props.canSearch ? "flex" : "none"),
     position: "fixed",
     top: 0,
+    left: 0,
     width: "100vw",
     maxWidth: "none",
     height: 50,
@@ -198,16 +199,21 @@ const Navbar = () => {
     if (typeof link === "string") {
       setShowOption(false)
       ;(async () => {
-        setSearching(true)
-        const { data: skeletonLength } = await publicRequest.get(
-          `/products?category=${link}&page=0&count=true`
-        )
-        history.push({
-          pathname: `/products/${link || search}`,
-          state: { skeletonLength }
-        })
-        setSearching(false)
-        setSearch("")
+        try {
+          setSearching(true)
+          const { data: skeletonLength } = await publicRequest.get(
+            `/products?category=${link}&page=0&count=true`
+          )
+          history.push({
+            pathname: `/products/${link || search}`,
+            state: { skeletonLength }
+          })
+          setSearching(false)
+          setSearch("")
+        } catch (err) {
+          setSearching(false)
+          setSearch("")
+        }
       })()
     }
   }
@@ -223,12 +229,17 @@ const Navbar = () => {
     })()
   }
   const outlinedSx = {
-    display: "inline-flex",
+    display: canSearch ? "none" : "inline-flex",
     verticalAlign: "middle"
   }
   const { innerWidth: winWidth } = window
 
-  const searchSx = { color: "gray", fontSize: 16, cursor: "pointer" }
+  const searchSx = {
+    display: canSearch ? "none" : "inline-block",
+    color: "gray",
+    fontSize: 16,
+    cursor: "pointer"
+  }
   return (
     <Container>
       {searching ? <Loader /> : null}

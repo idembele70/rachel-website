@@ -16,19 +16,22 @@ import CategoryList from "./pages/categoryList/CategoryList";
 import Category from "./pages/category/Category";
 import OrdersList from "./pages/ordersList/OrdersList";
 import Order from "./pages/order/Order";
+import AppContainer from "./components/tools/AppContainer";
+import Main from "./components/tools/Main";
 function App() {
   const { currentUser } = useSelector(state => state.user)
   const admin = currentUser?.isAdmin || ""
+    
   return (
     <Router>
-      {!admin && <Redirect to="/login" />}
+      {!admin &&  <Redirect to="/login" />}
       <Switch>
         <Route exact path="/login">
           {admin ? <Redirect to="/" /> : <Login />}
         </Route>
-        <div className="appContainer">
+        <AppContainer>
           <Topbar />
-          <div className="main">
+          <Main>
             <Sidebar />
             <Route exact path="/">
               <Home />
@@ -66,8 +69,8 @@ function App() {
             <Route exact path="/order/:orderId">
               <Order />
             </Route>
-          </div>
-        </div>
+          </Main>
+        </AppContainer>
       </Switch>
     </Router>
   );

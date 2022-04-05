@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next"
 import { useLocation } from "react-router-dom"
 import { publicRequest } from "requestMethods"
 import styled from "styled-components"
+import { getTotalQuantity } from "components/tools/utils"
 import Product from "./Product"
 
 const Container = styled.div`
@@ -91,50 +92,61 @@ const Products = ({ category }) => {
       .catch(console.error)
   }, [category])
   const { t } = useTranslation()
+  const isMounted = useRef(false)
   useEffect(() => {
-    ;(async () => {
-      if (!location.state?.skeletonLength && category) {
-        setLoading(false)
-        setSearching(false)
-        setProducts([])
-        return
-      }
-      productsSkeleton.current = skeletonGenerator(
-        location.state?.skeletonLength
-      )
-      setLoading(true)
-      setSearching(false)
-      try {
-        // @ts-ignore
-        const { data } = await axios.get(
-          category
-            ? `${
-                process.env.REACT_APP_BASE_URL
-              }/products?category=${category}&page=${page - 1}`
-            : `${process.env.REACT_APP_BASE_URL}/products`
+    isMounted.current = true
+    if (isMounted.current) {
+      ;(async () => {
+        if (!location.state?.skeletonLength && category) {
+          setLoading(false)
+          setSearching(false)
+          setProducts([])
+          return
+        }
+        productsSkeleton.current = skeletonGenerator(
+          location.state?.skeletonLength
         )
-        if (category) {
-          setProducts(
-            data.map((product) => (
-              // eslint-disable-next-line no-underscore-dangle
-              <Product product={product} key={product._id} />
-            ))
+        setLoading(true)
+        setSearching(false)
+        try {
+          // @ts-ignore
+          const { data } = await axios.get(
+            category
+              ? `${
+                  process.env.REACT_APP_BASE_URL
+                }/products?category=${category}&page=${page - 1}`
+              : `${process.env.REACT_APP_BASE_URL}/products`
           )
-        } else
-          setProducts(
-            data.slice(0, 8).map((product) => (
-              <Product
-                product={product}
-                // eslint-disable-next-line no-underscore-dangle
-                key={product._id}
-              />
-            ))
-          )
-      } catch (error) {
-        console.error(error)
-      }
-      setLoading(false)
-    })()
+          if (category) {
+            setProducts(
+              data.map((product) =>
+                getTotalQuantity(product.colors) ? (
+                  // eslint-disable-next-line no-underscore-dangle
+                  <Product product={product} key={product._id} />
+                ) : null
+              )
+            )
+          } else
+            setProducts(
+              data.slice(0, 8).map((product) =>
+                getTotalQuantity(product.colors) ? (
+                  <Product
+                    product={product}
+                    // eslint-disable-next-line no-underscore-dangle
+                    key={product._id}
+                  />
+                ) : null
+              )
+            )
+        } catch (error) {
+          console.error(error)
+        }
+        setLoading(false)
+      })()
+    }
+    return () => {
+      isMounted.current = false
+    }
   }, [category, location, page])
   /* useEffect(() => {
     if ((category && filters.colors !== "none") || filters.sizes !== "size") {

@@ -6,7 +6,7 @@ import {
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
-import { useHistory } from "react-router-dom"
+import { useLocation, useHistory } from "react-router-dom"
 import { logout } from "redux/apiCalls"
 import { userRequest } from "requestMethods"
 import { mobile, smallMobile, tablet } from "responsive"
@@ -92,6 +92,7 @@ const MainItemTitle = styled.h1`
 export default function Sidebar() {
   const { t } = useTranslation()
   const history = useHistory()
+  const location = useLocation()
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
   const {
@@ -105,21 +106,31 @@ export default function Sidebar() {
         <Logo onClick={() => history.push("/")}>{t("siteName")}</Logo>
       </LogoContainer>
       <MainContainer>
-        <MainItem onClick={() => history.push("/user")}>
+        <MainItem
+          onClick={() => {
+            if (location.pathname !== "/user") history.push("/user")
+          }}
+        >
           <HomeSharp />
           <MainItemTitle>{t("navbar.home")}</MainItemTitle>
         </MainItem>
         <MainItem
           onClick={() => {
             ;(async () => {
-              setLoading(true)
-              const { data: orderLength } = await userRequest.get(
-                `orders/${id}?count=true`
-              )
-              history.push({
-                pathname: "/user/orders",
-                state: { orderLength }
-              })
+              if (location.pathname !== "/user/orders") {
+                try {
+                  setLoading(true)
+                  const { data: orderLength } = await userRequest.get(
+                    `orders/${id}?count=true`
+                  )
+                  history.push({
+                    pathname: "/user/orders",
+                    state: { orderLength }
+                  })
+                } catch (err) {
+                  setLoading(false)
+                }
+              }
             })()
           }}
         >

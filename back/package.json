@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/idembele70/rachel-website-api#readme",
   "dependencies": {
+    "axios": "^0.26.1",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dotenv": "^10.0.0",

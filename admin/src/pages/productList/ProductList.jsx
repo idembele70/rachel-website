@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProduct, getProducts } from "../../Redux/apiCalls";
+import { getTotalQuantity } from "../../utils/globalFunctions";
 
 export default function ProductList() {
   const { products } = useSelector(state => state.product)
@@ -35,7 +36,7 @@ export default function ProductList() {
       field: "quantity",
       headerName: "Quantité",
       width: 150,
-      renderCell: (params) => <>{params.row.quantity ? "Oui" : "Non"}</>
+      renderCell: (params) => <>{getTotalQuantity(params.row.colors)}</>
     },
     {
       field: "price",
@@ -62,7 +63,6 @@ export default function ProductList() {
       },
     },
   ];
-
 
   return (
     <div className="productList">

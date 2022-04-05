@@ -1,6 +1,18 @@
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import React from "react"
 import { useTranslation } from "react-i18next"
+
+const bgFlash = keyframes`
+  0% {
+    opacity: 1
+  }
+  80% {
+    opacity: 0
+  }
+  100% {
+    opacity: 1
+  }
+`
 
 const Container = styled.div`
   width: 100%;
@@ -14,6 +26,7 @@ const Container = styled.div`
   font-weight: 500;
   max-width: 1440px;
   margin: 0 auto;
+  animation: ${bgFlash} 6s linear infinite;
 `
 
 const Announcement = () => {
