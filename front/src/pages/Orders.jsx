@@ -1,4 +1,5 @@
 import { Skeleton } from "@mui/material"
+import { mongoDBDateConverter } from "components/tools/utils"
 import Sidebar from "components/tools/Sidebar"
 import React, { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -202,17 +203,21 @@ function Orders() {
         </ListItem>
       ))
   )
+  const isMounted = useRef(false)
   useEffect(() => {
-    userRequest.get(`orders/${id}`).then(({ data }) => {
-      setOrders(data)
-      setLoading(false)
-    })
+    isMounted.current = true
+    if (isMounted.current) {
+      userRequest.get(`orders/${id}`).then(({ data }) => {
+        setOrders(data)
+        setLoading(false)
+      })
+    }
+    return () => {
+      isMounted.current = false
+    }
   }, [id])
   const { t } = useTranslation()
-  const convertDate = (date) => {
-    const [y, m, d, hour] = date.split(/[-T.]/gi)
-    return `${d}/${m}/${y} ${hour}`
-  }
+
   const history = useHistory()
   const [copy, setCopy] = useState(false)
   const [trackingNumber, setTrackingNumber] = useState(null)
@@ -309,7 +314,12 @@ function Orders() {
                         <ListItemHeaderSkeleton />
                       ) : (
                         <>
-                          <HeaderHour>{convertDate(createdAt)}</HeaderHour>
+                          <HeaderHour>
+                            {mongoDBDateConverter({
+                              date: createdAt,
+                              noHour: true
+                            })}
+                          </HeaderHour>
                           <HeaderOrderNumber>
                             {t("user.orders.orderNumber")} {orderId}
                           </HeaderOrderNumber>

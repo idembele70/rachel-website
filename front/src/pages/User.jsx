@@ -7,7 +7,7 @@ import {
   MarkunreadMailboxOutlined,
   PermIdentityOutlined
 } from "@mui/icons-material"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { updateUser } from "redux/apiCalls"
@@ -314,8 +314,15 @@ const User = () => {
     const { name: inputName, value } = e.target
     setInfo({ ...info, [inputName]: value })
   }
+  const isMounted = useRef(false)
   useEffect(() => {
-    setInfo(currentUser)
+    isMounted.current = true
+    if (isMounted.current) {
+      setInfo(currentUser)
+    }
+    return () => {
+      isMounted.current = false
+    }
   }, [currentUser])
 
   const dispatch = useDispatch()

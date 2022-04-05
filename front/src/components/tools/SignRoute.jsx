@@ -11,7 +11,7 @@ const SignRoute = ({ component: Component, path, ...rest }) => {
     () => () => {
       if (isDisconnected) history.go(0)
     },
-    [history]
+    [history,isDisconnected]
   )
   const pathHandler = () => history.location.state?.pathname || "/"
   return (

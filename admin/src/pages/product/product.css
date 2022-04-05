@@ -1,3 +1,16 @@
+.addColorModalBox {
+  position: fixed;
+  background-color: aliceblue;
+  width: 400px;
+  padding: 20px;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+#add-color-detail-title {
+  text-transform: uppercase;
+  text-align: center;
+}
 .product {
   flex: 4;
   padding: 20px;
@@ -77,9 +90,9 @@
 .productForm {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   min-height: 290px;
 }
-
 .productFormLeft, .productFormCenter {
   display: flex;
   flex-direction: column;
@@ -88,17 +101,36 @@
   display: flex;
   flex-direction: column;
 }
-
 .productFormLeft > label, .productFormCenter > label {
   margin-bottom: 10px;
   color: gray;
 }
-
 .productFormLeft > input, .productFormCenter > input {
   margin-bottom: 10px;
   border: none;
   padding: 5px;
   border-bottom: 1px solid gray;
+}
+.productFormColor {
+  width:100%;
+  display: flex;
+  flex-direction: column;
+}
+.productDataGrid {
+  min-height: 200px;
+}
+.addDetail {
+  padding: 10px;
+  max-width: 120px;
+  margin: 10px auto;
+  background-color: white;
+  color:black;
+  cursor: pointer;
+  transition: all 500ms ease;
+}
+.addDetail:hover {
+  background-color: black;
+  color:white;
 }
 .productForm textarea {
   margin-top: 10px;
@@ -106,7 +138,6 @@
 .colorPicker {
   margin: 5px 0;
 }
-
 .productUploadImg{
   max-width: 100px;
   max-height: 100px;

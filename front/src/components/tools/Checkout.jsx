@@ -1,25 +1,23 @@
 // @ts-nocheck
 import { send } from "@emailjs/browser"
 import {
-  CardCvcElement,
-  CardExpiryElement,
   CardNumberElement,
   useElements,
   useStripe
 } from "@stripe/react-stripe-js"
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react"
+import Billing from "components/checkout/Billing"
+import PaymentMethod from "components/checkout/PaymentMethod"
+import PaypalCheckout from "components/checkout/PaypalCheckout"
+import StripeCheckout from "components/checkout/StripeCheckout"
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
 import { useHistory, useLocation } from "react-router-dom"
 import { userRequest } from "requestMethods"
-import { mobile, smallMobile } from "responsive"
+import { mobile } from "responsive"
 import styled from "styled-components"
+import Loader from "./Loader"
+import { SendEmail } from "./utils"
 
 const Container = styled.div`
   max-width: 100vw;
@@ -40,87 +38,7 @@ const Form = styled.form`
   margin: 0 auto;
   flex-direction: column;
 `
-const FormItem = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  ${mobile({ flexDirection: "column" })}
-`
-const ItemRow = styled.div`
-  flex: 1;
-  max-width: 50%;
-  margin: 0 5px;
-  display: flex;
-  flex-direction: column;
-  ${mobile({ maxWidth: "initial" })}
-  ${smallMobile({ margin: 0 })}
-`
-const Label = styled.label`
-  color: #6b7c93;
-  font-weight: 300;
-  letter-spacing: 0.025em;
-`
-const Input = styled.input`
-  width: calc(100% - 28px);
-  margin: 10px 0 20px 0;
-  max-width: 500px;
-  padding: 10px 14px;
-  font-size: 1em;
-  box-shadow: rgba(50, 50, 93, 0.109804) 0px 1px 3px,
-    rgba(0, 0, 0, 0.0196078) 0px 1px 0px;
-  border: 0;
-  outline: 0;
-  border-radius: 4px;
-  background: white;
-  &::placeholder {
-    color: #aab7c4;
-  }
-  &:focus {
-    box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px,
-      rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
-    transition: all 150ms ease;
-  }
-  ${mobile({ maxWidth: 300 })}
-`
-const Select = styled.select`
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  max-width: 500px;
-  padding: 10px 14px;
-  -webkit-appearance: none;
-  border-radius: 4px;
-  font-size: 1em;
-  ${mobile({ maxWidth: 328 })}
-`
-const Option = styled.option``
-const StripeFormItem = styled.div`
-  width: 100%;
-`
-const StripeInput = styled(({ component, ...props }) =>
-  React.cloneElement(component, props)
-)`
-  display: block;
-  margin: 10px 0 20px 0;
-  max-width: 500px;
-  padding: 10px 14px;
-  font-size: 1em;
-  box-shadow: rgba(50, 50, 93, 0.109804) 0px 1px 3px,
-    rgba(0, 0, 0, 0.0196078) 0px 1px 0px;
-  border: 0;
-  outline: 0;
-  border-radius: 4px;
-  background: white;
-  &::placeholder {
-    color: red;
-  }
-  &:focus {
-    box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px,
-      rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
-    transition: all 150ms ease;
-  }
-`
+
 const ButtonContainer = styled.div``
 const Button = styled.button`
   white-space: nowrap;
@@ -138,7 +56,7 @@ const Button = styled.button`
   background-color: ${(props) => (props.back ? "#e56b67" : "#6772e5")};
   text-decoration: none;
   transition: all 150ms ease;
-  margin: 0 10px;
+  margin: 0 10px 20px;
   ${mobile({ margin: 10 })}
   &:hover {
     color: #fff;
@@ -153,8 +71,10 @@ const Button = styled.button`
 `
 const Error = styled.span`
   color: red;
-  margin: 0 0 15px;
+  margin: 15px 0;
   font-size: 20px;
+  height: 25px;
+  transition: opacity 150ms ease-in;
   opacity: ${(props) => props.opacity};
 `
 function Checkout() {
@@ -164,136 +84,53 @@ function Checkout() {
     user: { currentUser },
     cart
   } = useSelector((state) => state)
-  const [info, setInfo] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    address: "",
-    zip: "",
-    city: "",
-    country: "",
-    phone: ""
-  })
   useLayoutEffect(() => {
     if (cart.products.length === 0 || Object.keys(currentUser).length === 0)
       history.push("/")
   })
-  useEffect(() => {
-    const {
-      _id,
-      isAdmin,
-      accesToken,
-      createdAt,
-      updatedAt,
-      __v,
-      postalBox: zip,
-      ...billing
-    } = currentUser
-    setInfo({ ...billing, zip })
-  }, [currentUser, location])
 
-  const { firstname, lastname, email, address, zip, city, country, phone } =
-    info
-  const handleUpdate = (ev) => {
-    ev.preventDefault()
-    const { name, value } = ev.target
-    setInfo({ ...info, [name]: value })
-  }
-  const [canPay, setCanPay] = useState(false)
+  const choosedPm = useRef(0)
+  const [choosePM, setChoosePM] = useState(true)
+  const [payWithCard, setPayWithCard] = useState(false)
+  const [showBilling, setShowBilling] = useState(false)
+  const [payWithPaypal, setPayWithPaypal] = useState(false)
   const [error, setError] = useState(false)
-  const options = useMemo(
-    () => ({
-      style: {
-        base: {
-          fontSize: 18,
-          color: "#424770",
-          letterSpacing: "0.025em",
-          "::placeholder": {
-            color: "#aab7c4"
-          }
-        },
-        invalid: {
-          color: "#9e2146"
-        }
-      }
-    }),
-    []
-  )
-
   const stripe = useStripe()
   const elements = useElements()
-  const countries = useMemo(
-    () => [
-      { country: "Argentina", code: "AR" },
-      { country: "Australia", code: "AU" },
-      { country: "Austria", code: "AT" },
-      { country: "Belgium", code: "BE" },
-      { country: "Bolivia", code: "BO" },
-      { country: "Brazil", code: "BR" },
-      { country: "Bulgaria", code: "BG" },
-      { country: "Canada", code: "CA" },
-      { country: "Chile", code: "CL" },
-      { country: "Colombia", code: "CO" },
-      { country: "Costa Rica", code: "CR" },
-      { country: "Croatia", code: "HR" },
-      { country: "Cyprus", code: "CY" },
-      { country: "Czech Republic", code: "CZ" },
-      { country: "Denmark", code: "DK" },
-      { country: "Dominican Republic", code: "DO" },
-      { country: "Egypt", code: "EG" },
-      { country: "Estonia", code: "EE" },
-      { country: "Finland", code: "FI" },
-      { country: "France", code: "FR" },
-      { country: "Germany", code: "DE" },
-      { country: "Greece", code: "GR" },
-      { country: "Hong Kong SAR China", code: "HK" },
-      { country: "Hungary", code: "HU" },
-      { country: "Iceland", code: "IS" },
-      { country: "India", code: "IN" },
-      { country: "Indonesia", code: "ID" },
-      { country: "Ireland", code: "IE" },
-      { country: "Israel", code: "IL" },
-      { country: "Italy", code: "IT" },
-      { country: "Japan", code: "JP" },
-      { country: "Latvia", code: "LV" },
-      { country: "Liechtenstein", code: "LI" },
-      { country: "Lithuania", code: "LT" },
-      { country: "Luxembourg", code: "LU" },
-      { country: "Malta", code: "MT" },
-      { country: "Mexico ", code: "MX" },
-      { country: "Netherlands", code: "NL" },
-      { country: "New Zealand", code: "NZ" },
-      { country: "Norway", code: "NO" },
-      { country: "Paraguay", code: "PY" },
-      { country: "Peru", code: "PE" },
-      { country: "Poland", code: "PL" },
-      { country: "Portugal", code: "PT" },
-      { country: "Romania", code: "RO" },
-      { country: "Singapore", code: "SG" },
-      { country: "Slovakia", code: "SK" },
-      { country: "Slovenia", code: "SI" },
-      { country: "Spain", code: "ES" },
-      { country: "Sweden", code: "SE" },
-      { country: "Switzerland", code: "CH" },
-      { country: "Thailand", code: "TH" },
-      { country: "Trinidad & Tobago", code: "TT" },
-      { country: "United Arab Emirates", code: "AE" },
-      { country: "United Kingdom", code: "GB" },
-      { country: "United States", code: "US" },
-      { country: "Uruguay", code: "UY" }
-    ],
-    []
-  )
+
   const { total, products } = useSelector((state) => state.cart)
+  const shippingPrice = location.state?.shippingPrice
+  const totalPrice = useRef(total + (shippingPrice <= 0 ? 0 : shippingPrice))
   const [paying, setPaying] = useState(false)
+  const [userInfo, setUserInfo] = useState(null)
+  const { t } = useTranslation()
+  const [loading, setLoading] = useState(false)
   const handleSubmit = async (ev) => {
+    setLoading(true)
     ev.preventDefault()
-    setPaying(true)
-    if (canPay) {
+    setError(false)
+    if (choosePM) {
+      if (choosedPm.current === 0) setError(true)
+      else if (choosedPm.current === 1) {
+        setShowBilling(true)
+        setChoosePM(false)
+        setError(false)
+      } else if (choosedPm.current === 2) {
+        setPayWithPaypal(true)
+        setChoosePM(false)
+        setError(false)
+      }
+    } else if (showBilling) {
+      setShowBilling(false)
+      setPayWithCard(true)
+    } else if (payWithCard) {
+      setPaying(true)
       if (!stripe || !elements) {
         console.log("stripe js has not loaded!")
         return
       }
+      const { firstname, lastname, email, address, zip, city, country, phone } =
+        userInfo
       const payload = await stripe.createPaymentMethod({
         type: "card",
         card: elements.getElement(CardNumberElement),
@@ -311,10 +148,10 @@ function Checkout() {
       })
       try {
         const {
-          data: { id: stripeId }
+          data: { id: stripeId, status }
         } = await userRequest.post("/checkout/payment/intents", {
           id: payload.paymentMethod?.id,
-          amount: total + location.state?.shippingPrice || 0
+          amount: totalPrice.current
         })
         const cartProducts = products.map(
           ({ title, price, qte, size, color }) => ({
@@ -331,195 +168,167 @@ function Checkout() {
           color: product.color,
           size: product.size
         }))
-        const { data } = await userRequest.post(
-          // eslint-disable-next-line no-underscore-dangle
-          `/orders/new/${currentUser._id}`,
-          {
-            userId: currentUser._id, // eslint-disable-line no-underscore-dangle
-            products: ordersProducts,
-            amount: total,
-            stripeId,
-            shippingPrice: location.state?.shippingPrice
-          }
-        )
-        if (data) {
-          const {
-            REACT_APP_SERVICE_ID,
-            REACT_APP_PAYMENT_TEMPLATE_ID,
-            REACT_APP_USER_ID
-          } = process.env
-          send(
-            REACT_APP_SERVICE_ID,
-            REACT_APP_PAYMENT_TEMPLATE_ID,
+        if (status === "succeeded") {
+          const { data } = await userRequest.post(
+            // eslint-disable-next-line no-underscore-dangle
+            `/orders/new/${currentUser._id}`,
             {
-              first_name: firstname,
-              order_number: data._id, // eslint-disable-line no-underscore-dangle
-              name: `${firstname} ${lastname}`,
-              address,
-              city,
-              postal_code: zip,
-              country,
-              to_email: email
-            },
-            REACT_APP_USER_ID
+              userId: currentUser._id, // eslint-disable-line no-underscore-dangle
+              products: ordersProducts,
+              amount: total,
+              stripeId,
+              shippingPrice: location.state?.shippingPrice
+            }
           )
-            .then(() => console.log("Email has been sent!"))
-            .catch(console.err)
-          history.push({
-            pathname: "/success",
-            state: { ordersData: data, cartProducts }
-          })
+          if (data) {
+            SendEmail({
+              welcome: false,
+              data: {
+                first_name: firstname,
+                order_number: data._id, // eslint-disable-line no-underscore-dangle
+                name: `${firstname} ${lastname}`,
+                address,
+                city,
+                postal_code: zip,
+                country,
+                to_email: email
+              }
+            })
+            ordersProducts.forEach(({ productId, quantity, color, size }) =>
+              userRequest.put(
+                `/products/${productId}?decreaseQte=${quantity}`,
+                {
+                  name: color,
+                  size
+                }
+              )
+            )
+            history.push({
+              pathname: "/success",
+              state: { ordersData: data, cartProducts }
+            })
+          }
+        } else {
+          setError(true)
         }
       } catch (err) {
-        // eslint-disable-next-line no-underscore-dangle
         console.error(err)
+        setError(true)
       }
-    } else if (Object.values(info).filter((x) => x === "").length !== 0)
-      setError(true)
-    else {
-      setCanPay(true)
-      setError(false)
+      setPaying(false)
     }
-    setPaying(false)
+    setLoading(false)
   }
   const handleReset = (e) => {
+    setError(false)
     e.preventDefault()
-    if (canPay) setCanPay(false)
-    else {
-      setCanPay(false)
-      history.push("/cart")
+    switch (true) {
+      case showBilling:
+        setChoosePM(true)
+        setShowBilling(false)
+        break
+      case payWithPaypal:
+        setChoosePM(true)
+        setPayWithPaypal(false)
+        break
+      case payWithCard:
+        setShowBilling(true)
+        setPayWithCard(false)
+        break
+
+      default:
+        setPayWithCard(false)
+        history.push("/cart")
+        break
     }
   }
-  const { t } = useTranslation()
+  const leftBtnLabel = useRef(null)
+  switch (true) {
+    case payWithCard:
+      leftBtnLabel.current = t("checkout.backToBilling")
+      break
+    case payWithPaypal || showBilling:
+      leftBtnLabel.current = t("checkout.choosePm")
+      choosedPm.current = 0
+      break
+    default:
+      leftBtnLabel.current = t("checkout.backToCard")
+      break
+  }
+  const rightBtnLabel = useRef(null)
+  switch (true) {
+    case choosePM || showBilling:
+      rightBtnLabel.current = t("checkout.next")
+      break
+    case payWithCard && paying:
+      rightBtnLabel.current = t("checkout.loading")
+      break
+    case payWithCard:
+      rightBtnLabel.current = `${t("checkout.pay")} ${
+        total + location.state?.shippingPrice
+      }${t("currency")}`
+      break
+    default:
+      rightBtnLabel.current = t("checkout.choosePm")
+      break
+  }
+  const errorLabel = useRef(null)
+  switch (true) {
+    case payWithCard && error:
+      errorLabel.current = t("checkout.paymentDenied")
+      break
+    case choosePM && error:
+      errorLabel.current = t("checkout.choosePMError")
+      break
+    default:
+      break
+  }
+  const handleChoosePm = useCallback(
+    (value) => {
+      choosedPm.current = value
+    },
+    [choosedPm]
+  )
+  const handleLoad = useCallback((value) => {
+    setLoading(value)
+  }, [])
+  const title = useRef(null)
+  switch (true) {
+    case payWithCard || payWithPaypal:
+      title.current = t("checkout.payment")
+      break
+    case choosePM:
+      title.current = null
+      break
+    default:
+      title.current = t("checkout.billing")
+      break
+  }
+
   return (
     <Container>
-      <Title>{canPay ? t("checkout.payment") : t("checkout.billing")}</Title>
+      {loading ? <Loader /> : null}
+      <Title>{title.current}</Title>
       <Form onSubmit={handleSubmit} onReset={handleReset}>
-        {!canPay ? (
-          <>
-            <FormItem>
-              <ItemRow>
-                <Label>{t("checkout.firstname")}</Label>
-                <Input
-                  required
-                  placeholder={t("checkout.firstname").toUpperCase()}
-                  name="firstname"
-                  value={firstname}
-                  onChange={handleUpdate}
-                />
-              </ItemRow>
-              <ItemRow>
-                <Label>{t("checkout.lastname")}</Label>
-                <Input
-                  required
-                  onChange={handleUpdate}
-                  placeholder={t("checkout.lastname").toUpperCase()}
-                  name="lastname"
-                  value={lastname}
-                />
-              </ItemRow>
-            </FormItem>
-            <FormItem>
-              <ItemRow>
-                <Label>{t("checkout.email")}</Label>
-                <Input
-                  required
-                  placeholder={t("checkout.email").toUpperCase()}
-                  name="email"
-                  value={email}
-                  onChange={handleUpdate}
-                />
-              </ItemRow>
-              <ItemRow>
-                <Label>Address</Label>
-                <Input
-                  required
-                  placeholder="ADDRESS"
-                  name="address"
-                  value={address}
-                  onChange={handleUpdate}
-                />
-              </ItemRow>
-            </FormItem>
-            <FormItem>
-              <ItemRow>
-                <Label>{t("checkout.postalCode")}</Label>
-                <Input
-                  required
-                  placeholder={t("checkout.postalCode").toUpperCase()}
-                  name="zip"
-                  value={zip}
-                  onChange={handleUpdate}
-                />
-              </ItemRow>
-              <ItemRow>
-                <Label>{t("checkout.city")}</Label>
-                <Input
-                  required
-                  placeholder={t("checkout.city").toUpperCase()}
-                  name="city"
-                  value={city}
-                  onChange={handleUpdate}
-                />
-              </ItemRow>
-            </FormItem>
-            <FormItem>
-              <ItemRow>
-                <Label>{t("checkout.country")}</Label>
-                <Select name="country" value={country} onChange={handleUpdate}>
-                  {countries.map(({ country: ctry, code }) => (
-                    <Option key={code} value={code}>
-                      {ctry}
-                    </Option>
-                  ))}
-                </Select>
-              </ItemRow>
-              <ItemRow>
-                <Label>{t("checkout.phone")}</Label>
-                <Input
-                  required
-                  placeholder={t("checkout.phone").toUpperCase()}
-                  name="phone"
-                  value={phone}
-                  onChange={handleUpdate}
-                />
-              </ItemRow>
-            </FormItem>
-          </>
-        ) : (
-          <>
-            <StripeFormItem>
-              <Label>{t("checkout.card.number")}</Label>
-              <StripeInput
-                component={<CardNumberElement options={options} />}
-              />
-            </StripeFormItem>
-            <StripeFormItem>
-              <Label>{t("checkout.card.expiration")}</Label>
-              <StripeInput
-                component={<CardExpiryElement options={options} />}
-              />
-            </StripeFormItem>
-            <StripeFormItem>
-              <Label>{t("checkout.card.cvc").toUpperCase()}</Label>
-              <StripeInput component={<CardCvcElement options={options} />} />
-            </StripeFormItem>
-          </>
+        {showBilling ? <Billing onUserSubmit={setUserInfo} /> : null}
+        {choosePM ? <PaymentMethod onChoosePm={handleChoosePm} /> : null}
+        {payWithCard ? <StripeCheckout /> : null}
+        {payWithPaypal ? (
+          <PaypalCheckout amount={totalPrice.current} onLoading={handleLoad} />
+        ) : null}
+        <Error opacity={error ? 1 : 0}>{errorLabel.current}</Error>
+        {loading ? null : (
+          <ButtonContainer>
+            <Button back type="Reset">
+              {leftBtnLabel.current}
+            </Button>
+            {payWithPaypal ? null : (
+              <Button type="submit" disabled={!stripe || paying}>
+                {rightBtnLabel.current}
+              </Button>
+            )}
+          </ButtonContainer>
         )}
-        <Error opacity={error ? 1 : 0}>{t("checkout.emptyField")}</Error>
-        <ButtonContainer>
-          <Button back type="Reset">
-            {canPay ? t("checkout.goBack") : t("checkout.backToCard")}
-          </Button>
-          <Button type="submit" disabled={!stripe || paying}>
-            {canPay
-              ? (paying && t("checkout.loading")) ||
-                `${t("checkout.pay")} ${
-                  total + location.state?.shippingPrice
-                }${t("currency")}`
-              : t("checkout.proceedToPayment")}
-          </Button>
-        </ButtonContainer>
       </Form>
     </Container>
   )

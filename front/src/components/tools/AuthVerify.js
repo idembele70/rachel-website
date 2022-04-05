@@ -15,7 +15,7 @@ const AuthVerify = ({ history }) => {
       logout(dispatch)
     }
   })
-  return <></>
+  return null
 }
 
 AuthVerify.propTypes = {

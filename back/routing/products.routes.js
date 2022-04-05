@@ -1,11 +1,10 @@
 
 const Product = require("../database/model/product.model")
-const { verifyTokenAndAdmin, verifyTokenAndAuthorization } = require("./verifyToken")
+const { verifyTokenAndAdmin,verifyTokenAndAuthorization } = require("./verifyToken")
 
 const router = require("express").Router()
 // CREATE
 router.post("/new", verifyTokenAndAdmin, async (req, res) => {
-  console.log(req.body)
   const newProduct = new Product(req.body)
   try {
     const savedProduct = await newProduct.save()
@@ -15,48 +14,54 @@ router.post("/new", verifyTokenAndAdmin, async (req, res) => {
   }
 })
 // CREATE ENDPOINT
-// CREATE MANY
-router.post("/insertMany", verifyTokenAndAdmin, async (req, res) => {
-  try {
-    const products = await Product.insertMany(req.body)
-    res.status(200).json(products)
-  } catch (err) {
-    res.status(500).json(err)
-  }
-})
-// CREATE MANY ENDPOINT
-// DELETE MANY
-router.delete("/findMany", verifyTokenAndAdmin, async (req, res) => {
-  try {
-    const products = await Product.deleteMany(
-      { img: { $regex: /dummyimage.com/i } }
-    )
-    res.status(200).json(products)
-  } catch (err) {
-    res.status(500).json(err)
-  }
-})
-// CREATE MANY ENDPOINT
-
 // UPDATE
-router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
+router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
-    const productUpdated = await Product.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: req.body
-      },
-      {
-        new: true
-      }
-    )
-    res.status(200).json(productUpdated)
+    let productUpdated = null
+    const qDecreaseQte = req.query.decreaseQte
+    if (qDecreaseQte) {
+      Product.findById(req.params.id).exec().then(
+        product => {
+          const toUpdate = product.colors.find(color => color.name === req.body.name)
+            .details.find(
+              ((detail) => detail.size === req.body.size))
+          if (toUpdate.quantity && toUpdate.quantity >= qDecreaseQte) {
+            toUpdate.quantity = toUpdate.quantity - qDecreaseQte
+            product.save()
+            res.status(200).json(product)
+          } else {
+            res.status(500).json({
+              errorMessage : "Your product Quantity is superior to the current maximun size"
+            })
+          }
+        }
+      ).catch(
+        err => res.status(500).json({
+          message: "Cannot decrement product quantity something went wrong",
+          err,
+          file: __filename
+        }
+        ))
+    } else {
+      productUpdated = await Product.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: req.body
+        },
+        {
+          new: true
+        }
+      )
+      res.status(200).json(productUpdated)
+    }
   } catch (err) {
-    console.log(req.body)
-    res.status(500).json(err)
+    res.status(500).json({
+      file: __filename,
+      err,
+    })
   }
 })
-
+// UPDATE ENDPOINT
 // DELETE
 router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
@@ -80,7 +85,7 @@ router.get("/find/:id", async (req, res) => {
 
 // GET ALL PRODUCTS
 router.get("/", async (req, res) => {
-  
+
   const qNew = req.query.new
   const qCategory = req.query.category
   const qCount = req.query.count
@@ -90,33 +95,34 @@ router.get("/", async (req, res) => {
     const productPerPage = 15
     if (qNew)
       products = await Product.find().sort({ createdAt: -1 }).limit(5)
-    else if (qCategory){
+    else if (qCategory) {
       if (qCount) {
-        if(qPage)
-           Product.find({
+        if (qPage)
+          Product.find({
             categories: { $eq: qCategory }
           }).skip(productPerPage * qPage).limit(productPerPage).count().exec()
-          .then(count => res.status(200).json(count))
-          else{
+            .then(count => res.status(200).json(count))
+        else {
           Product.find({
             categories: { $eq: qCategory }
           }).count().exec()
-          .then(count => res.status(200).json(count))}
+            .then(count => res.status(200).json(count))
         }
-      else if (qPage) 
+      }
+      else if (qPage)
         products = await Product.find({
-          categories: {$eq: qCategory},
+          categories: { $eq: qCategory },
         }).skip(productPerPage * qPage).limit(productPerPage)
       else
         products = await Product.find({
           categories: { $eq: qCategory }
         })
-      }
+    }
     else
       products = await Product.find()
-      if(products.length){
-        res.status(200).json(products)
-      }
+    if (products.length) {
+      res.status(200).json(products)
+    }
   } catch (err) {
     res.status(500).json(err)
   }

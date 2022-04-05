@@ -1,11 +1,12 @@
 import Navbar from "components/tools/Navbar"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useDispatch, useSelector } from "react-redux"
 import { useHistory, useLocation, Link } from "react-router-dom"
 import { mobile } from "responsive"
 import styled from "styled-components"
 import Emailjs from "@emailjs/browser"
+import { SendEmail } from "components/tools/utils"
 import { register } from "../redux/apiCalls"
 
 const Container = styled.div`
@@ -170,34 +171,26 @@ function Register() {
       setRedirect(true)
     }
   }
-
+  const isMounted = useRef(false)
   useEffect(() => {
-    const {
-      REACT_APP_SERVICE_ID,
-      REACT_APP_WELCOME_TEMPLATE_ID,
-      REACT_APP_USER_ID
-    } = process.env
-    if (redirect && !formError && !isFetching) {
-      setError("")
-      Emailjs.send(
-        REACT_APP_SERVICE_ID,
-        REACT_APP_WELCOME_TEMPLATE_ID,
-        {
-          email_to: data.email
-        },
-        REACT_APP_USER_ID
-      )
-        .then(() => setLoading(false))
-        .catch(console.log)
-      history.push({
-        pathname: "/login",
-        state: location.state
-      })
-    } else if (Object.entries(data).every((x) => x[0] && x[1] && formError)) {
-      setError(t("signup.emailError"))
-      setLoading(false)
+    isMounted.current = true
+    if (isMounted.current) {
+      if (redirect && !formError && !isFetching) {
+        setError("")
+        SendEmail({ welcome: true, data: { email_to: data.email } })
+        history.push({
+          pathname: "/login",
+          state: location.state
+        })
+      } else if (Object.entries(data).every((x) => x[0] && x[1] && formError)) {
+        setError(t("signup.emailError"))
+        setLoading(false)
+      }
     }
-  }, [redirect, formError, isFetching, history, location])
+    return () => {
+      isMounted.current = false
+    }
+  }, [redirect, formError, isFetching, history, location, isMounted])
 
   return (
     <Container>
