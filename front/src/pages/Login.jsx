@@ -108,12 +108,7 @@ const Login = () => {
   useEffect(() => {
     isMounted.current = true
     if (isMounted.current) {
-      if (
-        Object.entries(data).every((x) => x[0] && x[1]) &&
-        errorForm &&
-        isTouched.current
-      )
-        setError(true)
+      if (errorForm && isTouched.current) setError(true)
       else setError(false)
     }
     return () => {
@@ -144,7 +139,7 @@ const Login = () => {
               placeholder={t("sign.password")}
             />
             <Error opacity={error ? 1 : 0}>{t("signin.errorMessage")}</Error>
-            <Button disabled={isFetching} type="submit">
+            <Button disabled={isFetching && isTouched.current} type="submit">
               {isFetching ? t("sign.loading") : t("signin.login")}
             </Button>
           </Form>
@@ -157,3 +152,4 @@ const Login = () => {
   )
 }
 export default Login
+
