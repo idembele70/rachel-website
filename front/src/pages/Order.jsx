@@ -4,7 +4,7 @@ import { getCountries } from "components/tools/utils"
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSelector } from "react-redux"
-import { useLocation } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 import { publicRequest, userRequest } from "requestMethods"
 import { smallMobile, tablet } from "responsive"
 import styled from "styled-components"
@@ -75,6 +75,7 @@ export default function Order() {
   const location = useLocation()
   const [, , , orderId] = location.pathname.split(/\//g)
   const [loading, setLoading] = useState(true)
+  const history = useHistory()
   const productsSkeleton = useRef(
     [...Array(location.state?.productsLength)].map((_, idx) => (
       // eslint-disable-next-line react/no-array-index-key
@@ -93,7 +94,10 @@ export default function Order() {
           const { data: ordersData } = await userRequest.get(
             `orders/find/${userId}/${orderId}`
           )
-          if (ordersData?.stripeId) {
+
+          if (ordersData.userId !== userId) {
+            history.push("/")
+          } else if (ordersData?.stripeId) {
             const { data: stripeData } = await publicRequest.get(
               `/checkout/payment/intents/${ordersData.stripeId}`
             )
