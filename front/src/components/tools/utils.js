@@ -80,9 +80,9 @@ export function SendEmail({ welcome, data }) {
     REACT_APP_SERVICE_ID,
     welcome ? REACT_APP_WELCOME_TEMPLATE_ID : REACT_APP_PAYMENT_TEMPLATE_ID,
     data,
-    REACT_APP_USER_ID
+    REACT_APP_USER_ID 
   )
-    .then(() => console.log("Email has been sent!"))
+    .then(() => console.log("Email has been sent !"))
     .catch(console.error)
 }
 

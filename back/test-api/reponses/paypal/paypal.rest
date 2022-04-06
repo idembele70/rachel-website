@@ -1,0 +1,25 @@
+### GET paypal order
+GET http://localhost:5000/api/paypal/payment/5G5480529G9732517 HTTP/1.1
+token: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZjVjZWQ5MWJkNmU2MDFmZjUzMDFhNiIsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0Nzg4MzY2MiwiZXhwIjoxNjQ3OTcwMDYyfQ.4rj08PHxwtfUrbuqkAli5ob9k6RkvCGsV24AIdp5dik
+
+### GET paypal orders from their API
+GET https://api.sandbox.paypal.com/v2/checkout/orders/id
+Content-Type: application/json
+Authorization: bearer TOKEN
+
+### GENERATE TOKEN from their API
+POST https://api.sandbox.paypal.com/v1/oauth2/token
+Accept: application/json
+Accept-Language: fr_FR
+content-type: application/x-www-form-urlencoded
+
+{
+    "auth": {
+    "user": "client-id",
+    "pass": "client-secret",
+    // sendImmediately: false
+  },
+  "form": {
+    "grant_type": "client_credentials"
+  }
+}
