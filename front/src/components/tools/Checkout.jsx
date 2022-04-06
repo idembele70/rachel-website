@@ -174,9 +174,9 @@ function Checkout() {
             {
               userId: currentUser._id, // eslint-disable-line no-underscore-dangle
               products: ordersProducts,
-              amount: total,
+              amount: totalPrice.current,
               stripeId,
-              shippingPrice: location.state?.shippingPrice
+              shippingPrice: shippingPrice <= 0 ? 0 : shippingPrice
             }
           )
           if (data) {
@@ -190,8 +190,7 @@ function Checkout() {
                 city,
                 postal_code: zip,
                 country,
-                to_email: email,
-                base_url: process.env.REACT_APP_BASE_URL
+                to_email: email
               }
             })
             ordersProducts.forEach(({ productId, quantity, color, size }) =>
@@ -264,8 +263,9 @@ function Checkout() {
       rightBtnLabel.current = t("checkout.loading")
       break
     case payWithCard:
-      rightBtnLabel.current = `${t("checkout.pay")} ${total + location.state?.shippingPrice
-        }${t("currency")}`
+      rightBtnLabel.current = `${t("checkout.pay")} ${totalPrice.current}${t(
+        "currency"
+      )}`
       break
     default:
       rightBtnLabel.current = t("checkout.choosePm")

@@ -114,8 +114,8 @@ const Products = ({ category }) => {
             category
               ? `${
                   process.env.REACT_APP_BASE_URL
-                }/products?category=${category}&page=${page - 1}`
-              : `${process.env.REACT_APP_BASE_URL}/products`
+                }/api/products?category=${category}&page=${page - 1}`
+              : `${process.env.REACT_APP_BASE_URL}/api/products`
           )
           if (category) {
             setProducts(

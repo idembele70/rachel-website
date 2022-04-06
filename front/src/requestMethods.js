@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const BASE_URL = process.env.REACT_APP_BASE_URL
+const BASE_URL = `${process.env.REACT_APP_BASE_URL}/api`
 const persistRoot = JSON.parse(localStorage.getItem("persist:root"))
 const TOKEN = persistRoot
   ? JSON.parse(persistRoot?.user)?.currentUser?.accessToken
