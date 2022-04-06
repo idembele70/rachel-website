@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { send } from "@emailjs/browser"
 import {
   CardNumberElement,
   useElements,
@@ -191,7 +190,8 @@ function Checkout() {
                 city,
                 postal_code: zip,
                 country,
-                to_email: email
+                to_email: email,
+                base_url: process.env.REACT_APP_BASE_URL
               }
             })
             ordersProducts.forEach(({ productId, quantity, color, size }) =>
@@ -264,9 +264,8 @@ function Checkout() {
       rightBtnLabel.current = t("checkout.loading")
       break
     case payWithCard:
-      rightBtnLabel.current = `${t("checkout.pay")} ${
-        total + location.state?.shippingPrice
-      }${t("currency")}`
+      rightBtnLabel.current = `${t("checkout.pay")} ${total + location.state?.shippingPrice
+        }${t("currency")}`
       break
     default:
       rightBtnLabel.current = t("checkout.choosePm")
