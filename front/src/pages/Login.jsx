@@ -1,3 +1,4 @@
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 import Navbar from "components/tools/Navbar"
 import React, { useState, useEffect, useRef } from "react"
 import { useTranslation } from "react-i18next"
@@ -43,12 +44,31 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
 `
-const Input = styled.input`
+const FormRow = styled.div`
   flex: 1;
   width: 80%;
-  max-width: 320px;
+  max-width: 340px;
   margin: 10px 0;
+  position: relative;
+  display: flex;
+`
+const Input = styled.input`
+  flex: 1;
   padding: 10px;
+`
+const StyledVisibility = styled(({ component, ...props }) =>
+  React.cloneElement(component, props)
+)`
+  position: absolute;
+  right: 0%;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `
 const Button = styled.button`
   width: 110px;
@@ -93,28 +113,34 @@ const Login = () => {
   })
   const location = useLocation()
   const dispatch = useDispatch()
-  const isTouched = useRef(false)
-  const handleUpdate = (event) =>
-    setData({ ...data, [event.target.name]: event.target.value })
+  const [isTouched, setIsTouched] = useState(false)
+  const handleUpdate = (event) => {
+    const { value, name } = event.target
+    if (name === "email") setData({ ...data, [name]: value })
+    else setData({ ...data, [name]: value })
+  }
+  const [hidePassword, setHidePassword] = useState(true)
   // @ts-ignore
   const { isFetching, error: errorForm } = useSelector((state) => state.user)
   const [error, setError] = useState(false)
   const handleLog = (e) => {
     e.preventDefault()
-    isTouched.current = true
+    setIsTouched(true)
     login(dispatch, data)
   }
+  const handleVisibility = () => setHidePassword(!hidePassword)
+  
   const isMounted = useRef(false)
   useEffect(() => {
     isMounted.current = true
     if (isMounted.current) {
-      if (errorForm && isTouched.current) setError(true)
+      if (errorForm && isTouched) setError(true)
       else setError(false)
     }
     return () => {
       isMounted.current = false
     }
-  }, [errorForm, data])
+  }, [errorForm, data, isTouched])
   return (
     <Container>
       <Navbar />
@@ -122,22 +148,38 @@ const Login = () => {
         <Wrapper>
           <Title>{t("signin.title")}</Title>
           <Form onSubmit={handleLog}>
-            <Input
-              required
-              name="email"
-              value={data.email}
-              onChange={handleUpdate}
-              placeholder={t("sign.email")}
-            />
-            <Input
-              required
-              type="password"
-              name="password"
-              value={data.password}
-              // eslint-disable-next-line no-shadow
-              onChange={handleUpdate}
-              placeholder={t("sign.password")}
-            />
+            <FormRow aria-label="email">
+              <Input
+                type="email"
+                required
+                name="email"
+                value={data.email}
+                onChange={handleUpdate}
+                placeholder={t("sign.email")}
+              />
+            </FormRow>
+            <FormRow>
+              <Input
+                required
+                type={hidePassword ? "password" : "text"}
+                name="password"
+                value={data.password}
+                // eslint-disable-next-line no-shadow
+                onChange={handleUpdate}
+                placeholder={t("sign.password")}
+              />
+              {hidePassword ? (
+                <StyledVisibility
+                  onClick={handleVisibility}
+                  component={<Visibility />}
+                />
+              ) : (
+                <StyledVisibility
+                  onClick={handleVisibility}
+                  component={<VisibilityOff />}
+                />
+              )}
+            </FormRow>
             <Error opacity={error ? 1 : 0}>{t("signin.errorMessage")}</Error>
             <Button disabled={isFetching && isTouched.current} type="submit">
               {isFetching ? t("sign.loading") : t("signin.login")}
@@ -152,4 +194,3 @@ const Login = () => {
   )
 }
 export default Login
-
