@@ -95,7 +95,7 @@ const Button = styled.button`
 const Error = styled.div`
   color: red;
   width: 100%;
-  height: 20px;
+  min-height: 20px;
   transition: opacity 400ms ease-in;
   line-height: 20px;
   margin: 10px 0 0;
@@ -148,7 +148,10 @@ function Register() {
   })
   const [consent, setConsent] = useState(false)
   const [error, setError] = useState("")
+  const [isTouched, setIsTouched] = useState(false)
   const handleUpdate = (e) => {
+    setError("")
+    setIsTouched(false)
     const { name, value } = e.target
     setData({ ...data, [name]: value.toLowerCase() })
   }
@@ -157,12 +160,11 @@ function Register() {
   const dispatch = useDispatch()
   const handleRegister = async (e) => {
     setLoading(true)
+    setIsTouched(true)
     e.preventDefault()
     const { password, confirmPassword, email, confirmEmail } = data
     if (!consent || password !== confirmPassword || email !== confirmEmail) {
       if (!consent) setError(t("signup.agreementError"))
-      else if (email !== confirmEmail) setError(t("signup.email"))
-      else setError(t("signup.passwordError"))
       setLoading(false)
     } else {
       const { confirmPassword: ignoredPassword, ...others } = data
@@ -174,6 +176,7 @@ function Register() {
   const isMounted = useRef(false)
   useEffect(() => {
     isMounted.current = true
+    const { email, confirmEmail, password, confirmPassword } = data
     if (isMounted.current) {
       if (redirect && !formError && !isFetching) {
         setError("")
@@ -182,15 +185,28 @@ function Register() {
           pathname: "/login",
           state: location.state
         })
-      } else if (Object.entries(data).every((x) => x[0] && x[1] && formError)) {
-        setError(t("signup.emailError"))
+      } else if (isTouched && formError) {
+        if (email !== confirmEmail) setError(t("signup.email"))
+        else if (password !== confirmPassword)
+          setError(t("signup.passwordError"))
+        else if (email === confirmEmail) setError(t("signup.emailError"))
         setLoading(false)
       }
     }
     return () => {
       isMounted.current = false
     }
-  }, [redirect, formError, isFetching, history, location, isMounted])
+  }, [
+    redirect,
+    formError,
+    isFetching,
+    history,
+    location,
+    isMounted,
+    data,
+    t,
+    isTouched
+  ])
 
   return (
     <Container>
@@ -250,6 +266,7 @@ function Register() {
               <InputRadio
                 type="checkbox"
                 checked={consent}
+                required
                 onChange={() => setConsent(!consent)}
               />
               <InlineText>{t("signup.agreement")}</InlineText>
@@ -262,8 +279,8 @@ function Register() {
               </StyledLink>
             </Agreement>
             <ButtonContainer>
-              <Button disabled={isFetching} type="submit">
-                {loading ? t("sign.loading") : t("signup.create")}
+              <Button disabled={isFetching && isTouched} type="submit">
+                {loading && isFetching ? t("sign.loading") : t("signup.create")}
               </Button>
               <LoginButton
                 onClick={() =>
@@ -284,3 +301,4 @@ function Register() {
 }
 
 export default Register
+
