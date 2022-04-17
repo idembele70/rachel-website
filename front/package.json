@@ -1,7 +1,7 @@
 {
   "name": "front",
   "version": "0.1.0",
-  "private": true,
+  "homepage": ".",
   "dependencies": {
     "@emailjs/browser": "^3.4.0",
     "@emotion/react": "^11.4.1",

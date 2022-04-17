@@ -1,9 +1,9 @@
 import axios from "axios"
-const baseURL = "http://localhost:5000/api/"
+const baseURL = process.env.REACT_APP_BASE_URL
 let TOKEN = null
 const persistRoot = JSON.parse(localStorage?.getItem("persist:root"))
-if(persistRoot)
-TOKEN = JSON.parse(persistRoot?.user)?.currentUser?.accessToken
+if (persistRoot)
+  TOKEN = JSON.parse(persistRoot?.user)?.currentUser?.accessToken
 
 export const publicRequest = axios.create({
   baseURL
