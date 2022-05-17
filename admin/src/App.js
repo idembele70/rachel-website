@@ -2,7 +2,12 @@ import Sidebar from "./components/sidebar/Sidebar";
 import Topbar from "./components/topbar/Topbar";
 import "./App.css";
 import Home from "./pages/home/Home";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import UserList from "./pages/userList/UserList";
 import User from "./pages/user/User";
 import NewUser from "./pages/newUser/NewUser";
@@ -19,12 +24,12 @@ import Order from "./pages/order/Order";
 import AppContainer from "./components/tools/AppContainer";
 import Main from "./components/tools/Main";
 function App() {
-  const { currentUser } = useSelector(state => state.user)
-  const admin = currentUser?.isAdmin || ""
-    
+  const { currentUser } = useSelector((state) => state.user);
+  const admin = currentUser?.isAdmin || "";
+
   return (
     <Router>
-      {!admin &&  <Redirect to="/login" />}
+      {!admin && <Redirect to="/login" />}
       <Switch>
         <Route exact path="/login">
           {admin ? <Redirect to="/" /> : <Login />}

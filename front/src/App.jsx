@@ -23,9 +23,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import ScrollToTop from "./components/tools/ScrollToTop"
 
 function App() {
-  const stripePromise = loadStripe(
-    REPLACE_WITH_YOUR_STRIPE_PK
-  )
+  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK)
   return (
     <Router>
       <>

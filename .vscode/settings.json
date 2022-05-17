@@ -1,10 +1,7 @@
 {
   "files.eol": "\n", // LF
   "editor.tabSize": 2,
-  "editor.formatOnSave": true,
-  "[javascript]": {
-    "editor.formatOnSave": false
-  },
+  "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
     "source.fixAll": true
   }
